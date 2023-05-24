@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.moviebase.HomeFragment"
+        android:name="com.example.moviebase.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/savedFragment"
-        android:name="com.example.moviebase.SavedFragment"
+        android:name="com.example.moviebase.fragments.SavedFragment"
         android:label="fragment_saved"
         tools:layout="@layout/fragment_saved" />
     <fragment
         android:id="@+id/generateFragment"
-        android:name="com.example.moviebase.GenreFragment"
+        android:name="com.example.moviebase.fragments.GenreFragment"
         android:label="fragment_generate"
         tools:layout="@layout/fragment_generate" />
 </navigation>

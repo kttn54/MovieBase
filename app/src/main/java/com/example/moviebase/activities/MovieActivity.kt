@@ -2,11 +2,9 @@ package com.example.moviebase.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.bumptech.glide.Glide
 import com.example.moviebase.Constants
-import com.example.moviebase.HomeFragment
-import com.example.moviebase.R
+import com.example.moviebase.fragments.HomeFragment
 import com.example.moviebase.databinding.ActivityMovieBinding
 
 class MovieActivity : AppCompatActivity() {

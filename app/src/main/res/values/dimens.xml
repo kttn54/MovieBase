@@ -3,4 +3,5 @@
     <dimen name="popular_button_text_size">12sp</dimen>
     <dimen name="popular_button_layout_height">38dp</dimen>
     <dimen name="popular_button_margin_start">5dp</dimen>
+    <dimen name="MaM_filter_text_size">18sp</dimen>
 </resources>
