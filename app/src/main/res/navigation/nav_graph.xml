@@ -16,8 +16,8 @@
         android:label="fragment_saved"
         tools:layout="@layout/fragment_saved" />
     <fragment
-        android:id="@+id/genreFragment"
+        android:id="@+id/generateFragment"
         android:name="com.example.moviebase.GenreFragment"
-        android:label="fragment_genre"
-        tools:layout="@layout/fragment_genre" />
+        android:label="fragment_generate"
+        tools:layout="@layout/fragment_generate" />
 </navigation>

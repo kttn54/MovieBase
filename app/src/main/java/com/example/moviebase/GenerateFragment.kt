@@ -34,7 +34,7 @@ class GenreFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_genre, container, false)
+        return inflater.inflate(R.layout.fragment_generate, container, false)
     }
 
     companion object {

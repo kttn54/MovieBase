@@ -17,6 +17,7 @@ import kotlin.random.Random
 class HomeViewModel(): ViewModel() {
 
     private var trendingMovieLiveData = MutableLiveData<Movie>()
+    private var popularMovieLiveData = MutableLiveData<List<Movie>>()
 
     fun getTrendingMovie() {
         RetrofitInstance.api.getTrendingMovie(Constants.api_key).enqueue(object: Callback<MovieList> {
@@ -30,12 +31,32 @@ class HomeViewModel(): ViewModel() {
             }
 
             override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                Log.e("HomeViewModel", t.message.toString())
+                Log.e("HomeViewModel: Trending Movie Error", t.message.toString())
             }
         })
     }
 
+    fun getPopularMoviesByCategory(genre: String) {
+        RetrofitInstance.api.getPopularMovieByGenre(Constants.api_key, false, false, "en-US", 1, "popularity.desc", genre)
+            .enqueue(object: Callback<MovieList> {
+                override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
+                    if (response.body() != null) {
+                        val popularMovies = response.body()!!.results
+                        popularMovieLiveData.value = popularMovies
+                    }
+                }
+
+                override fun onFailure(call: Call<MovieList>, t: Throwable) {
+                    Log.e("HomeViewModel: Popular Movie Error", t.message.toString())
+                }
+            })
+    }
+
     fun observerTrendingMovieLiveData(): LiveData<Movie> {
         return trendingMovieLiveData
+    }
+
+    fun observerPopularMovieLiveData(): LiveData<List<Movie>> {
+        return popularMovieLiveData
     }
 }

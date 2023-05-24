@@ -71,11 +71,12 @@
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/nexa_light"
+                    android:fontFamily="@font/lemon_milk_medium"
                     android:gravity="center"
                     android:text="Trending Movie"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
+                    android:textStyle=""
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_trending" />
@@ -136,15 +137,54 @@
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:textSize="@dimen/popular_button_text_size"
                             android:text="Action" />
+
+                        <Button
+                            android:id="@+id/btn_adventure"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/popular_button_layout_height"
+                            android:layout_marginStart="@dimen/popular_button_margin_start"
+                            android:textSize="@dimen/popular_button_text_size"
+                            android:text="Adventure" />
+
+                        <Button
+                            android:id="@+id/btn_animation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/popular_button_layout_height"
+                            android:layout_marginStart="@dimen/popular_button_margin_start"
+                            android:textSize="@dimen/popular_button_text_size"
+                            android:text="Animation" />
+
+                        <Button
+                            android:id="@+id/btn_comedy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/popular_button_layout_height"
+                            android:layout_marginStart="@dimen/popular_button_margin_start"
+                            android:textSize="@dimen/popular_button_text_size"
+                            android:text="Comedy" />
+
+                        <Button
+                            android:id="@+id/btn_crime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/popular_button_layout_height"
+                            android:layout_marginStart="@dimen/popular_button_margin_start"
+                            android:textSize="@dimen/popular_button_text_size"
+                            android:text="Crime" />
+
+                        <Button
+                            android:id="@+id/btn_drama"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/popular_button_layout_height"
+                            android:layout_marginStart="@dimen/popular_button_margin_start"
+                            android:textSize="@dimen/popular_button_text_size"
+                            android:text="Drama" />
                     </LinearLayout>
                 </HorizontalScrollView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_popular"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="185dp"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
