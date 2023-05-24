@@ -37,12 +37,13 @@ class HomeViewModel(): ViewModel() {
     }
 
     fun getPopularMoviesByCategory(genre: String) {
-        RetrofitInstance.api.getPopularMovieByGenre(Constants.api_key, false, false, "en-US", 1, "popularity.desc", genre)
+        RetrofitInstance.api.getPopularMovieByGenre(Constants.api_key, false, "en", 1, "popularity.desc", genre)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val popularMovies = response.body()!!.results
                         popularMovieLiveData.value = popularMovies
+                        // Log.d("test","${response.body()}")
                     }
                 }
 

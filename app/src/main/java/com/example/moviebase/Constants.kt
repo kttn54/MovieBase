@@ -28,6 +28,13 @@ object Constants {
     const val THRILLER: Int = 53
     const val WAR: Int = 10752
     const val WESTERN: Int = 37
+
+    const val MOST_POPULAR = "popularity.desc"
+    const val TOP_RATED = "vote_average.desc"
+    const val RECENTLY_RELEASED = "primary_release_date.desc"
+    const val LEAST_POPULAR = "popularity.asc"
+    const val LEAST_RATED = "vote_average.asc"
+    const val RELEASED_AGES_AGO = "primary_release_date.asc"
 }
 
 // ?api_key=775154bc0da8953106516b8e02ffd088

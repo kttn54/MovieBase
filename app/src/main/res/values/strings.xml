@@ -3,6 +3,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="genres" >
+        <item>-</item>
         <item>Action</item>
         <item>Adventure</item>
         <item>Animation</item>
@@ -22,6 +23,29 @@
         <item>Thriller</item>
         <item>War</item>
         <item>Western</item>
+    </string-array>
+
+    <string-array name="region" >
+        <item>-</item>
+        <item>AU</item>
+        <item>US</item>
+        <item>KR</item>
+        <item>JP</item>
+        <item>CN</item>
+        <item>TW</item>
+        <item>VN</item>
+        <item>UK</item>
+        <item>FR</item>
+        <item>UK</item>
+    </string-array>
+
+    <string-array name="sort_by" >
+        <item>Most Popular</item>
+        <item>Top Rated</item>
+        <item>Recently released</item>
+        <item>Least Popular</item>
+        <item>Least Rated</item>
+        <item>Released Ages Ago</item>
     </string-array>
 
 </resources>
