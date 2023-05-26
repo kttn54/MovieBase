@@ -16,6 +16,8 @@ import retrofit2.Response
 
 class MakeAMovieViewModel(): ViewModel() {
 
+    private val include_adult = false
+
     private val makeAMovieLiveData = MutableLiveData<List<Movie>>()
     private val getActorLiveData = MutableLiveData<ActorDetails>()
 
@@ -39,12 +41,13 @@ class MakeAMovieViewModel(): ViewModel() {
     } */
 
     fun makeAMovieWithGenre(genreId: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithGenre(Constants.api_key, false, 1, genreId, sortBy)
+        RetrofitInstance.api.makeMovieWithGenre(Constants.api_key, include_adult, 1, genreId, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
+                        Log.d("test","genre: ${response.body()}")
                     }
                 }
 
@@ -55,12 +58,13 @@ class MakeAMovieViewModel(): ViewModel() {
     }
 
     fun makeAMovieWithActor(actorId: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithActor(Constants.api_key, false, 1, actorId, sortBy)
+        RetrofitInstance.api.makeMovieWithActor(Constants.api_key, include_adult, 1, actorId, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
+                        Log.d("test","actor: ${response.body()}")
                     }
                 }
 
@@ -71,12 +75,13 @@ class MakeAMovieViewModel(): ViewModel() {
     }
 
     fun makeAMovieWithRegion(region: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithRegion(Constants.api_key, false, 1, region, sortBy)
+        RetrofitInstance.api.makeMovieWithRegion(Constants.api_key, include_adult, 1, region, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
+                        Log.d("test","region: ${response.body()}")
                     }
                 }
 
@@ -87,12 +92,13 @@ class MakeAMovieViewModel(): ViewModel() {
     }
 
     fun makeAMovieWithGenreAndActor(genreId: String, actorId: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithGenreAndActor(Constants.api_key, false, 1, genreId, actorId, sortBy)
+        RetrofitInstance.api.makeMovieWithGenreAndActor(Constants.api_key, include_adult, 1, genreId, actorId, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
+                        Log.d("test","genre and actor: ${response.body()}")
                     }
                 }
 
@@ -103,12 +109,13 @@ class MakeAMovieViewModel(): ViewModel() {
     }
 
     fun makeAMovieWithGenreAndActorAndRegion(genreId: String, actorId: String, region: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithGenreAndActorAndRegion(Constants.api_key, false, 1, genreId, actorId, region, sortBy)
+        RetrofitInstance.api.makeMovieWithGenreAndActorAndRegion(Constants.api_key, include_adult, 1, genreId, actorId, region, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
+                        Log.d("test","genre actor and region: ${response.body()}")
                     }
                 }
 
@@ -119,12 +126,13 @@ class MakeAMovieViewModel(): ViewModel() {
     }
 
     fun makeAMovieBySorted(sortBy: String) {
-        RetrofitInstance.api.makeMovieBySorted(Constants.api_key, false, 1, sortBy)
+        RetrofitInstance.api.makeMovieBySorted(Constants.api_key, include_adult, 1, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
+                        Log.d("test","sorted only: ${response.body()}")
                     }
                 }
 
@@ -135,12 +143,13 @@ class MakeAMovieViewModel(): ViewModel() {
     }
 
     fun makeAMovieWithGenreAndRegion(genreId: String, region: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithGenreAndRegion(Constants.api_key, false, 1, genreId, region, sortBy)
+        RetrofitInstance.api.makeMovieWithGenreAndRegion(Constants.api_key, include_adult, 1, genreId, region, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
+                        Log.d("test","genre and region: ${response.body()}")
                     }
                 }
 
@@ -151,12 +160,13 @@ class MakeAMovieViewModel(): ViewModel() {
     }
 
     fun makeAMovieWithActorAndRegion(actorId: String, region: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithActorAndRegion(Constants.api_key, false, 1, actorId, region, sortBy)
+        RetrofitInstance.api.makeMovieWithActorAndRegion(Constants.api_key, include_adult, 1, actorId, region, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
+                        Log.d("test","actor and region: ${response.body()}")
                     }
                 }
 
@@ -170,8 +180,14 @@ class MakeAMovieViewModel(): ViewModel() {
         RetrofitInstance.api.getActorId(Constants.api_key, actorName).enqueue(object: Callback<ActorResult> {
             override fun onResponse(call: Call<ActorResult>, response: Response<ActorResult>) {
                 if (response.body() != null) {
-                    val actorDetails = response.body()!!.results[0]
-                    getActorLiveData.value = actorDetails
+                    if (response.body()!!.total_results == 0) {
+                        Log.d("test", "returned")
+                        return
+                    } else {
+                        Log.d("test", "worked")
+                        val actorDetails = response.body()!!.results[0]
+                        getActorLiveData.value = actorDetails
+                    }
                 }
             }
 

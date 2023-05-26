@@ -12,6 +12,7 @@ import com.example.moviebase.model.Movie
 class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHolder>() {
 
     private var movieList = ArrayList<Movie>()
+    lateinit var onItemClick: ((Movie) -> Unit)
 
     fun setMovies(movieList: ArrayList<Movie>) {
         this.movieList = movieList
@@ -31,6 +32,10 @@ class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHo
             .into(holder.binding.ivMakeAMovie)
 
         holder.binding.tvGenerateMovieItem.text = movieList[position].title
+
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(movieList[position])
+        }
     }
 
     override fun getItemCount(): Int {

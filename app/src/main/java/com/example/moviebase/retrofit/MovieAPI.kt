@@ -32,7 +32,7 @@ interface MovieAPI {
         @Query("include_adult") include_adult: Boolean,
         @Query("with_genres") with_genres: String,
         @Query("with_cast") with_cast: String,
-        @Query("region") region: String,
+        @Query("language") language: String,
         @Query("sort_by") sort_by: String
     ): Call<MovieList>
 
@@ -65,10 +65,11 @@ interface MovieAPI {
         @Query("api_key") api_key: String,
         @Query("include_adult") include_adult: Boolean,
         @Query("page") page: Int,
-        @Query("region") region: String,
+        @Query("language") language: String,
         @Query("sort_by") sort_by: String
     ): Call<MovieList>
 
+    @GET ("discover/movie")
     fun makeMovieBySorted(
         @Query("api_key") api_key: String,
         @Query("include_adult") include_adult: Boolean,
@@ -93,7 +94,7 @@ interface MovieAPI {
         @Query("include_adult") include_adult: Boolean,
         @Query("page") page: Int,
         @Query("with_genres") with_genres: String,
-        @Query("region") region: String,
+        @Query("language") language: String,
         @Query("sort_by") sort_by: String,
     ): Call<MovieList>
 
@@ -103,7 +104,7 @@ interface MovieAPI {
         @Query("include_adult") include_adult: Boolean,
         @Query("page") page: Int,
         @Query("with_cast") with_cast: String,
-        @Query("region") region: String,
+        @Query("language") language: String,
         @Query("sort_by") sort_by: String,
     ): Call<MovieList>
 
@@ -114,7 +115,7 @@ interface MovieAPI {
         @Query("page") page: Int,
         @Query("with_genres") with_genres: String,
         @Query("with_cast") with_cast: String,
-        @Query("region") region: String,
+        @Query("language") language: String,
         @Query("sort_by") sort_by: String
     ): Call<MovieList>
 

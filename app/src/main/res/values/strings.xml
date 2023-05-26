@@ -31,12 +31,10 @@
         <item>US</item>
         <item>KR</item>
         <item>JP</item>
-        <item>CN</item>
-        <item>TW</item>
-        <item>VN</item>
-        <item>UK</item>
-        <item>FR</item>
-        <item>UK</item>
+        <item>EN</item>
+        <item>KO</item>
+        <item>VI</item>
+        <item>JA</item>
     </string-array>
 
     <string-array name="sort_by" >

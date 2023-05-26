@@ -10,6 +10,8 @@ import com.example.moviebase.viewModel.HomeViewModel
 
 class MainActivity : AppCompatActivity() {
 
+    //TODO: add next page functionality at the bottom to "MakeAMovieFragment"
+
     private lateinit var binding: ActivityMainBinding
 
     /*    To create Room database later

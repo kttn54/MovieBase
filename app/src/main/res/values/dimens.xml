@@ -7,5 +7,5 @@
     <dimen name="MaM_spinner_margin_start">50dp</dimen>
     <dimen name="MaM_filter_text_size">18sp</dimen>
     <dimen name="MaM_filter_margin_start">15dp</dimen>
-    <dimen name="MaM_actor_edit_text_margin_start">60dp</dimen>
+    <dimen name="MaM_actor_edit_text_margin_start">50dp</dimen>
 </resources>
