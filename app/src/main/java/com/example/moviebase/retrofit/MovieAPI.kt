@@ -2,6 +2,7 @@ package com.example.moviebase.retrofit
 
 import com.example.moviebase.model.ActorResult
 import com.example.moviebase.model.MovieList
+import com.example.moviebase.model.TVSeriesList
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -25,16 +26,41 @@ interface MovieAPI {
         @Query("with_genres") with_genres: String
     ): Call<MovieList>
 
-    @GET("discover/movie")
-    fun makeMovieTestAllFilters(
+    @GET("discover/tv")
+    fun makeTVSeriesWithGenre(
         @Query("api_key") api_key: String,
-        @Query("page") page: Int,
         @Query("include_adult") include_adult: Boolean,
+        @Query("page") page: Int,
         @Query("with_genres") with_genres: String,
-        @Query("with_cast") with_cast: String,
+        @Query("sort_by") sort_by: String
+    ): Call<TVSeriesList>
+
+    @GET ("discover/tv")
+    fun makeTVSeriesBySorted(
+        @Query("api_key") api_key: String,
+        @Query("include_adult") include_adult: Boolean,
+        @Query("page") page: Int,
+        @Query("sort_by") sort_by: String
+    ): Call<TVSeriesList>
+
+    @GET("discover/tv")
+    fun makeTVSeriesWithGenreAndRegion(
+        @Query("api_key") api_key: String,
+        @Query("include_adult") include_adult: Boolean,
+        @Query("page") page: Int,
+        @Query("with_genres") with_genres: String,
+        @Query("language") language: String,
+        @Query("sort_by") sort_by: String,
+    ): Call<TVSeriesList>
+
+    @GET("discover/tv")
+    fun makeTVSeriesWithRegion(
+        @Query("api_key") api_key: String,
+        @Query("include_adult") include_adult: Boolean,
+        @Query("page") page: Int,
         @Query("language") language: String,
         @Query("sort_by") sort_by: String
-    ): Call<MovieList>
+    ): Call<TVSeriesList>
 
     @GET("search/person")
     fun getActorId(
@@ -86,7 +112,6 @@ interface MovieAPI {
         @Query("with_cast") with_cast: String,
         @Query("sort_by") sort_by: String
     ): Call<MovieList>
-
 
     @GET("discover/movie")
     fun makeMovieWithGenreAndRegion(

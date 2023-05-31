@@ -4,11 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/ic_drag.xml" value="0.2225" />
+        <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/ic_favourite.xml" value="0.223" />
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/ic_genre.xml" value="0.2145" />
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/ic_home.xml" value="0.1" />
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/ic_movie.xml" value="0.11" />
+        <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/ic_saved.xml" value="0.223" />
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/ic_star.xml" value="0.288" />
+        <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/language_tab_text_colour_selector.xml" value="0.223" />
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/mam_spinner.xml" value="0.2225" />
+        <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/drawable/radio_group_tab_background.xml" value="0.223" />
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/font/font.xml" value="0.4161458333333333" />
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/layout/activity_main.xml" value="0.16985645933014354" />
         <entry key="..\:/Users/Kevin N/Documents/Coding/MovieBase/app/src/main/res/layout/activity_movie.xml" value="0.35597826086956524" />

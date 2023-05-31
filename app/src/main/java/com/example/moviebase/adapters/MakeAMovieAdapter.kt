@@ -8,6 +8,7 @@ import com.example.moviebase.Constants
 import com.example.moviebase.R
 import com.example.moviebase.databinding.GenerateMovieItemBinding
 import com.example.moviebase.model.Movie
+import com.example.moviebase.model.TVSeries
 
 class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHolder>() {
 
@@ -15,6 +16,11 @@ class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHo
     lateinit var onItemClick: ((Movie) -> Unit)
 
     fun setMovies(movieList: ArrayList<Movie>) {
+        this.movieList = movieList
+        notifyDataSetChanged()
+    }
+
+    fun setTVSeries(TVList: ArrayList<TVSeries>) {
         this.movieList = movieList
         notifyDataSetChanged()
     }
@@ -40,5 +46,9 @@ class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHo
 
     override fun getItemCount(): Int {
         return movieList.size
+    }
+
+    fun clearData() {
+        movieList.clear()
     }
 }

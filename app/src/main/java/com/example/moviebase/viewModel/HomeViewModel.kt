@@ -4,20 +4,24 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.moviebase.Constants
+import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
 import com.example.moviebase.model.MovieList
 import com.example.moviebase.retrofit.RetrofitInstance
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import kotlin.random.Random
 
-class HomeViewModel(): ViewModel() {
+class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
 
     private var trendingMovieLiveData = MutableLiveData<Movie>()
     private var popularMovieLiveData = MutableLiveData<List<Movie>>()
+    private var favouritedMovieLiveData = movieDatabase.movieDao().getAllSavedMovies()
 
     fun getTrendingMovie() {
         RetrofitInstance.api.getTrendingMovie(Constants.api_key).enqueue(object: Callback<MovieList> {
@@ -53,11 +57,21 @@ class HomeViewModel(): ViewModel() {
             })
     }
 
+    fun insertMovie(movie: Movie) {
+        viewModelScope.launch {
+            movieDatabase.movieDao().upsertMovie(movie)
+        }
+    }
+
     fun observerTrendingMovieLiveData(): LiveData<Movie> {
         return trendingMovieLiveData
     }
 
     fun observerPopularMovieLiveData(): LiveData<List<Movie>> {
         return popularMovieLiveData
+    }
+
+    fun observerFavouritedMovieLiveData(): LiveData<List<Movie>> {
+        return favouritedMovieLiveData
     }
 }

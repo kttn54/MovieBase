@@ -1,6 +1,7 @@
 package com.example.moviebase.fragments
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,9 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviebase.Constants
 import com.example.moviebase.Constants.LEAST_POPULAR
@@ -21,14 +25,18 @@ import com.example.moviebase.Constants.RECENTLY_RELEASED
 import com.example.moviebase.Constants.RELEASED_AGES_AGO
 import com.example.moviebase.Constants.TOP_RATED
 import com.example.moviebase.R
+import com.example.moviebase.activities.MainActivity
 import com.example.moviebase.activities.MovieActivity
 import com.example.moviebase.adapters.MakeAMovieAdapter
+import com.example.moviebase.adapters.MakeATVSeriesAdapter
 import com.example.moviebase.databinding.FragmentGenerateBinding
 import com.example.moviebase.model.ActorDetails
 import com.example.moviebase.model.Movie
+import com.example.moviebase.model.TVSeries
 import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.MakeAMovieViewModel
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.coroutines.*
 import retrofit2.Callback
 import java.lang.Math.abs
 
@@ -36,25 +44,30 @@ class GenreFragment : Fragment() {
 
     private lateinit var binding: FragmentGenerateBinding
     private lateinit var MaMMvvm: MakeAMovieViewModel
+    private lateinit var viewModel: HomeViewModel
     private var genreOne = ""
     private var genreOneId = ""
     private var genreTwo = ""
     private var genreTwoId = ""
-    private var combinedGenres = ""
+    private var combinedGenreIds = ""
     private var actorOneName = ""
-    private var actorOneId = ""
+    private var actorOneId: String = ""
     private var actorTwoName = ""
     private var actorTwoId = ""
-    private var combinedActors = ""
+    private var combinedActorIds = ""
     private var region = ""
     private var sortBy = "popularity.desc"
     private lateinit var MaMAdapter: MakeAMovieAdapter
+    private lateinit var MaMTVAdapter: MakeATVSeriesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         MaMMvvm = ViewModelProvider(this)[MakeAMovieViewModel::class.java]
+        viewModel = (activity as MainActivity).viewModel
+
         MaMAdapter = MakeAMovieAdapter()
+        MaMTVAdapter = MakeATVSeriesAdapter()
     }
 
     override fun onCreateView(
@@ -69,39 +82,26 @@ class GenreFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initialiseUI()
+        setupRadioGroupListener()
 
         binding.btnMaMSubmit.setOnClickListener {
             readDataFromUI()
 
-            // TODO: combine actors and genres
-
-            if (actorOneName.isNullOrEmpty()) {
-                if (genreOneId.isNullOrEmpty() && actorOneName.isNullOrEmpty() && region.isNullOrEmpty()) {
-                    MaMMvvm.makeAMovieBySorted(sortBy)
-                } else if (genreOneId.isNotEmpty() && actorOneName.isNullOrEmpty() && region.isNullOrEmpty()) {
-                    MaMMvvm.makeAMovieWithGenre(genreOneId, sortBy)
-                } else if (genreOneId.isNotEmpty() && actorOneName.isNullOrEmpty() && region.isNotEmpty()) {
-                    MaMMvvm.makeAMovieWithGenreAndRegion(genreOneId, region, sortBy)
-                } else if (genreOneId.isNullOrEmpty() && actorOneName.isNullOrEmpty() && region.isNotEmpty()) {
-                MaMMvvm.makeAMovieWithRegion(region, sortBy)
+            if (binding.rbMaMMovie.isChecked) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    getActorOneId()
+                    getActorTwoId()
+                    delay(1000L)
+                    combineActors()
+                    getMovies()
+                    observeMakeAMovie()
+                    prepareMaMRecyclerView()
                 }
             } else {
-                getActorId {
-                    Log.d("test", "getactorid is $actorOneId")
-                    if (genreOneId.isNullOrEmpty() && actorOneId.isNotEmpty() && region.isNullOrEmpty()) {
-                        MaMMvvm.makeAMovieWithActor(actorOneId, sortBy)
-                    } else if (genreOneId.isNullOrEmpty() && actorOneId.isNotEmpty() && region.isNotEmpty()) {
-                        MaMMvvm.makeAMovieWithActorAndRegion(actorOneId, region, sortBy)
-                    } else if (genreOneId.isNotEmpty() && actorOneId.isNotEmpty() && region.isNullOrEmpty()) {
-                        MaMMvvm.makeAMovieWithGenreAndActor(genreOneId, actorOneId, sortBy)
-                    } else if (genreOneId.isNotEmpty() && actorOneId.isNotEmpty() && region.isNotEmpty()) {
-                        MaMMvvm.makeAMovieWithGenreAndActorAndRegion(genreOneId, actorOneId, region, sortBy)
-                    }
-                }
+                getTVSeries()
+                observeMakeATVSeries()
+                prepareMaMRecyclerView()
             }
-
-            observeMakeAMovie()
-            prepareMaMRecyclerView()
         }
 
         binding.appbarMaM.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
@@ -116,6 +116,7 @@ class GenreFragment : Fragment() {
             binding.spinnerMaMSortBy.alpha = 1- collapsePercentage
             binding.etMaMActorOne.alpha = 1- collapsePercentage
             binding.etMaMActorTwo.alpha = 1- collapsePercentage
+            binding.rgMaMType.alpha = 1- collapsePercentage
 
             if (collapsePercentage.compareTo(1.0) == 0) {
                 binding.ivToolbarDrag.visibility = View.VISIBLE
@@ -125,23 +126,132 @@ class GenreFragment : Fragment() {
         }
 
         onMaMMovieClicked()
+        onMaMTVSeriesClicked()
+    }
+
+    private fun setupRadioGroupListener() {
+        binding.rgMaMType.setOnCheckedChangeListener { _, checkedId: Int ->
+            if (checkedId == binding.rbMaMMovie.id) {
+                initialiseUI()
+                MaMTVAdapter.clearData()
+                MaMTVAdapter.notifyDataSetChanged()
+                binding.spinnerMaMGenreOne.setSelection(0)
+                binding.spinnerMaMGenreTwo.setSelection(0)
+                binding.llMaMActors.visibility = View.VISIBLE
+                binding.btnMaMSubmit.text = "FIND MOVIES!"
+            } else {
+                initialiseUI()
+                MaMAdapter.clearData()
+                MaMAdapter.notifyDataSetChanged()
+                binding.spinnerMaMGenreOne.setSelection(0)
+                binding.spinnerMaMGenreTwo.setSelection(0)
+                binding.llMaMActors.visibility = View.GONE
+                binding.btnMaMSubmit.text = "FIND TV SERIES!"
+
+                val marginTopInDp = 5
+                val marginTopInPixels = (marginTopInDp * resources.displayMetrics.density).toInt()
+                binding.llMaMRegion.translationY = marginTopInPixels.toFloat()
+                binding.llMaMSortBy.translationY = marginTopInPixels.toFloat()
+                binding.clMaMMovies.translationY = marginTopInPixels.toFloat()
+            }
+        }
+    }
+
+    private fun getMovies() {
+        if (combinedActorIds.isNullOrEmpty()) {
+            // Log.d("test", "test1")
+            if (combinedGenreIds.isNullOrEmpty() && actorOneName.isNullOrEmpty() && region.isNullOrEmpty()) {
+                MaMMvvm.makeAMovieBySorted(sortBy)
+            } else if (combinedGenreIds.isNotEmpty() && actorOneName.isNullOrEmpty() && region.isNullOrEmpty()) {
+                MaMMvvm.makeAMovieWithGenre(combinedGenreIds, sortBy)
+            } else if (combinedGenreIds.isNotEmpty() && actorOneName.isNullOrEmpty() && region.isNotEmpty()) {
+                MaMMvvm.makeAMovieWithGenreAndRegion(combinedGenreIds, region, sortBy)
+            } else if (combinedGenreIds.isNullOrEmpty() && actorOneName.isNullOrEmpty() && region.isNotEmpty()) {
+                MaMMvvm.makeAMovieWithRegion(region, sortBy)
+            }
+        } else {
+            // Log.d("test", "test2")
+            if (combinedGenreIds.isNullOrEmpty() && region.isNullOrEmpty()) {
+                MaMMvvm.makeAMovieWithActor(combinedActorIds, sortBy)
+            } else if (combinedGenreIds.isNullOrEmpty() && region.isNotEmpty()) {
+                MaMMvvm.makeAMovieWithActorAndRegion(combinedActorIds, region, sortBy)
+            } else if (combinedGenreIds.isNotEmpty() && region.isNullOrEmpty()) {
+                MaMMvvm.makeAMovieWithGenreAndActor(combinedGenreIds, combinedActorIds, sortBy)
+            } else if (combinedGenreIds.isNotEmpty() && region.isNotEmpty()) {
+                MaMMvvm.makeAMovieWithGenreAndActorAndRegion(combinedGenreIds, combinedActorIds, region, sortBy)
+            }
+        }
+    }
+
+    private fun getTVSeries() {
+        if(combinedGenreIds.isNullOrEmpty() && region.isNotEmpty()) {
+            MaMMvvm.makeTVSeriesWithRegion(region, sortBy)
+        } else if (combinedGenreIds.isNotEmpty() && region.isNullOrEmpty()) {
+            MaMMvvm.makeTVSeriesWithGenre(combinedGenreIds, sortBy)
+        } else if (combinedGenreIds.isNotEmpty() && region.isNotEmpty()) {
+            MaMMvvm.makeTVSeriesWithGenreAndRegion(combinedGenreIds, region, sortBy)
+        } else {
+            MaMMvvm.makeTVSeriesBySorted(sortBy)
+        }
+    }
+
+    private fun combineActors() {
+        if (actorOneId.isNotEmpty() && actorTwoId.isNotEmpty()) {
+            combinedActorIds = "$actorOneId,$actorTwoId"
+        } else if (actorOneId.isNotEmpty()) {
+            combinedActorIds = actorOneId
+        } else if (actorTwoId.isNotEmpty()) {
+            combinedActorIds = actorTwoId
+        } else {
+            combinedActorIds = ""
+        }
     }
 
     private fun onMaMMovieClicked() {
         MaMAdapter.onItemClick = { movie ->
             val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(HomeFragment.MOVIE_OBJECT, movie)
+            Log.d("test", "movie is $movie")
+
             intent.putExtra(HomeFragment.MOVIE_TITLE, movie.title)
-            intent.putExtra(HomeFragment.MOVIE_IMAGE, movie.poster_path)
+            if(movie.poster_path != null) {
+                intent.putExtra(HomeFragment.MOVIE_IMAGE, movie.poster_path)
+            } else {
+                intent.putExtra(HomeFragment.MOVIE_IMAGE, "N/A")
+            }
             intent.putExtra(HomeFragment.MOVIE_OVERVIEW, movie.overview)
             intent.putExtra(HomeFragment.MOVIE_RATING, movie.vote_average)
             intent.putExtra(HomeFragment.MOVIE_RELEASE_DATE, movie.release_date)
+            intent.putIntegerArrayListExtra(HomeFragment.MOVIE_GENRES, ArrayList(movie.genre_ids))
+            startActivity(intent)
+        }
+    }
+
+    private fun onMaMTVSeriesClicked() {
+        MaMTVAdapter.onItemClick = { TVSeries ->
+            val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(HomeFragment.MOVIE_TITLE, TVSeries.name)
+            if(TVSeries.poster_path != null) {
+                intent.putExtra(HomeFragment.MOVIE_IMAGE, TVSeries.poster_path)
+            } else {
+                intent.putExtra(HomeFragment.MOVIE_IMAGE, "N/A")
+            }
+
+            intent.putExtra(HomeFragment.MOVIE_OVERVIEW, TVSeries.overview)
+            intent.putExtra(HomeFragment.MOVIE_RATING, TVSeries.vote_average)
+            intent.putExtra(HomeFragment.MOVIE_RELEASE_DATE, TVSeries.first_air_date)
+            intent.putIntegerArrayListExtra(HomeFragment.MOVIE_GENRES, ArrayList(TVSeries.genre_ids))
             startActivity(intent)
         }
     }
 
     private fun prepareMaMRecyclerView() {
         binding.rvMaMMovies.apply {
-            adapter = MaMAdapter
+            if (binding.rbMaMMovie.isChecked) {
+                adapter = MaMAdapter
+            } else {
+                adapter = MaMTVAdapter
+            }
             layoutManager = GridLayoutManager(activity, 3, GridLayoutManager.VERTICAL, false)
         }
     }
@@ -149,35 +259,68 @@ class GenreFragment : Fragment() {
     private fun observeMakeAMovie() {
         MaMMvvm.observerMakeAMovieLiveData().observe(viewLifecycleOwner) { movieList ->
             if (movieList.isNullOrEmpty()) {
-                binding.tvMamNoContent.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "No available data with the filters. Please try again.", Toast.LENGTH_LONG).show()
                 binding.progressBar.visibility = View.INVISIBLE
                 binding.rvMaMMovies.visibility = View.INVISIBLE
+                binding.rlPageButtons.visibility = View.INVISIBLE
             } else {
                 binding.progressBar.visibility = View.INVISIBLE
                 binding.rvMaMMovies.visibility = View.VISIBLE
+                binding.rlPageButtons.visibility = View.VISIBLE
                 MaMAdapter.setMovies(movieList = movieList as ArrayList<Movie>)
             }
         }
     }
 
+    private fun observeMakeATVSeries() {
+        MaMMvvm.observerTVSeriesLiveData().observe(viewLifecycleOwner) { tvList ->
+            if (tvList.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "No available data with the filters. Please try again.", Toast.LENGTH_LONG).show()
+                binding.progressBar.visibility = View.INVISIBLE
+                binding.rvMaMMovies.visibility = View.INVISIBLE
+                binding.rlPageButtons.visibility = View.INVISIBLE
+            } else {
+                binding.progressBar.visibility = View.INVISIBLE
+                binding.rvMaMMovies.visibility = View.VISIBLE
+                binding.rlPageButtons.visibility = View.VISIBLE
+                MaMTVAdapter.setTVSeries(tvList = tvList as ArrayList<TVSeries>)
+            }
+        }
+    }
+
+    private fun observeActorOneId() {
+        MaMMvvm.observerGetActorOneLiveData().observe(viewLifecycleOwner) { actor ->
+            actorOneId = actor!!.id.toString()
+        }
+    }
+
+    private fun observeActorTwoId() {
+        MaMMvvm.observerGetActorTwoLiveData().observe(viewLifecycleOwner) { actor ->
+            actorTwoId = actor!!.id.toString()
+        }
+    }
+
     private fun readDataFromUI() {
         binding.progressBar.visibility = View.VISIBLE
-        binding.tvMamNoContent.visibility = View.INVISIBLE
         genreOne = binding.spinnerMaMGenreOne.selectedItem.toString()
         genreTwo = binding.spinnerMaMGenreTwo.selectedItem.toString()
 
         getGenreOneId(genreOne)
         getGenreTwoId(genreTwo)
-        Log.d("test","genreoneid is $genreOneId and genretwoid is $genreTwoId")
+        combineGenres(genreOneId, genreTwoId)
 
-        actorOneName = binding.etMaMActorOne.text.toString()
-        if (actorOneName.isNullOrEmpty()) {
-            actorOneName = ""
-        }
+        if (binding.rbMaMMovie.isChecked) {
+            actorOneName = binding.etMaMActorOne.text.toString()
+            Log.d("test", "actoronename from readdata is $actorOneName")
+            Log.d("test", "combinegenres from readdata is $combinedGenreIds")
+            if (actorOneName.isNullOrEmpty()) {
+                actorOneName = ""
+            }
 
-        actorTwoName = binding.etMaMActorTwo.text.toString()
-        if (actorTwoName.isNullOrEmpty()) {
-            actorTwoName = ""
+            actorTwoName = binding.etMaMActorTwo.text.toString()
+            if (actorTwoName.isNullOrEmpty()) {
+                actorTwoName = ""
+            }
         }
 
         region = binding.spinnerMaMRegion.selectedItem.toString()
@@ -189,48 +332,75 @@ class GenreFragment : Fragment() {
 
         when (sortByValue) {
             "Most Popular" -> {
-                sortBy = Constants.MOST_POPULAR
+                sortBy = MOST_POPULAR
             }
             "Top Rated" -> {
-                sortBy = Constants.TOP_RATED
-            }
-            "Recently Released" -> {
-                sortBy = Constants.RECENTLY_RELEASED
+                sortBy = TOP_RATED
             }
             "Least Popular" -> {
-                sortBy = Constants.LEAST_POPULAR
+                sortBy = LEAST_POPULAR
             }
             "Least Rated" -> {
-                sortBy = Constants.LEAST_RATED
+                sortBy = LEAST_RATED
             }
             "Released Ages Ago" -> {
-                sortBy = Constants.RELEASED_AGES_AGO
+                sortBy = RELEASED_AGES_AGO
+            }
+            "Recently Released" -> {
+                sortBy = RECENTLY_RELEASED
             }
         }
     }
 
-    private fun getActorId(callback: () -> Unit) {
-        MaMMvvm.getActorId(actorOneName)
-        observeActorOneId(callback)
+    private fun combineGenres(genreOneId: String, genreTwoId: String) {
+        if (genreOneId.isNotEmpty() && genreTwoId.isNotEmpty()) {
+            combinedGenreIds = "$genreOneId,$genreTwoId"
+        } else if (genreOneId.isNotEmpty()) {
+            combinedGenreIds = genreOneId
+        } else if (genreTwoId.isNotEmpty()) {
+            combinedGenreIds = genreTwoId
+        } else {
+            combinedGenreIds = ""
+        }
+        Log.d("test", "combinedgenres is $combinedGenreIds")
     }
 
-    private fun observeActorOneId(callback: () -> Unit) {
-        MaMMvvm.observerGetActorLiveData().observe(viewLifecycleOwner, object: Observer<ActorDetails> {
-            override fun onChanged(actor: ActorDetails?) {
-                actorOneId = actor!!.id.toString()
-                callback.invoke()
-            }
+    private fun getActorOneId() {
+        if (actorOneName == "") {
+            actorOneId = ""
+            return
+        }
+        MaMMvvm.getActorOneId(actorOneName)
+        observeActorOneId()
+    }
 
-        })
+    private fun getActorTwoId() {
+        if (actorTwoName == "") {
+            actorTwoId = ""
+            return
+        }
+        MaMMvvm.getActorTwoId(actorTwoName)
+        observeActorTwoId()
     }
 
     private fun initialiseUI() {
-        val genreOptions = resources.getStringArray(R.array.genres)
+        val genreOptions: Array<String?>
+        if (binding.rbMaMMovie.isChecked) {
+            val nonNullGenreOptions: Array<String> = resources.getStringArray(R.array.genres_movie)
+            genreOptions = nonNullGenreOptions.map { it }.toTypedArray()
+
+            val regionOptions = resources.getStringArray(R.array.language_movie)
+            binding.spinnerMaMRegion.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, regionOptions)
+        } else {
+            val nonNullGenreOptions: Array<String> = resources.getStringArray(R.array.genres_tv)
+            genreOptions = nonNullGenreOptions.map { it }.toTypedArray()
+
+            val regionOptions = resources.getStringArray(R.array.language_movie)
+            binding.spinnerMaMRegion.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, regionOptions)
+        }
+
         binding.spinnerMaMGenreOne.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genreOptions)
         binding.spinnerMaMGenreTwo.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genreOptions)
-
-        val regionOptions = resources.getStringArray(R.array.region)
-        binding.spinnerMaMRegion.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, regionOptions)
 
         val sortOptions = resources.getStringArray(R.array.sort_by)
         binding.spinnerMaMSortBy.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sortOptions)
@@ -298,6 +468,30 @@ class GenreFragment : Fragment() {
             "Western" -> {
                 genreOneId = Constants.WESTERN.toString()
             }
+            "Action & Adventure" -> {
+                genreOneId = Constants.ACTION_AND_ADVENTURE.toString()
+            }
+            "Kids" -> {
+                genreOneId = Constants.KIDS.toString()
+            }
+            "News" -> {
+                genreOneId = Constants.NEWS.toString()
+            }
+            "Reality" -> {
+                genreOneId = Constants.REALITY.toString()
+            }
+            "Sci-Fi & Fantasy" -> {
+                genreOneId = Constants.SCI_FI_AND_FANTASY.toString()
+            }
+            "Soap" -> {
+                genreOneId = Constants.SOAP.toString()
+            }
+            "Talk" -> {
+                genreOneId = Constants.TALK.toString()
+            }
+            "War & Politics" -> {
+                genreOneId = Constants.WAR_AND_POLITICS.toString()
+            }
         }
     }
 
@@ -362,6 +556,30 @@ class GenreFragment : Fragment() {
             }
             "Western" -> {
                 genreTwoId = Constants.WESTERN.toString()
+            }
+            "Action & Adventure" -> {
+                genreOneId = Constants.ACTION_AND_ADVENTURE.toString()
+            }
+            "Kids" -> {
+                genreOneId = Constants.KIDS.toString()
+            }
+            "News" -> {
+                genreOneId = Constants.NEWS.toString()
+            }
+            "Reality" -> {
+                genreOneId = Constants.REALITY.toString()
+            }
+            "Sci-Fi & Fantasy" -> {
+                genreOneId = Constants.SCI_FI_AND_FANTASY.toString()
+            }
+            "Soap" -> {
+                genreOneId = Constants.SOAP.toString()
+            }
+            "Talk" -> {
+                genreOneId = Constants.TALK.toString()
+            }
+            "War & Politics" -> {
+                genreOneId = Constants.WAR_AND_POLITICS.toString()
             }
         }
     }

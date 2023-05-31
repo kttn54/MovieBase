@@ -11,4 +11,9 @@
     <color name="blue_crayola">#3772FF</color>
     <color name="outer_space">#464F51</color>
     <color name="grey">#E0E0E0</color>
+
+    <color name="rgSolidColour">#E0E0E0</color>
+    <color name="rgStrokeColour">#000000</color>
+    <color name="rbStateChecked">#FFFFFF</color>
+    <color name="rbStateUnchecked">#808080</color>
 </resources>

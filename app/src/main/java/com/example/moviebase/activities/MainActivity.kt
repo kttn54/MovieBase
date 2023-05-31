@@ -2,11 +2,14 @@ package com.example.moviebase.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.example.moviebase.R
 import com.example.moviebase.databinding.ActivityMainBinding
+import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.viewModel.HomeViewModel
+import com.example.moviebase.viewModel.HomeViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,11 +17,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    /*    To create Room database later
-    val viewModel: HomeViewModel by lazy {
+    /**
+     *  'HomeViewModel' will be instantiated lazily, accessing 'viewModel' for the first time.
+     *  Further uses will return the same instance.
+     */
 
+    val viewModel: HomeViewModel by lazy {
+        val movieDatabase = MovieDatabase.getInstance(this)
+        val homeViewModelProviderFactory = HomeViewModelFactory(movieDatabase)
+        ViewModelProvider(this, homeViewModelProviderFactory)[HomeViewModel::class.java]
     }
-    */
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

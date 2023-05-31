@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.moviebase.Constants
 import com.example.moviebase.R
+import com.example.moviebase.activities.MainActivity
 import com.example.moviebase.adapters.PopularMovieAdapter
 import com.example.moviebase.databinding.FragmentHomeBinding
 import com.example.moviebase.model.Movie
@@ -23,7 +24,7 @@ import com.example.moviebase.activities.MovieActivity
 class HomeFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var homeMvvm: HomeViewModel
+    private lateinit var viewModel: HomeViewModel
     private lateinit var trendingMovie: Movie
     private lateinit var popularMoviesAdapter: PopularMovieAdapter
     private var genreId = ""
@@ -35,12 +36,14 @@ class HomeFragment : Fragment(), View.OnClickListener {
         const val MOVIE_IMAGE = "com.example.moviebase.movieImage"
         const val MOVIE_RATING = "com.example.moviebase.movieRating"
         const val MOVIE_RELEASE_DATE = "com.example.moviebase.movieReleaseDate"
+        const val MOVIE_GENRES = "com.example.moviebase.movieGenres"
+        const val MOVIE_OBJECT = "com.example.moviebase.movie"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        homeMvvm = ViewModelProvider(this)[HomeViewModel::class.java]
+        viewModel = (activity as MainActivity).viewModel
 
         popularMoviesAdapter = PopularMovieAdapter()
     }
@@ -61,11 +64,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
         preparePopularMoviesRecyclerView()
 
-        homeMvvm.getTrendingMovie()
+        viewModel.getTrendingMovie()
         observerTrendingMovie()
         onTrendingMovieClicked()
 
-        homeMvvm.getPopularMoviesByCategory(genreId)
+        viewModel.getPopularMoviesByCategory(genreId)
         observerPopularMovie()
         onPopularMovieClicked()
     }
@@ -73,11 +76,17 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private fun onPopularMovieClicked() {
         popularMoviesAdapter.onItemClick = { movie ->
             val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(HomeFragment.MOVIE_OBJECT, movie)
             intent.putExtra(MOVIE_TITLE, movie.title)
-            intent.putExtra(MOVIE_IMAGE, movie.poster_path)
+            if(movie.poster_path != null) {
+                intent.putExtra(MOVIE_IMAGE, movie.poster_path)
+            } else {
+                intent.putExtra(MOVIE_IMAGE, "N/A")
+            }
             intent.putExtra(MOVIE_OVERVIEW, movie.overview)
             intent.putExtra(MOVIE_RATING, movie.vote_average)
             intent.putExtra(MOVIE_RELEASE_DATE, movie.release_date)
+            intent.putIntegerArrayListExtra(MOVIE_GENRES, ArrayList(movie.genre_ids))
             startActivity(intent)
         }
     }
@@ -85,11 +94,17 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private fun onTrendingMovieClicked() {
         binding.ivTrending.setOnClickListener {
             val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(HomeFragment.MOVIE_OBJECT, trendingMovie)
             intent.putExtra(MOVIE_TITLE, trendingMovie.title)
-            intent.putExtra(MOVIE_IMAGE, trendingMovie.poster_path)
+            if(trendingMovie.poster_path != null) {
+                intent.putExtra(MOVIE_IMAGE, trendingMovie.poster_path)
+            } else {
+                intent.putExtra(MOVIE_IMAGE, "N/A")
+            }
             intent.putExtra(MOVIE_OVERVIEW, trendingMovie.overview)
             intent.putExtra(MOVIE_RATING, trendingMovie.vote_average)
             intent.putExtra(MOVIE_RELEASE_DATE, trendingMovie.release_date)
+            intent.putIntegerArrayListExtra(MOVIE_GENRES, ArrayList(trendingMovie.genre_ids))
             startActivity(intent)
         }
     }
@@ -103,7 +118,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     private fun observerTrendingMovie() {
         showDialogBox()
-        homeMvvm.observerTrendingMovieLiveData().observe(viewLifecycleOwner, object: Observer<Movie> {
+        viewModel.observerTrendingMovieLiveData().observe(viewLifecycleOwner, object: Observer<Movie> {
             override fun onChanged(movie: Movie?) {
                 Glide.with(this@HomeFragment)
                     .load("${Constants.BASE_IMG_URL}${movie!!.backdrop_path}")
@@ -119,7 +134,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     private fun observerPopularMovie() {
         showDialogBox()
-        homeMvvm.observerPopularMovieLiveData().observe(viewLifecycleOwner)
+        viewModel.observerPopularMovieLiveData().observe(viewLifecycleOwner)
         { movieList ->
             popularMoviesAdapter.setMovies(movieList = movieList as ArrayList<Movie>)
         }
@@ -152,7 +167,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
             }
         }
 
-        homeMvvm.getPopularMoviesByCategory(genreId)
+        viewModel.getPopularMoviesByCategory(genreId)
         hideDialogBox()
     }
 
