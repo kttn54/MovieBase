@@ -44,24 +44,6 @@ interface MovieAPI {
         @Query("sort_by") sort_by: String
     ): Call<TVSeriesList>
 
-    @GET("discover/tv")
-    fun makeTVSeriesWithGenreAndRegion(
-        @Query("api_key") api_key: String,
-        @Query("include_adult") include_adult: Boolean,
-        @Query("page") page: Int,
-        @Query("with_genres") with_genres: String,
-        @Query("language") language: String,
-        @Query("sort_by") sort_by: String,
-    ): Call<TVSeriesList>
-
-    @GET("discover/tv")
-    fun makeTVSeriesWithRegion(
-        @Query("api_key") api_key: String,
-        @Query("include_adult") include_adult: Boolean,
-        @Query("page") page: Int,
-        @Query("language") language: String,
-        @Query("sort_by") sort_by: String
-    ): Call<TVSeriesList>
 
     @GET("search/person")
     fun getActorId(
@@ -87,15 +69,6 @@ interface MovieAPI {
         @Query("sort_by") sort_by: String
     ): Call<MovieList>
 
-    @GET("discover/movie")
-    fun makeMovieWithRegion(
-        @Query("api_key") api_key: String,
-        @Query("include_adult") include_adult: Boolean,
-        @Query("page") page: Int,
-        @Query("language") language: String,
-        @Query("sort_by") sort_by: String
-    ): Call<MovieList>
-
     @GET ("discover/movie")
     fun makeMovieBySorted(
         @Query("api_key") api_key: String,
@@ -111,37 +84,6 @@ interface MovieAPI {
         @Query("page") page: Int,
         @Query("with_genres") with_genres: String,
         @Query("with_cast") with_cast: String,
-        @Query("sort_by") sort_by: String
-    ): Call<MovieList>
-
-    @GET("discover/movie")
-    fun makeMovieWithGenreAndRegion(
-        @Query("api_key") api_key: String,
-        @Query("include_adult") include_adult: Boolean,
-        @Query("page") page: Int,
-        @Query("with_genres") with_genres: String,
-        @Query("language") language: String,
-        @Query("sort_by") sort_by: String,
-    ): Call<MovieList>
-
-    @GET("discover/movie")
-    fun makeMovieWithActorAndRegion(
-        @Query("api_key") api_key: String,
-        @Query("include_adult") include_adult: Boolean,
-        @Query("page") page: Int,
-        @Query("with_cast") with_cast: String,
-        @Query("language") language: String,
-        @Query("sort_by") sort_by: String,
-    ): Call<MovieList>
-
-    @GET("discover/movie")
-    fun makeMovieWithGenreAndActorAndRegion(
-        @Query("api_key") api_key: String,
-        @Query("include_adult") include_adult: Boolean,
-        @Query("page") page: Int,
-        @Query("with_genres") with_genres: String,
-        @Query("with_cast") with_cast: String,
-        @Query("language") language: String,
         @Query("sort_by") sort_by: String
     ): Call<MovieList>
 

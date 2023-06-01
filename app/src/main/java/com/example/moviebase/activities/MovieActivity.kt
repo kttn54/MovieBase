@@ -44,6 +44,7 @@ import com.example.moviebase.fragments.HomeFragment
 import com.example.moviebase.databinding.ActivityMovieBinding
 import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
+import com.example.moviebase.model.TVSeries
 import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.MovieViewModel
 import com.example.moviebase.viewModel.MovieViewModelFactory
@@ -53,7 +54,10 @@ class MovieActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMovieBinding
     private lateinit var movieMvvm: MovieViewModel
     private lateinit var movie: Movie
-    private lateinit var similarMoviesAdapter: HorizontalMovieAdapter
+    private lateinit var TV: TVSeries
+    lateinit var similarMoviesAdapter: HorizontalMovieAdapter
+    private lateinit var contentType: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,16 +90,6 @@ class MovieActivity : AppCompatActivity() {
         similarMoviesAdapter.onItemClick = { movie ->
             val intent = Intent(this, MovieActivity::class.java)
             intent.putExtra(HomeFragment.MOVIE_OBJECT, movie)
-            intent.putExtra(HomeFragment.MOVIE_TITLE, movie.title)
-            if(movie.poster_path != null) {
-                intent.putExtra(HomeFragment.MOVIE_IMAGE, movie.poster_path)
-            } else {
-                intent.putExtra(HomeFragment.MOVIE_IMAGE, "N/A")
-            }
-            intent.putExtra(HomeFragment.MOVIE_OVERVIEW, movie.overview)
-            intent.putExtra(HomeFragment.MOVIE_RATING, movie.vote_average)
-            intent.putExtra(HomeFragment.MOVIE_RELEASE_DATE, movie.release_date)
-            intent.putIntegerArrayListExtra(HomeFragment.MOVIE_GENRES, ArrayList(movie.genre_ids))
             startActivity(intent)
         }
     }
@@ -125,7 +119,14 @@ class MovieActivity : AppCompatActivity() {
 
     private fun getMovieInformation() {
         val intent = intent
-        movie = intent.getParcelableExtra(HomeFragment.MOVIE_OBJECT)!!
+        contentType = intent.getStringExtra(HomeFragment.CONTENT_TYPE).toString()
+
+        if (contentType == "Movie") {
+            movie = intent.getParcelableExtra(HomeFragment.MOVIE_OBJECT)!!
+        } else {
+            TV = intent.getParcelableExtra(HomeFragment.TV_OBJECT)!!
+        }
+
     }
 
     private fun setMovieInformation() {

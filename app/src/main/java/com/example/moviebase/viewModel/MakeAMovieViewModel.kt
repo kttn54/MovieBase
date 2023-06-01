@@ -54,23 +54,6 @@ class MakeAMovieViewModel(): ViewModel() {
             })
     }
 
-    fun makeAMovieWithRegion(region: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithRegion(Constants.api_key, include_adult, 1, region, sortBy)
-            .enqueue(object: Callback<MovieList> {
-                override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
-                    if (response.body() != null) {
-                        val movieList = response.body()!!.results
-                        makeAMovieLiveData.value = movieList
-                        Log.d("test","movie region: ${response.body()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                    Log.e("MaMViewModel Error: Make A Movie Error", t.message.toString())
-                }
-            })
-    }
-
     fun makeAMovieWithGenreAndActor(genreId: String, actorId: String, sortBy: String) {
         RetrofitInstance.api.makeMovieWithGenreAndActor(Constants.api_key, include_adult, 1, genreId, actorId, sortBy)
             .enqueue(object: Callback<MovieList> {
@@ -88,23 +71,6 @@ class MakeAMovieViewModel(): ViewModel() {
             })
     }
 
-    fun makeAMovieWithGenreAndActorAndRegion(genreId: String, actorId: String, region: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithGenreAndActorAndRegion(Constants.api_key, include_adult, 1, genreId, actorId, region, sortBy)
-            .enqueue(object: Callback<MovieList> {
-                override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
-                    if (response.body() != null) {
-                        val movieList = response.body()!!.results
-                        makeAMovieLiveData.value = movieList
-                        Log.d("test","movie genre actor and region: ${response.body()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                    Log.e("MaMViewModel Error: Make A Movie Error", t.message.toString())
-                }
-            })
-    }
-
     fun makeAMovieBySorted(sortBy: String) {
         RetrofitInstance.api.makeMovieBySorted(Constants.api_key, include_adult, 1, sortBy)
             .enqueue(object: Callback<MovieList> {
@@ -113,40 +79,6 @@ class MakeAMovieViewModel(): ViewModel() {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
                         Log.d("test","movie sorted only: ${response.body()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                    Log.e("MaMViewModel Error: Make A Movie Error", t.message.toString())
-                }
-            })
-    }
-
-    fun makeAMovieWithGenreAndRegion(genreId: String, region: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithGenreAndRegion(Constants.api_key, include_adult, 1, genreId, region, sortBy)
-            .enqueue(object: Callback<MovieList> {
-                override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
-                    if (response.body() != null) {
-                        val movieList = response.body()!!.results
-                        makeAMovieLiveData.value = movieList
-                        Log.d("test","movie genre and region: ${response.body()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                    Log.e("MaMViewModel Error: Make A Movie Error", t.message.toString())
-                }
-            })
-    }
-
-    fun makeAMovieWithActorAndRegion(actorId: String, region: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithActorAndRegion(Constants.api_key, include_adult, 1, actorId, region, sortBy)
-            .enqueue(object: Callback<MovieList> {
-                override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
-                    if (response.body() != null) {
-                        val movieList = response.body()!!.results
-                        makeAMovieLiveData.value = movieList
-                        Log.d("test","movie actor and region: ${response.body()}")
                     }
                 }
 
@@ -217,38 +149,6 @@ class MakeAMovieViewModel(): ViewModel() {
                     val tvSeriesList = response.body()!!.results
                     makeATVSeriesLiveData.value = tvSeriesList
                     Log.d("test","tv series sorted: ${response.body()}")
-                }
-            }
-
-            override fun onFailure(call: Call<TVSeriesList>, t: Throwable) {
-                Log.e("MaMViewModel Error: TV Series", t.message.toString())
-            }
-        })
-    }
-
-    fun makeTVSeriesWithGenreAndRegion(genreId: String, language: String, sortBy: String) {
-        RetrofitInstance.api.makeTVSeriesWithGenreAndRegion(Constants.api_key, include_adult, 1, genreId, language, sortBy).enqueue(object: Callback<TVSeriesList> {
-            override fun onResponse(call: Call<TVSeriesList>, response: Response<TVSeriesList>) {
-                if (response.body() != null) {
-                    val tvSeriesList = response.body()!!.results
-                    makeATVSeriesLiveData.value = tvSeriesList
-                    Log.d("test","tv series genre and region: ${response.body()}")
-                }
-            }
-
-            override fun onFailure(call: Call<TVSeriesList>, t: Throwable) {
-                Log.e("MaMViewModel Error: TV Series", t.message.toString())
-            }
-        })
-    }
-
-    fun makeTVSeriesWithRegion(language: String, sortBy: String) {
-        RetrofitInstance.api.makeTVSeriesWithRegion(Constants.api_key, include_adult, 1, language, sortBy).enqueue(object: Callback<TVSeriesList> {
-            override fun onResponse(call: Call<TVSeriesList>, response: Response<TVSeriesList>) {
-                if (response.body() != null) {
-                    val tvSeriesList = response.body()!!.results
-                    makeATVSeriesLiveData.value = tvSeriesList
-                    Log.d("test","tv series region: ${response.body()}")
                 }
             }
 

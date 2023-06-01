@@ -30,13 +30,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private var progressDialog: Dialog? = null
 
     companion object {
-        const val MOVIE_TITLE = "com.example.moviebase.movieTitle"
-        const val MOVIE_OVERVIEW = "com.example.moviebase.movieOverview"
-        const val MOVIE_IMAGE = "com.example.moviebase.movieImage"
-        const val MOVIE_RATING = "com.example.moviebase.movieRating"
-        const val MOVIE_RELEASE_DATE = "com.example.moviebase.movieReleaseDate"
-        const val MOVIE_GENRES = "com.example.moviebase.movieGenres"
-        const val MOVIE_OBJECT = "com.example.moviebase.movie"
+        const val CONTENT_TYPE = "com.example.moviebase.contentType"
+        const val MOVIE_OBJECT = "com.example.moviebase.movieObject"
+        const val TV_OBJECT = "com.example.moviebase.tvObject"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,16 +72,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         popularMoviesAdapter.onItemClick = { movie ->
             val intent = Intent(activity, MovieActivity::class.java)
             intent.putExtra(HomeFragment.MOVIE_OBJECT, movie)
-            intent.putExtra(MOVIE_TITLE, movie.title)
-            if(movie.poster_path != null) {
-                intent.putExtra(MOVIE_IMAGE, movie.poster_path)
-            } else {
-                intent.putExtra(MOVIE_IMAGE, "N/A")
-            }
-            intent.putExtra(MOVIE_OVERVIEW, movie.overview)
-            intent.putExtra(MOVIE_RATING, movie.vote_average)
-            intent.putExtra(MOVIE_RELEASE_DATE, movie.release_date)
-            intent.putIntegerArrayListExtra(MOVIE_GENRES, ArrayList(movie.genre_ids))
             startActivity(intent)
         }
     }
@@ -94,16 +80,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         binding.ivTrending.setOnClickListener {
             val intent = Intent(activity, MovieActivity::class.java)
             intent.putExtra(HomeFragment.MOVIE_OBJECT, trendingMovie)
-            intent.putExtra(MOVIE_TITLE, trendingMovie.title)
-            if(trendingMovie.poster_path != null) {
-                intent.putExtra(MOVIE_IMAGE, trendingMovie.poster_path)
-            } else {
-                intent.putExtra(MOVIE_IMAGE, "N/A")
-            }
-            intent.putExtra(MOVIE_OVERVIEW, trendingMovie.overview)
-            intent.putExtra(MOVIE_RATING, trendingMovie.vote_average)
-            intent.putExtra(MOVIE_RELEASE_DATE, trendingMovie.release_date)
-            intent.putIntegerArrayListExtra(MOVIE_GENRES, ArrayList(trendingMovie.genre_ids))
             startActivity(intent)
         }
     }

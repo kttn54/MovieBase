@@ -55,7 +55,6 @@ class GenreFragment : Fragment() {
     private var actorTwoName = ""
     private var actorTwoId = ""
     private var combinedActorIds = ""
-    private var region = ""
     private var sortBy = "popularity.desc"
     private lateinit var MaMAdapter: MakeAMovieAdapter
     private lateinit var MaMTVAdapter: MakeATVSeriesAdapter
@@ -106,11 +105,9 @@ class GenreFragment : Fragment() {
 
         binding.appbarMaM.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val collapsePercentage = abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange
-            binding.tvMaMRegion.alpha = 1- collapsePercentage
             binding.tvMaMSortBy.alpha = 1- collapsePercentage
             binding.tvMaMGenre.alpha = 1- collapsePercentage
             binding.tvMaMActor.alpha = 1- collapsePercentage
-            binding.spinnerMaMRegion.alpha = 1- collapsePercentage
             binding.spinnerMaMGenreOne.alpha = 1- collapsePercentage
             binding.spinnerMaMGenreTwo.alpha = 1- collapsePercentage
             binding.spinnerMaMSortBy.alpha = 1- collapsePercentage
@@ -150,7 +147,6 @@ class GenreFragment : Fragment() {
 
                 val marginTopInDp = 5
                 val marginTopInPixels = (marginTopInDp * resources.displayMetrics.density).toInt()
-                binding.llMaMRegion.translationY = marginTopInPixels.toFloat()
                 binding.llMaMSortBy.translationY = marginTopInPixels.toFloat()
                 binding.clMaMMovies.translationY = marginTopInPixels.toFloat()
             }
@@ -159,37 +155,23 @@ class GenreFragment : Fragment() {
 
     private fun getMovies() {
         if (combinedActorIds.isNullOrEmpty()) {
-            // Log.d("test", "test1")
-            if (combinedGenreIds.isNullOrEmpty() && actorOneName.isNullOrEmpty() && region.isNullOrEmpty()) {
+            if (combinedGenreIds.isNullOrEmpty() && actorOneName.isNullOrEmpty()) {
                 MaMMvvm.makeAMovieBySorted(sortBy)
-            } else if (combinedGenreIds.isNotEmpty() && actorOneName.isNullOrEmpty() && region.isNullOrEmpty()) {
+            } else if (combinedGenreIds.isNotEmpty() && actorOneName.isNullOrEmpty()) {
                 MaMMvvm.makeAMovieWithGenre(combinedGenreIds, sortBy)
-            } else if (combinedGenreIds.isNotEmpty() && actorOneName.isNullOrEmpty() && region.isNotEmpty()) {
-                MaMMvvm.makeAMovieWithGenreAndRegion(combinedGenreIds, region, sortBy)
-            } else if (combinedGenreIds.isNullOrEmpty() && actorOneName.isNullOrEmpty() && region.isNotEmpty()) {
-                MaMMvvm.makeAMovieWithRegion(region, sortBy)
             }
         } else {
-            // Log.d("test", "test2")
-            if (combinedGenreIds.isNullOrEmpty() && region.isNullOrEmpty()) {
+            if (combinedGenreIds.isNullOrEmpty()) {
                 MaMMvvm.makeAMovieWithActor(combinedActorIds, sortBy)
-            } else if (combinedGenreIds.isNullOrEmpty() && region.isNotEmpty()) {
-                MaMMvvm.makeAMovieWithActorAndRegion(combinedActorIds, region, sortBy)
-            } else if (combinedGenreIds.isNotEmpty() && region.isNullOrEmpty()) {
+            }  else if (combinedGenreIds.isNotEmpty()) {
                 MaMMvvm.makeAMovieWithGenreAndActor(combinedGenreIds, combinedActorIds, sortBy)
-            } else if (combinedGenreIds.isNotEmpty() && region.isNotEmpty()) {
-                MaMMvvm.makeAMovieWithGenreAndActorAndRegion(combinedGenreIds, combinedActorIds, region, sortBy)
             }
         }
     }
 
     private fun getTVSeries() {
-        if(combinedGenreIds.isNullOrEmpty() && region.isNotEmpty()) {
-            MaMMvvm.makeTVSeriesWithRegion(region, sortBy)
-        } else if (combinedGenreIds.isNotEmpty() && region.isNullOrEmpty()) {
+        if (combinedGenreIds.isNotEmpty()) {
             MaMMvvm.makeTVSeriesWithGenre(combinedGenreIds, sortBy)
-        } else if (combinedGenreIds.isNotEmpty() && region.isNotEmpty()) {
-            MaMMvvm.makeTVSeriesWithGenreAndRegion(combinedGenreIds, region, sortBy)
         } else {
             MaMMvvm.makeTVSeriesBySorted(sortBy)
         }
@@ -210,19 +192,8 @@ class GenreFragment : Fragment() {
     private fun onMaMMovieClicked() {
         MaMAdapter.onItemClick = { movie ->
             val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(HomeFragment.CONTENT_TYPE, "MOVIE")
             intent.putExtra(HomeFragment.MOVIE_OBJECT, movie)
-            Log.d("test", "movie is $movie")
-
-            intent.putExtra(HomeFragment.MOVIE_TITLE, movie.title)
-            if(movie.poster_path != null) {
-                intent.putExtra(HomeFragment.MOVIE_IMAGE, movie.poster_path)
-            } else {
-                intent.putExtra(HomeFragment.MOVIE_IMAGE, "N/A")
-            }
-            intent.putExtra(HomeFragment.MOVIE_OVERVIEW, movie.overview)
-            intent.putExtra(HomeFragment.MOVIE_RATING, movie.vote_average)
-            intent.putExtra(HomeFragment.MOVIE_RELEASE_DATE, movie.release_date)
-            intent.putIntegerArrayListExtra(HomeFragment.MOVIE_GENRES, ArrayList(movie.genre_ids))
             startActivity(intent)
         }
     }
@@ -230,6 +201,10 @@ class GenreFragment : Fragment() {
     private fun onMaMTVSeriesClicked() {
         MaMTVAdapter.onItemClick = { TVSeries ->
             val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(HomeFragment.CONTENT_TYPE, "TV")
+            intent.putExtra(HomeFragment.TV_OBJECT, TVSeries)
+
+            /*
             intent.putExtra(HomeFragment.MOVIE_TITLE, TVSeries.name)
             if(TVSeries.poster_path != null) {
                 intent.putExtra(HomeFragment.MOVIE_IMAGE, TVSeries.poster_path)
@@ -241,6 +216,7 @@ class GenreFragment : Fragment() {
             intent.putExtra(HomeFragment.MOVIE_RATING, TVSeries.vote_average)
             intent.putExtra(HomeFragment.MOVIE_RELEASE_DATE, TVSeries.first_air_date)
             intent.putIntegerArrayListExtra(HomeFragment.MOVIE_GENRES, ArrayList(TVSeries.genre_ids))
+            */
             startActivity(intent)
         }
     }
@@ -323,11 +299,6 @@ class GenreFragment : Fragment() {
             }
         }
 
-        region = binding.spinnerMaMRegion.selectedItem.toString()
-        if (region == "-") {
-            region = ""
-        }
-
         val sortByValue = binding.spinnerMaMSortBy.selectedItem.toString()
 
         when (sortByValue) {
@@ -388,15 +359,9 @@ class GenreFragment : Fragment() {
         if (binding.rbMaMMovie.isChecked) {
             val nonNullGenreOptions: Array<String> = resources.getStringArray(R.array.genres_movie)
             genreOptions = nonNullGenreOptions.map { it }.toTypedArray()
-
-            val regionOptions = resources.getStringArray(R.array.language_movie)
-            binding.spinnerMaMRegion.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, regionOptions)
         } else {
             val nonNullGenreOptions: Array<String> = resources.getStringArray(R.array.genres_tv)
             genreOptions = nonNullGenreOptions.map { it }.toTypedArray()
-
-            val regionOptions = resources.getStringArray(R.array.language_movie)
-            binding.spinnerMaMRegion.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, regionOptions)
         }
 
         binding.spinnerMaMGenreOne.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genreOptions)

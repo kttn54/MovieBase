@@ -179,33 +179,6 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/ll_MaM_region"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                app:layout_collapseMode="parallax"
-                                android:layout_marginTop="10dp">
-
-                                <TextView
-                                    android:id="@+id/tv_MaM_region"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/MaM_filter_margin_start"
-                                    android:layout_marginEnd="5dp"
-                                    android:textSize="@dimen/MaM_filter_text_size"
-                                    android:textColor="@color/black"
-                                    android:text="Region" />
-
-                                <Spinner
-                                    android:id="@+id/spinner_MaM_region"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-
-                                    android:background="@drawable/mam_spinner"
-                                    android:layout_marginStart="40dp"/>
-                            </LinearLayout>
-
-                            <LinearLayout
                                 android:id="@+id/ll_MaM_sort_by"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
