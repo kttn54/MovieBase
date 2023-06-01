@@ -5,6 +5,7 @@ import com.example.moviebase.model.MovieList
 import com.example.moviebase.model.TVSeriesList
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 // https://api.themoviedb.org/3/discover/movie?api_key=775154bc0da8953106516b8e02ffd088&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc
@@ -144,4 +145,9 @@ interface MovieAPI {
         @Query("sort_by") sort_by: String
     ): Call<MovieList>
 
+    @GET("movie/{movie_id}/recommendations")
+    fun getSimilarMovies(
+        @Path("movie_id") movie_id: Int,
+        @Query("api_key") api_key: String
+    ): Call<MovieList>
 }

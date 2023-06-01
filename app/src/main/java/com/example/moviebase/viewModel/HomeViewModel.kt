@@ -21,7 +21,7 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
 
     private var trendingMovieLiveData = MutableLiveData<Movie>()
     private var popularMovieLiveData = MutableLiveData<List<Movie>>()
-    private var favouritedMovieLiveData = movieDatabase.movieDao().getAllSavedMovies()
+    private var savedMovieLiveData = movieDatabase.movieDao().getAllSavedMovies()
 
     fun getTrendingMovie() {
         RetrofitInstance.api.getTrendingMovie(Constants.api_key).enqueue(object: Callback<MovieList> {
@@ -63,6 +63,12 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
         }
     }
 
+    fun deleteMovie(movie: Movie) {
+        viewModelScope.launch {
+            movieDatabase.movieDao().deleteMovie(movie)
+        }
+    }
+
     fun observerTrendingMovieLiveData(): LiveData<Movie> {
         return trendingMovieLiveData
     }
@@ -71,7 +77,7 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
         return popularMovieLiveData
     }
 
-    fun observerFavouritedMovieLiveData(): LiveData<List<Movie>> {
-        return favouritedMovieLiveData
+    fun observerSavedMovieLiveData(): LiveData<List<Movie>> {
+        return savedMovieLiveData
     }
 }

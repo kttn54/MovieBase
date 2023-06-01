@@ -2,16 +2,14 @@ package com.example.moviebase.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.moviebase.Constants
 import com.example.moviebase.R
 import com.example.moviebase.databinding.PopularMovieItemBinding
 import com.example.moviebase.model.Movie
-import kotlin.coroutines.coroutineContext
 
-class PopularMovieAdapter: RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
+class HorizontalMovieAdapter: RecyclerView.Adapter<HorizontalMovieAdapter.PopularMovieViewHolder>() {
 
     lateinit var onItemClick: ((Movie) -> Unit)
     private var movieList = ArrayList<Movie>()

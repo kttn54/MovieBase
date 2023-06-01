@@ -288,7 +288,6 @@
                         android:id="@+id/rl_page_buttons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="invisible"
                         app:layout_constraintTop_toBottomOf="@id/rv_MaM_movies">
 
                         <ImageView

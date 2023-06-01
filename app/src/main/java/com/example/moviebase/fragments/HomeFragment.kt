@@ -9,13 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.moviebase.Constants
 import com.example.moviebase.R
 import com.example.moviebase.activities.MainActivity
-import com.example.moviebase.adapters.PopularMovieAdapter
+import com.example.moviebase.adapters.HorizontalMovieAdapter
 import com.example.moviebase.databinding.FragmentHomeBinding
 import com.example.moviebase.model.Movie
 import com.example.moviebase.viewModel.HomeViewModel
@@ -26,7 +25,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var trendingMovie: Movie
-    private lateinit var popularMoviesAdapter: PopularMovieAdapter
+    private lateinit var popularMoviesAdapter: HorizontalMovieAdapter
     private var genreId = ""
     private var progressDialog: Dialog? = null
 
@@ -45,7 +44,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
         viewModel = (activity as MainActivity).viewModel
 
-        popularMoviesAdapter = PopularMovieAdapter()
+        popularMoviesAdapter = HorizontalMovieAdapter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
