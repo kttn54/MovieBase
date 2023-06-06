@@ -23,6 +23,7 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
     private var trendingMovieLiveData = MutableLiveData<Movie>()
     private var trendingActorLiveData = MutableLiveData<TrendingActorDetails>()
     private var popularMovieLiveData = MutableLiveData<List<Movie>>()
+    private var searchedMoviesLiveData = MutableLiveData<List<Movie>>()
     private var savedMovieLiveData = movieDatabase.movieDao().getAllSavedMovies()
 
     fun getTrendingMovie() {
@@ -42,13 +43,27 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
         })
     }
 
+    fun searchMovie(query: String) {
+        RetrofitInstance.api.searchMovie(Constants.api_key, query).enqueue(object: Callback<MovieList> {
+            override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
+                if (response.body() != null) {
+                    searchedMoviesLiveData.value = response.body()!!.results
+                }
+            }
+
+            override fun onFailure(call: Call<MovieList>, t: Throwable) {
+                Log.d("HomeViewModel: Searched Movies", t.message.toString())
+            }
+
+        })
+    }
+
     fun getPopularMoviesByCategory(genre: String) {
         RetrofitInstance.api.getPopularMovieByGenre(Constants.api_key, false, "en", 1, "popularity.desc", genre)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
-                        val popularMovies = response.body()!!.results
-                        popularMovieLiveData.value = popularMovies
+                        popularMovieLiveData.value = response.body()!!.results
                     }
                 }
 
@@ -101,5 +116,9 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
 
     fun observerTrendingActorLiveData(): LiveData<TrendingActorDetails> {
         return trendingActorLiveData
+    }
+
+    fun observerSearchedMoviesLiveData(): LiveData<List<Movie>> {
+        return searchedMoviesLiveData
     }
 }

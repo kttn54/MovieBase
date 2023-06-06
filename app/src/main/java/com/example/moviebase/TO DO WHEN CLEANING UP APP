@@ -1,3 +1,9 @@
 
-1. Change RecyclerView adapters "notifyDataSetChanged" - not efficient
+1. DONE Change RecyclerView adapters "notifyDataSetChanged" - not efficient
 2. Add comments to functions
+3. Remove horizontal scroll bar for Popular movies - possible?
+4. Add "next page" functionality
+
+Extra features
+- Pull down home page to refresh
+- Have actor cards so swipe to see new actor

@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:fitsSystemWindows="true"
             app:layout_constraintTop_toBottomOf="@id/tv_generate_movie"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" >
@@ -35,6 +36,7 @@
                 android:id="@+id/appbar_MaM"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
                 android:backgroundTint="@color/grey">
 
                     <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -42,6 +44,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:contentScrim="@color/blue_crayola"
+                        android:fitsSystemWindows="true"
                         app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
                         app:titleEnabled="false" >
 
@@ -197,53 +200,51 @@
                     </com.google.android.material.appbar.CollapsingToolbarLayout>
             </com.google.android.material.appbar.AppBarLayout>
 
-            <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_MaM_movies"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/rl_page_buttons"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    >
+            <RelativeLayout
+                android:id="@+id/rl_page_buttons"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/rv_MaM_movies"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_alignParentBottom="true">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_MaM_movies"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"/>
+                <ImageView
+                    android:id="@+id/iv_arrow_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_arrow_back" />
 
-                    <RelativeLayout
-                        android:id="@+id/rl_page_buttons"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
-                            android:src="@drawable/ic_arrow_back" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginEnd="20dp"
-                            android:layout_alignParentEnd="true"
-                            android:src="@drawable/ic_arrow_forward"/>
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_arrow_forward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_arrow_forward" />
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/progress_bar"
@@ -253,5 +254,6 @@
                 app:layout_anchor="@id/appbar_MaM"
                 app:layout_anchorGravity="bottom"
                 android:visibility="gone"/>
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

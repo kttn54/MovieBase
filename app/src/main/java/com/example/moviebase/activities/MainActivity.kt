@@ -11,11 +11,12 @@ import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.HomeViewModelFactory
 
-
+/**
+ * This class instantiates a variable of type HomeViewModel and binds the bottom navigation
+ * with the host fragment
+ */
 
 class MainActivity : AppCompatActivity() {
-
-    //TODO: add next page functionality at the bottom to "MakeAMovieFragment"
 
     private lateinit var binding: ActivityMainBinding
 
@@ -30,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         ViewModelProvider(this, homeViewModelProviderFactory)[HomeViewModel::class.java]
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,6 +39,5 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigation = binding.btmNav
         val navController = Navigation.findNavController(this, R.id.host_fragment)
         NavigationUI.setupWithNavController(bottomNavigation, navController)
-
     }
 }

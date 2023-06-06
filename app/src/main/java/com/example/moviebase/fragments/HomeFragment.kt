@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.moviebase.Constants
@@ -38,7 +39,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         super.onCreate(savedInstanceState)
 
         viewModel = (activity as MainActivity).viewModel
-
         popularMoviesAdapter = HorizontalMovieAdapter()
     }
 
@@ -69,6 +69,14 @@ class HomeFragment : Fragment(), View.OnClickListener {
         viewModel.getTrendingActor()
         observerTrendingActor()
         onTrendingActorClicked()
+
+        onSearchIconClicked()
+    }
+
+    private fun onSearchIconClicked() {
+        binding.ivSearch.setOnClickListener {
+            findNavController().navigate(R.id.searchFragment)
+        }
     }
 
     private fun preparePopularMoviesRecyclerView() {

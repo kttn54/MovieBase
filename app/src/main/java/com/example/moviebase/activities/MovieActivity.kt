@@ -44,6 +44,10 @@ import com.example.moviebase.model.Movie
 import com.example.moviebase.viewModel.MovieViewModel
 import com.example.moviebase.viewModel.MovieViewModelFactory
 
+/**
+ * This class shows detailed information of the movie that was clicked in the previous activity/fragment.
+ */
+
 class MovieActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieBinding
@@ -76,15 +80,19 @@ class MovieActivity : AppCompatActivity() {
 
     private fun getMovieInformation() {
         val intent = intent
-
         movie = intent.getParcelableExtra(Constants.MOVIE_OBJECT)!!
     }
 
+    /**
+     * A function that updates the UI components based on the movie that was clicked.
+     */
     private fun setMovieInformation() {
         binding.tvDetailedMovieTitle.text = movie.title
         binding.tvDetailedMovieOverview.text = movie.overview
         binding.tvDetailedMovieRating.text = "Rating: ${movie.vote_average}"
         binding.tvDetailedMovieReleaseDate.text = "Release Date: ${movie.release_date}"
+
+        // If there is no image, display the "no image found" picture. Otherwise, display the image.
         if (movie.poster_path == "N/A") {
             Glide.with(this@MovieActivity)
                 .load(R.drawable.no_image_small)
@@ -108,12 +116,18 @@ class MovieActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * A function that updates the RecyclerView's adapter based on movie data received from the API call.
+     */
     private fun observerSimilarMovies() {
         movieMvvm.observerSimilarMoviesLiveData().observe(this) { movieList ->
             similarMoviesAdapter.setMovies(movieList = movieList as ArrayList<Movie>)
         }
     }
 
+    /**
+     * A function that takes the user to this same Movie Activity, where detailed information is shown on the movie that was clicked.
+     */
     private fun onSimilarMovieClicked() {
         similarMoviesAdapter.onItemClick = { movie ->
             val intent = Intent(this, MovieActivity::class.java)
@@ -122,6 +136,9 @@ class MovieActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * A function that saves the movie into the Saved Fragment when the favourite button is clicked.
+     */
     private fun onFavouriteButtonClicked() {
         binding.ivSave.setOnClickListener {
             movie.let {
@@ -137,6 +154,9 @@ class MovieActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * A function that returns the appropriate genre given the corresponding integer.
+     */
     private fun getGenreName(genreId: Int): String {
         return when (genreId) {
             ACTION -> "Action"

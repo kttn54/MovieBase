@@ -15,6 +15,12 @@ interface MovieAPI {
         @Query("api_key") api_key: String
     ): Call<MovieList>
 
+    @GET("search/movie")
+    fun searchMovie(
+        @Query("api_key") api_key: String,
+        @Query("query") query: String
+    ): Call<MovieList>
+
     @GET("discover/movie")
     fun getPopularMovieByGenre(
         @Query("api_key") api_key: String,

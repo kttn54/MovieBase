@@ -19,13 +19,16 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
+/**
+ * This class shows detailed information about the clicked actor from the HomeFragment.
+ */
+
 class ActorActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityActorBinding
     private lateinit var actorMvvm: DetailedActorViewModel
     private lateinit var actorMovieAdapter: ActorMovieAdapter
     private lateinit var actorKnownForMovies: List<Movie>
-    private lateinit var actorAge: String
     private var actorId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,17 +47,24 @@ class ActorActivity : AppCompatActivity() {
         onHomeButtonClicked()
     }
 
+    /**
+     * A function to retrieve Actor-related information from the HomeFragment.
+     */
     private fun getActorInformation() {
         val intent = intent
         actorId = intent.getIntExtra(Constants.ACTOR_ID, 0)
-        actorKnownForMovies = intent.getParcelableArrayListExtra(Constants.ACTOR_KNOWN_FOR)!!
-
-        actorMovieAdapter.setActorMovies(actorKnownForMovies as ArrayList<Movie>)
-
         actorMvvm.getDetailedActorInformation(actorId)
     }
 
+    /**
+     * A function to update the UI components based on the retrieved Actor.
+     */
     private fun setActorInformation() {
+        // Set the featured movies in the RecyclerView
+        actorKnownForMovies = intent.getParcelableArrayListExtra(Constants.ACTOR_KNOWN_FOR)!!
+        actorMovieAdapter.setActorMovies(actorKnownForMovies as ArrayList<Movie>)
+
+        // Set all other UI components
         actorMvvm.observerActorInformationLiveData().observe(this) { actor ->
             binding.tvDetailedActorName.text = actor.name
             if (actor.profile_path == "N/A") {
@@ -71,6 +81,7 @@ class ActorActivity : AppCompatActivity() {
             binding.tvDetailedActorBirthday.text = "Birthday: ${actor.birthday.reversed()}"
             binding.tvDetailedActorBirthPlace.text = "Place of Birth: ${actor.place_of_birth}"
 
+            // This calculates the actor's age if they are still alive, or age when deceased.
             val calendar = Calendar.getInstance()
             val currentYear = calendar.get(Calendar.YEAR)
 
@@ -94,6 +105,9 @@ class ActorActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * A function to move to the Movie Activity when a featured movie is clicked.
+     */
     private fun onFeaturedMovieClick() {
         actorMovieAdapter.onItemClick = { movie ->
             val intent = Intent(this, MovieActivity::class.java)

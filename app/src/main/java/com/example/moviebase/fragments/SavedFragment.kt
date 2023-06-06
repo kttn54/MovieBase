@@ -29,8 +29,8 @@ class SavedFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        savedAdapter = SavedMoviesAdapter()
         viewModel = (activity as MainActivity).viewModel
+        savedAdapter = SavedMoviesAdapter()
     }
 
     override fun onCreateView(
