@@ -76,9 +76,7 @@ class ActorActivity : AppCompatActivity() {
 
             val actorBirthYear = actor.birthday.split("-")[0].toInt()
             var actorAge = currentYear - actorBirthYear
-
-            Log.e("test", "deathday is ${actor.deathday}")
-
+            
             if (actor.deathday == null) {
                 binding.tvDetailedActorAge.text = "Age: ${actorAge}"
             } else {
