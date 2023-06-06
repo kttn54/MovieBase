@@ -9,17 +9,19 @@ import com.example.moviebase.Constants
 import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
 import com.example.moviebase.model.MovieList
+import com.example.moviebase.model.TrendingActorDetails
+import com.example.moviebase.model.TrendingActorResults
 import com.example.moviebase.retrofit.RetrofitInstance
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 import kotlin.random.Random
 
 class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
 
     private var trendingMovieLiveData = MutableLiveData<Movie>()
+    private var trendingActorLiveData = MutableLiveData<TrendingActorDetails>()
     private var popularMovieLiveData = MutableLiveData<List<Movie>>()
     private var savedMovieLiveData = movieDatabase.movieDao().getAllSavedMovies()
 
@@ -47,7 +49,6 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
                     if (response.body() != null) {
                         val popularMovies = response.body()!!.results
                         popularMovieLiveData.value = popularMovies
-                        // Log.d("test","${response.body()}")
                     }
                 }
 
@@ -55,6 +56,23 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
                     Log.e("HomeViewModel: Popular Movie Error", t.message.toString())
                 }
             })
+    }
+
+    fun getTrendingActor() {
+        RetrofitInstance.api.getTrendingActor(Constants.api_key).enqueue(object: Callback<TrendingActorResults> {
+            override fun onResponse(call: Call<TrendingActorResults>, response: Response<TrendingActorResults>) {
+                if (response.body() != null) {
+                    val listSize = response.body()!!.results.size
+                    val randomIndex = Random.nextInt(0, listSize)
+                    val randomTrendingActor = response.body()!!.results[randomIndex]
+                    trendingActorLiveData.value = randomTrendingActor
+                }
+            }
+
+            override fun onFailure(call: Call<TrendingActorResults>, t: Throwable) {
+                Log.e("HomeViewModel: Trending Actor Error", t.message.toString())
+            }
+        })
     }
 
     fun insertMovie(movie: Movie) {
@@ -79,5 +97,9 @@ class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
 
     fun observerSavedMovieLiveData(): LiveData<List<Movie>> {
         return savedMovieLiveData
+    }
+
+    fun observerTrendingActorLiveData(): LiveData<TrendingActorDetails> {
+        return trendingActorLiveData
     }
 }

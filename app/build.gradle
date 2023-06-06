@@ -74,4 +74,7 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+
+    // Hdodenhof - Circle Image View
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

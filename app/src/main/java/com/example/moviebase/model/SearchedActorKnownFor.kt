@@ -1,6 +1,6 @@
 package com.example.moviebase.model
 
-data class ActorKnownFor(
+data class SearchedActorKnownFor(
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: List<Int>,

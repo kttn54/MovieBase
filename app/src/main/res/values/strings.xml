@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">MovieBase</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string-array name="genres_movie" >
+    <string-array name="genres_movie">
         <item>-</item>
         <item>Action</item>
         <item>Adventure</item>
@@ -25,27 +24,7 @@
         <item>Western</item>
     </string-array>
 
-    <string-array name="genres_tv" >
-        <item>-</item>
-        <item>Action &amp; Adventure</item>
-        <item>Animation</item>
-        <item>Comedy</item>
-        <item>Crime</item>
-        <item>Documentary</item>
-        <item>Drama</item>
-        <item>Family</item>
-        <item>Kids</item>
-        <item>Mystery</item>
-        <item>News</item>
-        <item>Reality</item>
-        <item>Sci-Fi &amp; Fantasy</item>
-        <item>Soap</item>
-        <item>Talk</item>
-        <item>War &amp; Politics</item>
-        <item>Western</item>
-    </string-array>
-
-    <string-array name="language_movie" >
+    <string-array name="language_movie">
         <item>-</item>
         <item>EN</item>
         <item>JA</item>
@@ -54,15 +33,7 @@
         <item>ZH</item>
     </string-array>
 
-    <string-array name="region_tv" >
-        <item>-</item>
-        <item>AU</item>
-        <item>US</item>
-        <item>KR</item>
-        <item>JP</item>
-    </string-array>
-
-    <string-array name="sort_by" >
+    <string-array name="sort_by">
         <item>Most Popular</item>
         <item>Top Rated</item>
         <item>Recently released</item>

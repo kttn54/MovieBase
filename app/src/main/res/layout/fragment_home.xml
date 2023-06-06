@@ -135,48 +135,48 @@
                             android:id="@+id/btn_action"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
-                            android:textSize="@dimen/popular_button_text_size"
-                            android:text="Action" />
+                            android:text="Action"
+                            android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
                             android:id="@+id/btn_adventure"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:textSize="@dimen/popular_button_text_size"
-                            android:text="Adventure" />
+                            android:text="Adventure"
+                            android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
                             android:id="@+id/btn_animation"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:textSize="@dimen/popular_button_text_size"
-                            android:text="Animation" />
+                            android:text="Animation"
+                            android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
                             android:id="@+id/btn_comedy"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:textSize="@dimen/popular_button_text_size"
-                            android:text="Comedy" />
+                            android:text="Comedy"
+                            android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
                             android:id="@+id/btn_crime"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:textSize="@dimen/popular_button_text_size"
-                            android:text="Crime" />
+                            android:text="Crime"
+                            android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
                             android:id="@+id/btn_drama"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:textSize="@dimen/popular_button_text_size"
-                            android:text="Drama" />
+                            android:text="Drama"
+                            android:textSize="@dimen/popular_button_text_size" />
                     </LinearLayout>
                 </HorizontalScrollView>
 
@@ -191,39 +191,74 @@
                     app:layout_constraintTop_toBottomOf="@id/sv_popular" />
 
                 <TextView
-                    android:id="@+id/tv_genres"
+                    android:id="@+id/tv_actor_spotlight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/nexa_heavy"
-                    android:text="Genres"
+                    android:text="Actor Spotlight"
                     android:textColor="@color/black"
                     android:textSize="25sp"
                     app:layout_constraintStart_toStartOf="@id/tv_trending"
                     app:layout_constraintTop_toBottomOf="@id/rv_popular" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_genres"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp"
-                    app:cardCornerRadius="5dp"
-                    app:cardElevation="5dp"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_genres">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/siv_actor_spotlight"
+                    android:layout_width="150dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="matrix"
+                    android:src="@drawable/sample_image"
+                    app:layout_constraintStart_toStartOf="@id/tv_actor_spotlight"
+                    app:layout_constraintTop_toBottomOf="@id/tv_actor_spotlight"
+                    app:shapeAppearanceOverlay="@style/ImageStyle_Corners_Rounded" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_genres"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_actor_spotlight"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintStart_toEndOf="@id/siv_actor_spotlight"
+                    app:layout_constraintTop_toBottomOf="@id/tv_actor_spotlight">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_popular" />
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tv_actor_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/roboto_black"
+                            android:text="Name: Kevin Nguyen"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tv_actor_age"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/roboto_black"
+                            android:text="Popularity"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tv_actor_known_for"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/roboto_black"
+                            android:text="Starred in:"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>

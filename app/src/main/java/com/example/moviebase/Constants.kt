@@ -1,14 +1,20 @@
 package com.example.moviebase
 
-import com.example.moviebase.model.ActorKnownFor
+// TODO: include actor part in the main page
 
 object Constants {
 
     const val api_key: String = "775154bc0da8953106516b8e02ffd088"
 
     const val BASE_IMG_URL: String = "https://image.tmdb.org/t/p/w500/"
+    const val BASE_IMG_ACTOR_URL: String = "https://image.tmdb.org/t/p/w500/"
 
     const val BASE_URL: String = "https://api.themoviedb.org/3/"
+
+    const val MOVIE_OBJECT = "com.example.moviebase.movieObject"
+    const val ACTOR_OBJECT = "com.example.moviebase.actorObject"
+    const val ACTOR_KNOWN_FOR = "com.example.moviebase.actorKnownFor"
+    const val ACTOR_ID = "com.example.moviebase.actorId"
 
     const val ACTION: Int = 28
     const val ADVENTURE: Int = 12

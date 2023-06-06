@@ -1,5 +1,6 @@
 package com.example.moviebase.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moviebase.Constants
 import com.example.moviebase.R
 import com.example.moviebase.activities.MainActivity
+import com.example.moviebase.activities.MovieActivity
 import com.example.moviebase.adapters.SavedMoviesAdapter
 import com.example.moviebase.databinding.FragmentSavedBinding
 import com.example.moviebase.viewModel.HomeViewModel
@@ -33,7 +36,7 @@ class SavedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSavedBinding.inflate(inflater)
         return binding.root
     }
@@ -43,9 +46,32 @@ class SavedFragment : Fragment() {
 
         prepareRecyclerView()
         observeSavedMovies()
+        onSavedMovieClicked()
+        onSavedMovieSwiped()
+    }
 
+    private fun prepareRecyclerView() {
+        binding.rvSavedMovies.apply {
+            adapter = savedAdapter
+            layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
+        }
+    }
 
+    private fun observeSavedMovies() {
+        viewModel.observerSavedMovieLiveData().observe(viewLifecycleOwner, Observer { movies ->
+            savedAdapter.differ.submitList(movies)
+        })
+    }
 
+    private fun onSavedMovieClicked() {
+        savedAdapter.onItemClick = { movie ->
+            val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(Constants.MOVIE_OBJECT, movie)
+            startActivity(intent)
+        }
+    }
+
+    private fun onSavedMovieSwiped() {
         val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
@@ -62,28 +88,13 @@ class SavedFragment : Fragment() {
                 viewModel.deleteMovie(deletedMovie)
 
                 Snackbar.make(requireView(), "Movie Deleted", Snackbar.LENGTH_LONG).setAction(
-                    "Undo",
-                    View.OnClickListener {
-                        viewModel.insertMovie(deletedMovie)
-                    }
-                ).show()
+                    "Undo"
+                ) {
+                    viewModel.insertMovie(deletedMovie)
+                }.show()
             }
         }
 
         ItemTouchHelper(itemTouchHelper).attachToRecyclerView(binding.rvSavedMovies)
     }
-
-    private fun observeSavedMovies() {
-        viewModel.observerSavedMovieLiveData().observe(viewLifecycleOwner, Observer { movies ->
-            savedAdapter.differ.submitList(movies)
-        })
-    }
-
-    private fun prepareRecyclerView() {
-        binding.rvSavedMovies.apply {
-            adapter = savedAdapter
-            layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
-        }
-    }
-
 }

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingBottom="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.GenreFragment">
+    tools:context=".fragments.MakeAMovieFragment">
 
         <TextView
             android:id="@+id/tv_generate_movie"
@@ -68,44 +68,6 @@
                             android:orientation="vertical"
                             app:layout_collapseMode="parallax"
                             android:layout_marginTop="50dp">
-
-                            <RadioGroup
-                                android:id="@+id/rg_MaM_Type"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="parent"
-                                android:layout_margin="15dp"
-                                android:background="@drawable/radio_group_tab_background"
-                                android:orientation="horizontal">
-
-                                <RadioButton
-                                    android:id="@+id/rb_MaM_Movie"
-                                    android:layout_width="0dp"
-                                    android:layout_height="35dp"
-                                    android:layout_weight="0.50"
-                                    android:background="@drawable/language_tab_selector"
-                                    android:button="@null"
-                                    android:checked="true"
-                                    android:gravity="center"
-                                    android:text="Movie"
-                                    android:textColor="@drawable/language_tab_text_colour_selector"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"/>
-
-                                <RadioButton
-                                    android:id="@+id/rb_MaM_TV_Series"
-                                    android:layout_width="0dp"
-                                    android:layout_height="35dp"
-                                    android:layout_weight="0.50"
-                                    android:background="@drawable/language_tab_selector"
-                                    android:button="@null"
-                                    android:checked="false"
-                                    android:gravity="center"
-                                    android:text="TV Series"
-                                    android:textColor="@drawable/language_tab_text_colour_selector"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"/>
-                            </RadioGroup>
 
                             <LinearLayout
                                 android:layout_marginTop="5dp"
@@ -261,7 +223,8 @@
                         android:id="@+id/rl_page_buttons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/rv_MaM_movies">
+                        android:layout_gravity="bottom"
+                        >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -278,7 +241,6 @@
                             android:layout_marginEnd="20dp"
                             android:layout_alignParentEnd="true"
                             android:src="@drawable/ic_arrow_forward"/>
-
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

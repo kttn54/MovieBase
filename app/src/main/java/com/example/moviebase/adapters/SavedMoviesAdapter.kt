@@ -13,6 +13,8 @@ import com.example.moviebase.model.Movie
 
 class SavedMoviesAdapter: RecyclerView.Adapter<SavedMoviesAdapter.SavedMoviesViewHolder>() {
 
+    lateinit var onItemClick: ((Movie) -> Unit)
+
     private val diffUtil = object : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
@@ -44,6 +46,10 @@ class SavedMoviesAdapter: RecyclerView.Adapter<SavedMoviesAdapter.SavedMoviesVie
             Glide.with(holder.itemView)
                 .load("${Constants.BASE_IMG_URL}${movie.poster_path}")
                 .into(holder.binding.ivMakeAMovie)
+        }
+
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(movie)
         }
     }
 

@@ -11,6 +11,8 @@ import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.HomeViewModelFactory
 
+
+
 class MainActivity : AppCompatActivity() {
 
     //TODO: add next page functionality at the bottom to "MakeAMovieFragment"

@@ -1,17 +1,15 @@
 package com.example.moviebase.retrofit
 
-import com.example.moviebase.model.ActorResult
+import com.example.moviebase.model.DetailedActor
+import com.example.moviebase.model.SearchedActorResult
 import com.example.moviebase.model.MovieList
-import com.example.moviebase.model.TVSeriesList
+import com.example.moviebase.model.TrendingActorResults
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-// https://api.themoviedb.org/3/discover/movie?api_key=775154bc0da8953106516b8e02ffd088&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc
-
 interface MovieAPI {
-
     @GET("trending/movie/day")
     fun getTrendingMovie(
         @Query("api_key") api_key: String
@@ -27,29 +25,22 @@ interface MovieAPI {
         @Query("with_genres") with_genres: String
     ): Call<MovieList>
 
-    @GET("discover/tv")
-    fun makeTVSeriesWithGenre(
-        @Query("api_key") api_key: String,
-        @Query("include_adult") include_adult: Boolean,
-        @Query("page") page: Int,
-        @Query("with_genres") with_genres: String,
-        @Query("sort_by") sort_by: String
-    ): Call<TVSeriesList>
+    @GET("trending/person/day")
+    fun getTrendingActor(
+        @Query("api_key") api_key: String
+    ): Call<TrendingActorResults>
 
-    @GET ("discover/tv")
-    fun makeTVSeriesBySorted(
-        @Query("api_key") api_key: String,
-        @Query("include_adult") include_adult: Boolean,
-        @Query("page") page: Int,
-        @Query("sort_by") sort_by: String
-    ): Call<TVSeriesList>
-
+    @GET("person/{person_id}")
+    fun getActorInformation(
+        @Path("person_id") person_id: Int,
+        @Query("api_key") api_key: String
+    ): Call<DetailedActor>
 
     @GET("search/person")
     fun getActorId(
         @Query("api_key") api_key: String,
         @Query("query") query: String
-    ): Call<ActorResult>
+    ): Call<SearchedActorResult>
 
     @GET("discover/movie")
     fun makeMovieWithGenre(

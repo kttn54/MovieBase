@@ -3,10 +3,8 @@ package com.example.moviebase.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -40,12 +38,9 @@ import com.example.moviebase.Constants.WAR_AND_POLITICS
 import com.example.moviebase.Constants.WESTERN
 import com.example.moviebase.R
 import com.example.moviebase.adapters.HorizontalMovieAdapter
-import com.example.moviebase.fragments.HomeFragment
 import com.example.moviebase.databinding.ActivityMovieBinding
 import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
-import com.example.moviebase.model.TVSeries
-import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.MovieViewModel
 import com.example.moviebase.viewModel.MovieViewModelFactory
 
@@ -54,10 +49,7 @@ class MovieActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMovieBinding
     private lateinit var movieMvvm: MovieViewModel
     private lateinit var movie: Movie
-    private lateinit var TV: TVSeries
     lateinit var similarMoviesAdapter: HorizontalMovieAdapter
-    private lateinit var contentType: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,60 +65,19 @@ class MovieActivity : AppCompatActivity() {
         setMovieInformation()
 
         movieMvvm.getSimilarMovies(movie.id)
+
         prepareSimilarMoviesRecyclerView()
         observerSimilarMovies()
         onSimilarMovieClicked()
+
         onFavouriteButtonClicked()
         onHomeButtonClicked()
     }
 
-    private fun onHomeButtonClicked() {
-        binding.ivMovieHome.setOnClickListener {
-            startActivity(Intent(this@MovieActivity, MainActivity::class.java))
-        }
-    }
-
-    private fun onSimilarMovieClicked() {
-        similarMoviesAdapter.onItemClick = { movie ->
-            val intent = Intent(this, MovieActivity::class.java)
-            intent.putExtra(HomeFragment.MOVIE_OBJECT, movie)
-            startActivity(intent)
-        }
-    }
-
-    private fun observerSimilarMovies() {
-        movieMvvm.observerSimilarMoviesLiveData().observe(this) { movieList ->
-            similarMoviesAdapter.setMovies(movieList = movieList as ArrayList<Movie>)
-            Log.e("test", "similarlist is $movieList")
-        }
-    }
-
-    private fun prepareSimilarMoviesRecyclerView() {
-        binding.rvSimilarMovies.apply {
-            adapter = similarMoviesAdapter
-            layoutManager = LinearLayoutManager(this@MovieActivity, LinearLayoutManager.HORIZONTAL, false)
-        }
-    }
-
-    private fun onFavouriteButtonClicked() {
-        binding.ivSave.setOnClickListener {
-            movie.let {
-                movieMvvm.insertMovie(it)
-                Toast.makeText(this, "Movie Saved", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     private fun getMovieInformation() {
         val intent = intent
-        contentType = intent.getStringExtra(HomeFragment.CONTENT_TYPE).toString()
 
-        if (contentType == "Movie") {
-            movie = intent.getParcelableExtra(HomeFragment.MOVIE_OBJECT)!!
-        } else {
-            TV = intent.getParcelableExtra(HomeFragment.TV_OBJECT)!!
-        }
-
+        movie = intent.getParcelableExtra(Constants.MOVIE_OBJECT)!!
     }
 
     private fun setMovieInformation() {
@@ -147,6 +98,42 @@ class MovieActivity : AppCompatActivity() {
         for (genreId in movie.genre_ids!!) {
             val genreName = getGenreName(genreId)
             binding.tvDetailedGenres.append("\n \u2022 $genreName")
+        }
+    }
+
+    private fun prepareSimilarMoviesRecyclerView() {
+        binding.rvSimilarMovies.apply {
+            adapter = similarMoviesAdapter
+            layoutManager = LinearLayoutManager(this@MovieActivity, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun observerSimilarMovies() {
+        movieMvvm.observerSimilarMoviesLiveData().observe(this) { movieList ->
+            similarMoviesAdapter.setMovies(movieList = movieList as ArrayList<Movie>)
+        }
+    }
+
+    private fun onSimilarMovieClicked() {
+        similarMoviesAdapter.onItemClick = { movie ->
+            val intent = Intent(this, MovieActivity::class.java)
+            intent.putExtra(Constants.MOVIE_OBJECT, movie)
+            startActivity(intent)
+        }
+    }
+
+    private fun onFavouriteButtonClicked() {
+        binding.ivSave.setOnClickListener {
+            movie.let {
+                movieMvvm.insertMovie(it!!)
+                Toast.makeText(this, "Movie Saved", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun onHomeButtonClicked() {
+        binding.ivMovieHome.setOnClickListener {
+            startActivity(Intent(this@MovieActivity, MainActivity::class.java))
         }
     }
 

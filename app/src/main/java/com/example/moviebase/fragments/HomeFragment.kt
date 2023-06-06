@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.moviebase.Constants
 import com.example.moviebase.R
+import com.example.moviebase.activities.ActorActivity
 import com.example.moviebase.activities.MainActivity
 import com.example.moviebase.adapters.HorizontalMovieAdapter
 import com.example.moviebase.databinding.FragmentHomeBinding
 import com.example.moviebase.model.Movie
 import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.activities.MovieActivity
+import com.example.moviebase.model.TrendingActorDetails
 
 class HomeFragment : Fragment(), View.OnClickListener {
 
@@ -27,13 +29,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private lateinit var trendingMovie: Movie
     private lateinit var popularMoviesAdapter: HorizontalMovieAdapter
     private var genreId = ""
+    private var actorId = 0
+    private lateinit var actorKnownForMovies: List<Movie>
     private var progressDialog: Dialog? = null
-
-    companion object {
-        const val CONTENT_TYPE = "com.example.moviebase.contentType"
-        const val MOVIE_OBJECT = "com.example.moviebase.movieObject"
-        const val TV_OBJECT = "com.example.moviebase.tvObject"
-    }
+    private lateinit var actorObject: TrendingActorDetails
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,22 +65,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
         viewModel.getPopularMoviesByCategory(genreId)
         observerPopularMovie()
         onPopularMovieClicked()
-    }
 
-    private fun onPopularMovieClicked() {
-        popularMoviesAdapter.onItemClick = { movie ->
-            val intent = Intent(activity, MovieActivity::class.java)
-            intent.putExtra(HomeFragment.MOVIE_OBJECT, movie)
-            startActivity(intent)
-        }
-    }
-
-    private fun onTrendingMovieClicked() {
-        binding.ivTrending.setOnClickListener {
-            val intent = Intent(activity, MovieActivity::class.java)
-            intent.putExtra(HomeFragment.MOVIE_OBJECT, trendingMovie)
-            startActivity(intent)
-        }
+        viewModel.getTrendingActor()
+        observerTrendingActor()
+        onTrendingActorClicked()
     }
 
     private fun preparePopularMoviesRecyclerView() {
@@ -97,6 +84,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
             override fun onChanged(movie: Movie?) {
                 Glide.with(this@HomeFragment)
                     .load("${Constants.BASE_IMG_URL}${movie!!.backdrop_path}")
+                    .placeholder(R.drawable.no_image_small)
                     .into(binding.ivTrending)
 
                 binding.tvTrendingTitle.text = movie.title
@@ -107,6 +95,14 @@ class HomeFragment : Fragment(), View.OnClickListener {
         hideDialogBox()
     }
 
+    private fun onTrendingMovieClicked() {
+        binding.ivTrending.setOnClickListener {
+            val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(Constants.MOVIE_OBJECT, trendingMovie)
+            startActivity(intent)
+        }
+    }
+
     private fun observerPopularMovie() {
         showDialogBox()
         viewModel.observerPopularMovieLiveData().observe(viewLifecycleOwner)
@@ -114,6 +110,46 @@ class HomeFragment : Fragment(), View.OnClickListener {
             popularMoviesAdapter.setMovies(movieList = movieList as ArrayList<Movie>)
         }
         hideDialogBox()
+    }
+
+    private fun onPopularMovieClicked() {
+        popularMoviesAdapter.onItemClick = { movie ->
+            val intent = Intent(activity, MovieActivity::class.java)
+            intent.putExtra(Constants.MOVIE_OBJECT, movie)
+            startActivity(intent)
+        }
+    }
+
+    private fun observerTrendingActor() {
+        viewModel.observerTrendingActorLiveData().observe(viewLifecycleOwner, object: Observer<TrendingActorDetails> {
+            override fun onChanged(actor: TrendingActorDetails?) {
+                Glide.with(this@HomeFragment)
+                    .load("${Constants.BASE_IMG_ACTOR_URL}${actor!!.profile_path}")
+                    .placeholder(R.drawable.no_image_small)
+                    .into(binding.sivActorSpotlight)
+
+                binding.tvActorName.text = "${actor.name}"
+                binding.tvActorAge.text = "Popularity: ${actor.popularity}"
+                binding.tvActorKnownFor.text = "Starred in:"
+                actorObject = actor
+                actorId = actor.id
+                actorKnownForMovies = actor.known_for
+
+                for (movie in actor.known_for) {
+                    val movieName = movie.title
+                    binding.tvActorKnownFor.append("\n \u2022 $movieName")
+                }
+            }
+        })
+    }
+
+    private fun onTrendingActorClicked() {
+        binding.sivActorSpotlight.setOnClickListener {
+            val intent = Intent(activity, ActorActivity::class.java)
+            intent.putExtra(Constants.ACTOR_ID, actorId)
+            intent.putParcelableArrayListExtra(Constants.ACTOR_KNOWN_FOR, ArrayList(actorKnownForMovies))
+            startActivity(intent)
+        }
     }
 
     override fun onClick(view: View?) {
@@ -141,7 +177,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 genreId = Constants.DRAMA.toString()
             }
         }
-
         viewModel.getPopularMoviesByCategory(genreId)
         hideDialogBox()
     }

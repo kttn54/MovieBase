@@ -28,7 +28,7 @@ class MovieViewModel (private val movieDatabase: MovieDatabase): ViewModel() {
             }
 
             override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                Log.d("Movie ViewModel: Error", t.message.toString())
+                Log.d("Movie ViewModel: Movie Error", t.message.toString())
             }
         })
     }
@@ -42,6 +42,4 @@ class MovieViewModel (private val movieDatabase: MovieDatabase): ViewModel() {
     fun observerSimilarMoviesLiveData(): LiveData<List<Movie>> {
         return similarMoviesDetailsLiveData
     }
-
-
 }

@@ -8,7 +8,7 @@ import com.example.moviebase.Constants
 import com.example.moviebase.R
 import com.example.moviebase.databinding.GenerateMovieItemBinding
 import com.example.moviebase.model.Movie
-import com.example.moviebase.model.TVSeries
+import java.lang.Integer.min
 
 class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHolder>() {
 
@@ -16,13 +16,18 @@ class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHo
     lateinit var onItemClick: ((Movie) -> Unit)
 
     fun setMovies(movieList: ArrayList<Movie>) {
-        this.movieList = movieList
-        notifyDataSetChanged()
-    }
+        val previousSize = this.movieList.size
+        this.movieList.clear()
+        this.movieList.addAll(movieList)
+        val newSize = this.movieList.size
 
-    fun setTVSeries(TVList: ArrayList<TVSeries>) {
-        this.movieList = movieList
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, min(previousSize, newSize))
+
+        if (previousSize < newSize) {
+            notifyItemRangeInserted(previousSize, newSize - previousSize)
+        } else if (previousSize > newSize) {
+            notifyItemRangeRemoved(newSize, previousSize - newSize)
+        }
     }
 
     inner class MakeAMovieViewHolder(val binding: GenerateMovieItemBinding): RecyclerView.ViewHolder(binding.root)

@@ -11,14 +11,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MakeAMovieViewModel(): ViewModel() {
+class MakeAMovieViewModel: ViewModel() {
 
     private val include_adult = false
 
     private val makeAMovieLiveData = MutableLiveData<List<Movie>>()
-    private val makeATVSeriesLiveData = MutableLiveData<List<TVSeries>>()
-    private val getActorOneLiveData = MutableLiveData<ActorDetails>()
-    private val getActorTwoLiveData = MutableLiveData<ActorDetails>()
+    private val getActorOneLiveData = MutableLiveData<SearchedActorDetails>()
+    private val getActorTwoLiveData = MutableLiveData<SearchedActorDetails>()
 
     fun makeAMovieWithGenre(genreId: String, sortBy: String) {
         RetrofitInstance.api.makeMovieWithGenre(Constants.api_key, include_adult, 1, genreId, sortBy)
@@ -89,8 +88,8 @@ class MakeAMovieViewModel(): ViewModel() {
     }
 
     fun getActorOneId(actorName: String) {
-        RetrofitInstance.api.getActorId(Constants.api_key, actorName).enqueue(object: Callback<ActorResult> {
-            override fun onResponse(call: Call<ActorResult>, response: Response<ActorResult>) {
+        RetrofitInstance.api.getActorId(Constants.api_key, actorName).enqueue(object: Callback<SearchedActorResult> {
+            override fun onResponse(call: Call<SearchedActorResult>, response: Response<SearchedActorResult>) {
                 if (response.body() != null) {
                     if (response.body()!!.total_results == 0) {
                         return
@@ -101,15 +100,15 @@ class MakeAMovieViewModel(): ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ActorResult>, t: Throwable) {
+            override fun onFailure(call: Call<SearchedActorResult>, t: Throwable) {
                 Log.e("MaMViewModel Error: getActorID", t.message.toString())
             }
         })
     }
 
     fun getActorTwoId(actorName: String) {
-        RetrofitInstance.api.getActorId(Constants.api_key, actorName).enqueue(object: Callback<ActorResult> {
-            override fun onResponse(call: Call<ActorResult>, response: Response<ActorResult>) {
+        RetrofitInstance.api.getActorId(Constants.api_key, actorName).enqueue(object: Callback<SearchedActorResult> {
+            override fun onResponse(call: Call<SearchedActorResult>, response: Response<SearchedActorResult>) {
                 if (response.body() != null) {
                     if (response.body()!!.total_results == 0) {
                         return
@@ -120,40 +119,8 @@ class MakeAMovieViewModel(): ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ActorResult>, t: Throwable) {
+            override fun onFailure(call: Call<SearchedActorResult>, t: Throwable) {
                 Log.e("MaMViewModel Error: getActorID", t.message.toString())
-            }
-        })
-    }
-
-    fun makeTVSeriesWithGenre(genreId: String, sortBy: String) {
-        RetrofitInstance.api.makeTVSeriesWithGenre(Constants.api_key, include_adult, 1, genreId, sortBy).enqueue(object: Callback<TVSeriesList> {
-            override fun onResponse(call: Call<TVSeriesList>, response: Response<TVSeriesList>) {
-                if (response.body() != null) {
-                    val tvSeriesList = response.body()!!.results
-                    makeATVSeriesLiveData.value = tvSeriesList
-                    Log.d("test","tv series genre: ${response.body()}")
-                }
-            }
-
-            override fun onFailure(call: Call<TVSeriesList>, t: Throwable) {
-                Log.e("MaMViewModel Error: TV Series", t.message.toString())
-            }
-        })
-    }
-
-    fun makeTVSeriesBySorted(sortBy: String) {
-        RetrofitInstance.api.makeTVSeriesBySorted(Constants.api_key, include_adult, 1, sortBy).enqueue(object: Callback<TVSeriesList> {
-            override fun onResponse(call: Call<TVSeriesList>, response: Response<TVSeriesList>) {
-                if (response.body() != null) {
-                    val tvSeriesList = response.body()!!.results
-                    makeATVSeriesLiveData.value = tvSeriesList
-                    Log.d("test","tv series sorted: ${response.body()}")
-                }
-            }
-
-            override fun onFailure(call: Call<TVSeriesList>, t: Throwable) {
-                Log.e("MaMViewModel Error: TV Series", t.message.toString())
             }
         })
     }
@@ -162,15 +129,11 @@ class MakeAMovieViewModel(): ViewModel() {
         return makeAMovieLiveData
     }
 
-    fun observerGetActorOneLiveData(): LiveData<ActorDetails> {
+    fun observerGetActorOneLiveData(): LiveData<SearchedActorDetails> {
         return getActorOneLiveData
     }
 
-    fun observerGetActorTwoLiveData(): LiveData<ActorDetails> {
+    fun observerGetActorTwoLiveData(): LiveData<SearchedActorDetails> {
         return getActorTwoLiveData
-    }
-
-    fun observerTVSeriesLiveData(): LiveData<List<TVSeries>> {
-        return makeATVSeriesLiveData
     }
 }
