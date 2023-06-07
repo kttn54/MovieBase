@@ -11,10 +11,17 @@ import com.example.moviebase.R
 import com.example.moviebase.databinding.GenerateMovieItemBinding
 import com.example.moviebase.model.Movie
 
+/**
+ * This is the adapter for the RecyclerView in the Saved Movies fragment.
+ */
+
 class SavedMoviesAdapter: RecyclerView.Adapter<SavedMoviesAdapter.SavedMoviesViewHolder>() {
 
     lateinit var onItemClick: ((Movie) -> Unit)
 
+    /**
+     * DiffUtil calculates differences between two lists and updates the RecyclerView accordingly
+     */
     private val diffUtil = object : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
@@ -25,6 +32,10 @@ class SavedMoviesAdapter: RecyclerView.Adapter<SavedMoviesAdapter.SavedMoviesVie
         }
     }
 
+    /**
+     * AsyncListDiffer is a helper class that determines the differences between two lists asynchronously
+     * and updates the RecyclerView accordingly.
+     */
     val differ = AsyncListDiffer(this, diffUtil)
 
     inner class SavedMoviesViewHolder(val binding: GenerateMovieItemBinding): RecyclerView.ViewHolder(binding.root)
