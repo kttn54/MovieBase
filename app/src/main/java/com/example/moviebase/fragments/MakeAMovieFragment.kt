@@ -30,6 +30,10 @@ import com.example.moviebase.viewModel.MakeAMovieViewModel
 import kotlinx.coroutines.*
 import java.lang.Math.abs
 
+/**
+ * This fragment creates a list of movies depending on the filters the user has chosen.
+ */
+
 class MakeAMovieFragment : Fragment() {
     private lateinit var binding: FragmentMakeAMovieBinding
     private lateinit var MaMMvvm: MakeAMovieViewModel
@@ -69,6 +73,7 @@ class MakeAMovieFragment : Fragment() {
 
         initialiseUI()
 
+        // When the submit button is clicked, collect all the filters and make a call to the API to request data
         binding.btnMaMSubmit.setOnClickListener {
             readDataFromUI()
 
@@ -87,11 +92,11 @@ class MakeAMovieFragment : Fragment() {
         onMaMMovieClicked()
     }
 
+    /**
+     * This function initialises the spinner UI components.
+     */
     private fun initialiseUI() {
-        val genreOptions: Array<String?>
-        val nonNullGenreOptions: Array<String> = resources.getStringArray(R.array.genres_movie)
-        genreOptions = nonNullGenreOptions.map { it }.toTypedArray()
-
+        val genreOptions = resources.getStringArray(R.array.genres_movie)
         binding.spinnerMaMGenreOne.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genreOptions)
         binding.spinnerMaMGenreTwo.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genreOptions)
 
@@ -99,6 +104,9 @@ class MakeAMovieFragment : Fragment() {
         binding.spinnerMaMSortBy.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sortOptions)
     }
 
+    /**
+     * This function reads the data selected from the filters. It combines the actors and genres if there are multiple selected.
+     */
     private fun readDataFromUI() {
         binding.progressBar.visibility = View.VISIBLE
         genreOne = binding.spinnerMaMGenreOne.selectedItem.toString()
@@ -121,6 +129,9 @@ class MakeAMovieFragment : Fragment() {
         sortBy = getSortByValue(binding.spinnerMaMSortBy.selectedItem.toString())
     }
 
+    /**
+     * This function makes an API call to get the actor ID if there is data in the first actor field.
+     */
     private fun getActorOneId() {
         if (actorOneName == "") {
             actorOneId = ""
@@ -130,6 +141,9 @@ class MakeAMovieFragment : Fragment() {
         observeActorOneId()
     }
 
+    /**
+     * This function makes an API call to get the actor ID if there is data in the second actor field.
+     */
     private fun getActorTwoId() {
         if (actorTwoName == "") {
             actorTwoId = ""
@@ -139,6 +153,9 @@ class MakeAMovieFragment : Fragment() {
         observeActorTwoId()
     }
 
+    /**
+     * This function combines the actors if there are two actors.
+     */
     private fun combineActors() {
         if (actorOneId.isNotEmpty() && actorTwoId.isNotEmpty()) {
             combinedActorIds = "$actorOneId,$actorTwoId"
@@ -151,6 +168,9 @@ class MakeAMovieFragment : Fragment() {
         }
     }
 
+    /**
+     * This function combines the genres if there are two genres.
+     */
     private fun combineGenres(genreOneId: String, genreTwoId: String) {
         if (genreOneId.isNotEmpty() && genreTwoId.isNotEmpty()) {
             combinedGenreIds = "$genreOneId,$genreTwoId"
@@ -161,9 +181,11 @@ class MakeAMovieFragment : Fragment() {
         } else {
             combinedGenreIds = ""
         }
-        Log.d("test", "combinedgenres is $combinedGenreIds")
     }
 
+    /**
+     * This function retrieves the movies from the API dependent on which filters are chosen.
+     */
     private fun getMovies() {
         if (combinedActorIds.isNullOrEmpty()) {
             if (combinedGenreIds.isNullOrEmpty() && actorOneName.isNullOrEmpty()) {
@@ -180,6 +202,10 @@ class MakeAMovieFragment : Fragment() {
         }
     }
 
+    /**
+     * When there is data received in the observer function of the MakeAMovie ViewModel, then load the movies into the RecyclerView.
+     * If no data is found, then do not load anything.
+     */
     private fun observeMakeAMovie() {
         MaMMvvm.observerMakeAMovieLiveData().observe(viewLifecycleOwner) { movieList ->
             if (movieList.isNullOrEmpty()) {

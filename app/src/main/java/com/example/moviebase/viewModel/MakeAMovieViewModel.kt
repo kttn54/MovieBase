@@ -11,6 +11,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+/**
+ * This class gets movie and actor information from the API to return data for the MakeAMovie fragment.
+ * There are different API calls dependent on the type of filters that are applied.
+ */
+
 class MakeAMovieViewModel: ViewModel() {
 
     private val include_adult = false

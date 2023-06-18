@@ -2,10 +2,12 @@ package com.example.moviebase.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
@@ -24,6 +26,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+/**
+ * This fragment searches movies based on the user's input and returns the list in the form of a grid.
+ */
 
 class SearchFragment : Fragment() {
 
@@ -49,20 +55,15 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         prepareRecyclerView()
-        searchMovies()
+        onLetterTyped()
         observeSearchedMoviesLiveData()
         onSearchedMovieClicked()
-
-        var searchJob: Job? = null
-        binding.etSearch.addTextChangedListener { searchQuery ->
-            searchJob?.cancel()
-            searchJob = lifecycleScope.launch {
-                delay(500)
-                viewModel.searchMovie(searchQuery.toString())
-            }
-        }
     }
 
+    /**
+     * When there is data received in the observer function of the HomeViewModel (after making a query to the database),
+     * then load the movies into the RecyclerView. If no data is found, do not load anything.
+     */
     private fun observeSearchedMoviesLiveData() {
         viewModel.observerSearchedMoviesLiveData().observe(viewLifecycleOwner) { movieList ->
             if (movieList.isNullOrEmpty()) {
@@ -75,13 +76,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun searchMovies() {
-        val searchQuery = binding.etSearch.text.toString()
-        if (searchQuery.isNotEmpty()) {
-            viewModel.searchMovie(searchQuery)
-        }
-    }
-
     private fun prepareRecyclerView() {
         searchedAdapter = MakeAMovieAdapter()
         binding.rvSearchedMovies.apply {
@@ -90,11 +84,29 @@ class SearchFragment : Fragment() {
         }
     }
 
+    /**
+     * When a movie in the RecyclerView is clicked, send relevant details to the Movie activity and start it.
+     */
     private fun onSearchedMovieClicked() {
         searchedAdapter.onItemClick = { movie ->
             val intent = Intent(activity, MovieActivity::class.java)
             intent.putExtra(Constants.MOVIE_OBJECT, movie)
             startActivity(intent)
+        }
+    }
+
+    /**
+     * This function searches the API when the user inputs anything into the search box.
+     * It waits 500 milliseconds between searches to ensure smoothness of the program.
+     */
+    private fun onLetterTyped() {
+        var searchJob: Job? = null
+        binding.etSearch.addTextChangedListener { searchQuery ->
+            searchJob?.cancel()
+            searchJob = lifecycleScope.launch {
+                delay(500)
+                viewModel.searchMovie(searchQuery.toString())
+            }
         }
     }
 }

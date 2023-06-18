@@ -20,6 +20,10 @@ import com.example.moviebase.viewModel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.NonDisposableHandle.parent
 
+/**
+ * This fragment displays the list of saved movies.
+ */
+
 class SavedFragment : Fragment() {
 
     private lateinit var binding: FragmentSavedBinding
@@ -57,6 +61,10 @@ class SavedFragment : Fragment() {
         }
     }
 
+    /**
+     * When there is data received in the observer function of the HomeViewModel (after making a query to the database),
+     * then load the movies into the RecyclerView. If no data is found, do not load anything.
+     */
     private fun observeSavedMovies() {
         viewModel.observerSavedMovieLiveData().observe(viewLifecycleOwner, Observer { movies ->
             savedAdapter.differ.submitList(movies)
@@ -71,6 +79,10 @@ class SavedFragment : Fragment() {
         }
     }
 
+    /**
+     * This function implements the swipe functionality to delete the swiped movie.
+     * It also includes a Snackbar to undo the deleted movie.
+     */
     private fun onSavedMovieSwiped() {
         val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,

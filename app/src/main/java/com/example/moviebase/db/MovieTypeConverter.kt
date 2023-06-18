@@ -1,8 +1,9 @@
 package com.example.moviebase.db
 
-import android.os.Build.VERSION_CODES.P
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+
+// TypeConverters is used to store non-primitive data/custom objects in the database, Room can only store primitive data types.
 
 @TypeConverters
 class MovieTypeConverter {

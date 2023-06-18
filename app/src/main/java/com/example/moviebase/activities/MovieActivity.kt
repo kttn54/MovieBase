@@ -45,7 +45,7 @@ import com.example.moviebase.viewModel.MovieViewModel
 import com.example.moviebase.viewModel.MovieViewModelFactory
 
 /**
- * This class shows detailed information of the movie that was clicked in the previous activity/fragment.
+ * This class shows detailed information about the movie that was clicked in the previous activity/fragment.
  */
 
 class MovieActivity : AppCompatActivity() {
@@ -60,14 +60,17 @@ class MovieActivity : AppCompatActivity() {
         binding = ActivityMovieBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // This creates and instantiates the MovieViewModel class
         val movieDatabase = MovieDatabase.getInstance(this)
         val viewModelFactory = MovieViewModelFactory(movieDatabase)
         movieMvvm = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
+
         similarMoviesAdapter = HorizontalMovieAdapter()
 
         getMovieInformation()
         setMovieInformation()
 
+        // Get similar movies based on the movie's ID
         movieMvvm.getSimilarMovies(movie.id)
 
         prepareSimilarMoviesRecyclerView()

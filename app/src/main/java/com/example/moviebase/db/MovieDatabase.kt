@@ -7,6 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.moviebase.model.Movie
 
+/**
+ * This class is the creates an instance of the Movie Database.
+ */
+
+// TypeConverters is used to store non-primitive data/custom objects in the database, Room can only store primitive data types.
 @Database(entities = [Movie::class], version = 1)
 @TypeConverters(MovieTypeConverter::class)
 abstract class MovieDatabase: RoomDatabase() {
@@ -17,7 +22,7 @@ abstract class MovieDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: MovieDatabase? = null
 
-        // @Synchronized ensures only one thread can have an instance of the database
+        // @Synchronized ensures that only one thread can have an instance of the database
         @Synchronized
         fun getInstance(context: Context): MovieDatabase {
             val tempInstance = INSTANCE

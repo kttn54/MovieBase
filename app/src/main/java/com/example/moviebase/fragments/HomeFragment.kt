@@ -23,6 +23,12 @@ import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.activities.MovieActivity
 import com.example.moviebase.model.TrendingActorDetails
 
+/**
+ * This fragment is the base fragment that the user sees when the application is opened.
+ * It contains the trending movie, popular movie and the Actor spotlight.
+ * Users can also search for a movie in this fragment.
+ */
+
 class HomeFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding: FragmentHomeBinding
@@ -49,28 +55,38 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        bindGenreOnClickListeners()
+
+        preparePopularMoviesRecyclerView()
+
+        // Get a trending movie using the API call in the HomeViewModel class, set it in the RecyclerView
+        // and set a click listener if the user clicks on the movie
+        viewModel.getTrendingMovie()
+        observerTrendingMovie()
+        onTrendingMovieClicked()
+
+        // Get popular movies using the API call in the HomeViewModel class, set it in the RecyclerView
+        // and set a click listener if the user clicks on the movie
+        viewModel.getPopularMoviesByCategory(genreId)
+        observerPopularMovie()
+        onPopularMovieClicked()
+
+        // Get a trending actor using the API call in the HomeViewModel class, set it in the RecyclerView
+        // and set a click listener if the user clicks on the actor
+        viewModel.getTrendingActor()
+        observerTrendingActor()
+        onTrendingActorClicked()
+
+        onSearchIconClicked()
+    }
+
+    private fun bindGenreOnClickListeners() {
         binding.btnAction.setOnClickListener(this)
         binding.btnAdventure.setOnClickListener(this)
         binding.btnAnimation.setOnClickListener(this)
         binding.btnCrime.setOnClickListener(this)
         binding.btnComedy.setOnClickListener(this)
         binding.btnDrama.setOnClickListener(this)
-
-        preparePopularMoviesRecyclerView()
-
-        viewModel.getTrendingMovie()
-        observerTrendingMovie()
-        onTrendingMovieClicked()
-
-        viewModel.getPopularMoviesByCategory(genreId)
-        observerPopularMovie()
-        onPopularMovieClicked()
-
-        viewModel.getTrendingActor()
-        observerTrendingActor()
-        onTrendingActorClicked()
-
-        onSearchIconClicked()
     }
 
     private fun onSearchIconClicked() {
@@ -86,6 +102,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    /**
+     * When there is data received in the observer function of the HomeViewModel, then load the image into the Trending movie UI component.
+     */
     private fun observerTrendingMovie() {
         showDialogBox()
         viewModel.observerTrendingMovieLiveData().observe(viewLifecycleOwner, object: Observer<Movie> {
@@ -103,6 +122,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         hideDialogBox()
     }
 
+    /**
+     * This function moves the user to the Movie activity with the according Movie details when the trending movie is clicked.
+     */
     private fun onTrendingMovieClicked() {
         binding.ivTrending.setOnClickListener {
             val intent = Intent(activity, MovieActivity::class.java)
@@ -111,6 +133,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    /**
+     * When there is data received in the observer function of the HomeViewModel, then load the image into the Popular movie UI component.
+     */
     private fun observerPopularMovie() {
         showDialogBox()
         viewModel.observerPopularMovieLiveData().observe(viewLifecycleOwner)
@@ -120,6 +145,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         hideDialogBox()
     }
 
+    /**
+     * This function moves the user to the Movie activity with the according Movie details when the popular movie is clicked.
+     */
     private fun onPopularMovieClicked() {
         popularMoviesAdapter.onItemClick = { movie ->
             val intent = Intent(activity, MovieActivity::class.java)
@@ -128,6 +156,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    /**
+     * When there is data received in the observer function of the HomeViewModel, then load the image into the actor UI component.
+     */
     private fun observerTrendingActor() {
         viewModel.observerTrendingActorLiveData().observe(viewLifecycleOwner, object: Observer<TrendingActorDetails> {
             override fun onChanged(actor: TrendingActorDetails?) {
@@ -151,6 +182,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         })
     }
 
+    /**
+     * This function moves the user to the Actor activity with the according Movie details when the popular movie is clicked.
+     */
     private fun onTrendingActorClicked() {
         binding.sivActorSpotlight.setOnClickListener {
             val intent = Intent(activity, ActorActivity::class.java)
@@ -160,6 +194,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    /**
+     * This function updates the popular movies UI component when a genre button is clicked.
+     */
     override fun onClick(view: View?) {
         showDialogBox()
         val button = view as Button

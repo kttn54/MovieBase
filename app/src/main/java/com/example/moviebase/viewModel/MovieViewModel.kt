@@ -15,6 +15,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+/**
+ * This class retrieves similar movies for a particular movie in the Movie activity.
+ */
+
 class MovieViewModel (private val movieDatabase: MovieDatabase): ViewModel() {
 
     private var similarMoviesDetailsLiveData = MutableLiveData<List<Movie>>()

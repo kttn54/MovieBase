@@ -18,6 +18,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.random.Random
 
+/**
+ * This class retrieves Trending Movies, Popular Movies and Trending actor information from the API.
+ * It also contains functions to save and delete movies from the local database.
+ */
+
 class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
 
     private var trendingMovieLiveData = MutableLiveData<Movie>()

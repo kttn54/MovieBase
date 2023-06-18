@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moviebase.db.MovieDatabase
 
 /**
- *  HomeViewModelFactory is responsible for creating instances of the 'HomeViewModel' class.
+ *  This HomeViewModelFactory is responsible for creating instances of the 'HomeViewModel' class.
  *  Its purpose is to customise the creation process of ViewModels and pass any required dependencies to them.
  */
 

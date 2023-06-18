@@ -1,6 +1,6 @@
 
 1. DONE Change RecyclerView adapters "notifyDataSetChanged" - not efficient
-2. Add comments to functions
+2. DONE Add comments to functions
 3. Remove horizontal scroll bar for Popular movies - possible?
 4. Add "next page" functionality
 
