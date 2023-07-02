@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.example.moviebase.R
 import com.example.moviebase.databinding.ActivityMainBinding
 import com.example.moviebase.db.MovieDatabase
@@ -36,8 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val bottomNavigation = binding.btmNav
-        val navController = Navigation.findNavController(this, R.id.host_fragment)
-        NavigationUI.setupWithNavController(bottomNavigation, navController)
+        val navController = findNavController(R.id.host_fragment)
+        binding.btmNav.setupWithNavController(navController)
     }
 }

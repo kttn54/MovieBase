@@ -59,7 +59,7 @@ class HorizontalMovieAdapter: RecyclerView.Adapter<HorizontalMovieAdapter.Horizo
         }
 
         holder.itemView.setOnClickListener {
-            onItemClick.invoke(movieList[position])
+            onItemClick.invoke(movie)
         }
     }
 
