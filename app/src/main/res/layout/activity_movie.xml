@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center"
             android:textIsSelectable="true"
-            android:text="Movie Title"/>
+            android:text="@string/movie_movie_title"/>
 
         <LinearLayout
             android:id="@+id/ll_detailed_movie"
@@ -62,7 +62,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/roboto_black"
-                    android:text="Movie Release Date"
+                    tools:text="Movie Release Date"
                     android:textSize="15sp" />
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/roboto_black"
-                    android:text="Genres:"
+                    tools:text="Genres:"
                     android:textSize="15sp" />
 
                 <RelativeLayout
@@ -87,9 +87,9 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="5dp"
-                        android:drawableEnd="@drawable/ic_star"
                         android:fontFamily="@font/roboto_black"
-                        android:text="Movie Rating" />
+                        android:text="@string/movie_movie_rating"
+                        app:drawableEndCompat="@drawable/ic_star" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -151,7 +151,7 @@
             app:layout_constraintBottom_toBottomOf="@id/iv_save"
             app:layout_constraintStart_toEndOf="@id/iv_save"
             app:layout_constraintTop_toTopOf="@id/iv_save"
-            android:text="Add to Saved List"
+            android:text="@string/movie_add_to_saved_list"
             android:fontFamily="@font/nexa_heavy"
             android:textSize="15sp"
             android:layout_marginStart="10dp"/>

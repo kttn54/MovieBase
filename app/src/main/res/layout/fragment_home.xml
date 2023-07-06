@@ -39,7 +39,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nexa_heavy"
-                        android:text="Home"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="@string/home_home"
                         android:textColor="@color/blue_crayola"
                         android:textSize="30sp" />
 
@@ -47,8 +49,7 @@
                         android:id="@+id/iv_search"
                         android:layout_width="32dp"
                         android:layout_height="match_parent"
-                        android:layout_gravity="bottom|center"
-                        android:layout_marginStart="150dp"
+                        android:layout_gravity="end"
                         android:src="@drawable/ic_search" />
                 </LinearLayout>
 
@@ -59,7 +60,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/nexa_heavy"
-                    android:text="Trending"
+                    android:text="@string/home_trending"
                     android:textColor="@color/black"
                     android:textSize="25sp"
                     app:layout_constraintStart_toStartOf="@id/ll_home"
@@ -74,7 +75,7 @@
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/lemon_milk_medium"
                     android:gravity="center"
-                    android:text="Trending Movie"
+                    android:text="@string/home_trending_movie"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle=""
@@ -110,7 +111,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/nexa_heavy"
-                    android:text="Popular"
+                    android:text="@string/home_popular"
                     android:textColor="@color/black"
                     android:textSize="25sp"
                     app:layout_constraintStart_toStartOf="@id/tv_trending"
@@ -137,7 +138,7 @@
                             android:id="@+id/btn_action"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
-                            android:text="Action"
+                            android:text="@string/home_action"
                             android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
@@ -145,7 +146,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:text="Adventure"
+                            android:text="@string/home_adventure"
                             android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
@@ -153,7 +154,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:text="Animation"
+                            android:text="@string/home_animation"
                             android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
@@ -161,7 +162,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:text="Comedy"
+                            android:text="@string/home_comedy"
                             android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
@@ -169,7 +170,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:text="Crime"
+                            android:text="@string/home_crime"
                             android:textSize="@dimen/popular_button_text_size" />
 
                         <Button
@@ -177,7 +178,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/popular_button_layout_height"
                             android:layout_marginStart="@dimen/popular_button_margin_start"
-                            android:text="Drama"
+                            android:text="@string/home_drama"
                             android:textSize="@dimen/popular_button_text_size" />
                     </LinearLayout>
                 </HorizontalScrollView>
@@ -199,7 +200,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/nexa_heavy"
-                    android:text="Actor Spotlight"
+                    android:text="@string/home_actor_spotlight"
                     android:textColor="@color/black"
                     android:textSize="25sp"
                     app:layout_constraintStart_toStartOf="@id/tv_trending"
@@ -249,7 +250,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/roboto_black"
-                                android:text="Name: Kevin Nguyen"
+                                tools:text="Name: Kevin Nguyen"
                                 android:textColor="@color/black" />
 
                             <TextView
@@ -258,7 +259,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
                                 android:fontFamily="@font/roboto_black"
-                                android:text="Popularity"
+                                android:text="@string/home_popularity"
                                 android:textColor="@color/black" />
 
                             <TextView
@@ -267,7 +268,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
                                 android:fontFamily="@font/roboto_black"
-                                android:text="Starred in:"
+                                android:text="@string/home_starred_in"
                                 android:textColor="@color/black" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>

@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center"
             android:textIsSelectable="true"
-            android:text="Actor"/>
+            android:text="@string/actor_actor"/>
 
         <LinearLayout
             android:id="@+id/ll_detailed_actor"
@@ -62,7 +62,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/roboto_black"
-                    android:text="Birthday:"
+                    tools:text="Birthday:"
                     android:textSize="15sp" />
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/roboto_black"
-                    android:text="Age:"
+                    tools:text="Age:"
                     android:textSize="15sp" />
 
                 <TextView
@@ -82,7 +82,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/roboto_black"
-                    android:text="Place of Birth:"
+                    tools:text="Place of Birth:"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -96,7 +96,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:fontFamily="@font/roboto_black"
-            android:text="Movie Description"
+            tools:text="Actor Description"
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/ll_detailed_actor"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,7 +110,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginStart="15dp"
             android:fontFamily="@font/nexa_heavy"
-            android:text="Featured Movies"
+            android:text="@string/actor_featured_movies"
             android:textColor="@color/black"
             android:textSize="25sp"
             app:layout_constraintStart_toStartOf="parent"

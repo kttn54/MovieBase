@@ -2,16 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="100dp"
     android:layout_height="195dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true"
-    app:cardElevation="5dp" >
+    app:cardElevation="5dp">
 
     <TextView
         android:id="@+id/tv_generate_movie_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Text"
+        tools:text="Text"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

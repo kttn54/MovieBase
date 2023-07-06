@@ -51,5 +51,32 @@
     <string name="movie_release_date">"Release Date: "</string>
     <string name="actor_popularity">"Popularity: "</string>
     <string name="actor_known_for">Starred in:</string>
+    <string name="home_home">Home</string>
+    <string name="home_trending">Trending</string>
+    <string name="home_trending_movie">Trending Movie</string>
+    <string name="home_popular">Popular</string>
+    <string name="home_action">Action</string>
+    <string name="home_adventure">Adventure</string>
+    <string name="home_animation">Animation</string>
+    <string name="home_comedy">Comedy</string>
+    <string name="home_crime">Crime</string>
+    <string name="home_drama">Drama</string>
+    <string name="home_actor_spotlight">Actor Spotlight</string>
+    <string name="home_popularity">Popularity</string>
+    <string name="home_starred_in">Starred in:</string>
+    <string name="actor_actor">Actor</string>
+    <string name="actor_featured_movies">Featured Movies</string>
+    <string name="movie_movie_title">Movie Title</string>
+    <string name="movie_movie_rating">Movie Rating</string>
+    <string name="movie_add_to_saved_list">Add to Saved List</string>
+    <string name="please_wait_8230">Please Wait…</string>
+    <string name="mam_make_a_movie">Make A Movie!</string>
+    <string name="mam_genre">Genre</string>
+    <string name="mam_actor">Actor</string>
+    <string name="mam_enter_actor_8230">Enter actor…</string>
+    <string name="mam_sort_by">Sort By</string>
+    <string name="mam_find_movies">Find movies!</string>
+    <string name="saved_saved">Saved</string>
+    <string name="search_movies_8230">Search movies…</string>
 
 </resources>
