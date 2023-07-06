@@ -1,6 +1,6 @@
-# MovieBase - An Android Movie Discovery App
+# MovieBase - A Movie Discovery App
 
-MovieBase is a high-quality, production-ready Android application that utilizes modern Android application development practices to provide a seamless and user-friendly experience.
+MovieBase is an Android application that utilises modern Android application development practices to provide a seamless and user-friendly experience.
 
 ![moviebase_home](https://github.com/stporg/MovieBase/assets/127300104/fde7d90e-ceeb-4be9-ad16-ccaff9c75373)
 ![moviebase_mam](https://github.com/stporg/MovieBase/assets/127300104/fc4e3114-56c1-4b44-91d0-2db8aada6cfa)
