@@ -41,7 +41,7 @@
         <item>Least Rated</item>
         <item>Released Ages Ago</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="actor_place_of_birth">"Place of Birth: "</string>
     <string name="actor_birthday">"Birthday: "</string>
