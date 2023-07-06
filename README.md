@@ -16,7 +16,7 @@ MovieBase is an Android application that utilises modern Android application dev
 ## Tech Stack
 
 * Kotlin - The project is entirely written in Kotlin, including the use of Coroutines and Flow for asynchronous tasks.
-* Architecture *: MVVM with Lifecycle-aware components, ViewModels, LiveData, and Navigation.
+* Architecture: MVVM with Lifecycle-aware components, ViewModels, LiveData, and Navigation.
 - **Libraries**:
   - Retrofit - For API network calls
   - Coroutine - For managing background tasks
