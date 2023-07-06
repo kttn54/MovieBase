@@ -10,15 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviebase.Constants
-import com.example.moviebase.R
+import com.example.moviebase.utils.Constants
 import com.example.moviebase.activities.MainActivity
 import com.example.moviebase.activities.MovieActivity
 import com.example.moviebase.adapters.SavedMoviesAdapter
 import com.example.moviebase.databinding.FragmentSavedBinding
 import com.example.moviebase.viewModel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 /**
  * This fragment displays the list of saved movies.

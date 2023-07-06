@@ -3,19 +3,15 @@ package com.example.moviebase.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.moviebase.Constants
+import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
 import com.example.moviebase.adapters.ActorMovieAdapter
 import com.example.moviebase.databinding.ActivityActorBinding
 import com.example.moviebase.model.Movie
 import com.example.moviebase.viewModel.DetailedActorViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -62,7 +58,12 @@ class ActorActivity : AppCompatActivity() {
     private fun setActorInformation() {
         // Set the featured movies in the RecyclerView
         actorKnownForMovies = intent.getParcelableArrayListExtra(Constants.ACTOR_KNOWN_FOR)!!
-        actorMovieAdapter.setActorMovies(actorKnownForMovies as ArrayList<Movie>)
+
+        intent.getParcelableArrayListExtra<Movie>(Constants.ACTOR_KNOWN_FOR)?.let { movies ->
+            actorMovieAdapter.setActorMovies(actorKnownForMovies as ArrayList<Movie>)
+        }
+
+        actorMvvm.observerActorInformationLiveData().removeObservers(this)
 
         // Set all other UI components
         actorMvvm.observerActorInformationLiveData().observe(this) { actor ->
@@ -78,8 +79,8 @@ class ActorActivity : AppCompatActivity() {
             }
             binding.tvDetailedActorBiography.text = actor.biography
 
-            binding.tvDetailedActorBirthday.text = "Birthday: ${actor.birthday.reversed()}"
-            binding.tvDetailedActorBirthPlace.text = "Place of Birth: ${actor.place_of_birth}"
+            binding.tvDetailedActorBirthday.text = getString(R.string.actor_birthday) + actor.birthday.reversed()
+            binding.tvDetailedActorBirthPlace.text = getString(R.string.actor_place_of_birth) + actor.place_of_birth
 
             // This calculates the actor's age if they are still alive, or age when deceased.
             val calendar = Calendar.getInstance()
@@ -89,11 +90,11 @@ class ActorActivity : AppCompatActivity() {
             var actorAge = currentYear - actorBirthYear
             
             if (actor.deathday == null) {
-                binding.tvDetailedActorAge.text = "Age: ${actorAge}"
+                binding.tvDetailedActorAge.text = getString(R.string.actor_age) + actorAge
             } else {
                 val actorDeathYear = actor.deathday.toString().split("-")[0].toInt()
                 actorAge = actorDeathYear - actorBirthYear
-                binding.tvDetailedActorAge.text = "Age: ${actorAge} (deceased)"
+                binding.tvDetailedActorAge.text = getString(R.string.actor_age) + actorAge + getString(R.string.actor_deceased)
             }
         }
     }
@@ -118,7 +119,7 @@ class ActorActivity : AppCompatActivity() {
 
     private fun onHomeButtonClicked() {
         binding.ivMovieHome.setOnClickListener {
-            startActivity(Intent(this@ActorActivity, MainActivity::class.java))
+            finish()
         }
     }
 }

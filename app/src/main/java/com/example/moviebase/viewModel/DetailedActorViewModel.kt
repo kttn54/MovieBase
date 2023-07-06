@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moviebase.Constants
 import com.example.moviebase.model.DetailedActor
 import com.example.moviebase.retrofit.RetrofitInstance
 import retrofit2.Call
@@ -20,10 +19,12 @@ class DetailedActorViewModel: ViewModel() {
     private val actorInformationLiveData = MutableLiveData<DetailedActor>()
 
     fun getDetailedActorInformation(id: Int) {
-        RetrofitInstance.api.getActorInformation(id, Constants.api_key).enqueue(object: Callback<DetailedActor> {
+        RetrofitInstance.api.getActorInformation(id).enqueue(object: Callback<DetailedActor> {
             override fun onResponse(call: Call<DetailedActor>, response: Response<DetailedActor>) {
                 if (response.body() != null) {
                     actorInformationLiveData.value = response.body()
+                } else {
+                    Log.d("HomeViewModel","Response body is null")
                 }
             }
 

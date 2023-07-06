@@ -2,12 +2,14 @@ package com.example.moviebase.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moviebase.Constants
+import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
 import com.example.moviebase.databinding.HorizontalMovieItemBinding
 import com.example.moviebase.model.Movie
+import com.example.moviebase.utils.MovieDiffCallback
 
 /**
  * This is the adapter for the multiple RecyclerViews where the movies are shown
@@ -16,26 +18,21 @@ import com.example.moviebase.model.Movie
 
 class HorizontalMovieAdapter: RecyclerView.Adapter<HorizontalMovieAdapter.HorizontalMovieViewHolder>() {
 
-    lateinit var onItemClick: ((Movie) -> Unit)
-    private var movieList = ArrayList<Movie>()
+    var onItemClick: ((Movie) -> Unit)? = null
+    private var movieList: MutableList<Movie> = mutableListOf()
 
     /**
      * This attaches the list of movies to the adapter. When there is a new list, then update according
      * to whether items are removed or inserted.
      */
-    fun setMovies(movieList: ArrayList<Movie>) {
-        val previousSize = this.movieList.size
+    fun setMovies(movieList: List<Movie>) {
+        val diffCallback = MovieDiffCallback(this.movieList, movieList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         this.movieList.clear()
         this.movieList.addAll(movieList)
-        val newSize = this.movieList.size
 
-        notifyItemRangeChanged(0, Integer.min(previousSize, newSize))
-
-        if (previousSize < newSize) {
-            notifyItemRangeInserted(previousSize, newSize - previousSize)
-        } else if (previousSize > newSize) {
-            notifyItemRangeRemoved(newSize, previousSize - newSize)
-        }
+        diffResult.dispatchUpdatesTo(this)
     }
 
     inner class HorizontalMovieViewHolder(val binding: HorizontalMovieItemBinding): RecyclerView.ViewHolder(binding.root)
@@ -48,7 +45,7 @@ class HorizontalMovieAdapter: RecyclerView.Adapter<HorizontalMovieAdapter.Horizo
         val movie = movieList[position]
 
         // Bind the movie's poster image to the row item if available
-        if (movie.poster_path.isNullOrEmpty()) {
+        if (movie.poster_path.isNullOrBlank()) {
             Glide.with(holder.itemView)
                 .load(R.drawable.no_image_small)
                 .into(holder.binding.ivPopularMovie)
@@ -59,7 +56,7 @@ class HorizontalMovieAdapter: RecyclerView.Adapter<HorizontalMovieAdapter.Horizo
         }
 
         holder.itemView.setOnClickListener {
-            onItemClick.invoke(movie)
+            onItemClick?.invoke(movie)
         }
     }
 

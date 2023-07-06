@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moviebase.Constants
 import com.example.moviebase.model.*
 import com.example.moviebase.retrofit.RetrofitInstance
 import retrofit2.Call
@@ -25,13 +24,14 @@ class MakeAMovieViewModel: ViewModel() {
     private val getActorTwoLiveData = MutableLiveData<SearchedActorDetails>()
 
     fun makeAMovieWithGenre(genreId: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithGenre(Constants.api_key, include_adult, 1, genreId, sortBy)
+        RetrofitInstance.api.makeMovieWithGenre(include_adult, 1, genreId, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
-                        Log.d("test","movie genre: ${response.body()}")
+                    } else {
+                        Log.d("MaMViewModel","Response body is null")
                     }
                 }
 
@@ -42,13 +42,14 @@ class MakeAMovieViewModel: ViewModel() {
     }
 
     fun makeAMovieWithActor(actorId: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithActor(Constants.api_key, include_adult, 1, actorId, sortBy)
+        RetrofitInstance.api.makeMovieWithActor(include_adult, 1, actorId, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
-                        Log.d("test","movie actor: ${response.body()}")
+                    } else {
+                        Log.d("MaMViewModel","Response body is null")
                     }
                 }
 
@@ -59,13 +60,14 @@ class MakeAMovieViewModel: ViewModel() {
     }
 
     fun makeAMovieWithGenreAndActor(genreId: String, actorId: String, sortBy: String) {
-        RetrofitInstance.api.makeMovieWithGenreAndActor(Constants.api_key, include_adult, 1, genreId, actorId, sortBy)
+        RetrofitInstance.api.makeMovieWithGenreAndActor(include_adult, 1, genreId, actorId, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
-                        Log.d("test","movie genre and actor: ${response.body()}")
+                    } else {
+                        Log.d("MaMViewModel","Response body is null")
                     }
                 }
 
@@ -76,13 +78,14 @@ class MakeAMovieViewModel: ViewModel() {
     }
 
     fun makeAMovieBySorted(sortBy: String) {
-        RetrofitInstance.api.makeMovieBySorted(Constants.api_key, include_adult, 1, sortBy)
+        RetrofitInstance.api.makeMovieBySorted(include_adult, 1, sortBy)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
                         val movieList = response.body()!!.results
                         makeAMovieLiveData.value = movieList
-                        Log.d("test","movie sorted only: ${response.body()}")
+                    } else {
+                        Log.d("MaMViewModel","Response body is null")
                     }
                 }
 
@@ -93,7 +96,7 @@ class MakeAMovieViewModel: ViewModel() {
     }
 
     fun getActorOneId(actorName: String) {
-        RetrofitInstance.api.getActorId(Constants.api_key, actorName).enqueue(object: Callback<SearchedActorResult> {
+        RetrofitInstance.api.getActorId(actorName).enqueue(object: Callback<SearchedActorResult> {
             override fun onResponse(call: Call<SearchedActorResult>, response: Response<SearchedActorResult>) {
                 if (response.body() != null) {
                     if (response.body()!!.total_results == 0) {
@@ -102,6 +105,8 @@ class MakeAMovieViewModel: ViewModel() {
                         val actorDetails = response.body()!!.results[0]
                         getActorOneLiveData.value = actorDetails
                     }
+                } else {
+                    Log.d("MaMViewModel","Response body is null")
                 }
             }
 
@@ -112,7 +117,7 @@ class MakeAMovieViewModel: ViewModel() {
     }
 
     fun getActorTwoId(actorName: String) {
-        RetrofitInstance.api.getActorId(Constants.api_key, actorName).enqueue(object: Callback<SearchedActorResult> {
+        RetrofitInstance.api.getActorId(actorName).enqueue(object: Callback<SearchedActorResult> {
             override fun onResponse(call: Call<SearchedActorResult>, response: Response<SearchedActorResult>) {
                 if (response.body() != null) {
                     if (response.body()!!.total_results == 0) {
@@ -121,6 +126,8 @@ class MakeAMovieViewModel: ViewModel() {
                         val actorDetails = response.body()!!.results[0]
                         getActorTwoLiveData.value = actorDetails
                     }
+                } else {
+                    Log.d("MaMViewModel","Response body is null")
                 }
             }
 

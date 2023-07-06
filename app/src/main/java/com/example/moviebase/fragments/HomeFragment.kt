@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.moviebase.Constants
+import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
 import com.example.moviebase.activities.ActorActivity
 import com.example.moviebase.activities.MainActivity
@@ -163,13 +163,13 @@ class HomeFragment : Fragment(), View.OnClickListener {
         viewModel.observerTrendingActorLiveData().observe(viewLifecycleOwner, object: Observer<TrendingActorDetails> {
             override fun onChanged(actor: TrendingActorDetails?) {
                 Glide.with(this@HomeFragment)
-                    .load("${Constants.BASE_IMG_ACTOR_URL}${actor!!.profile_path}")
+                    .load("${Constants.BASE_IMG_URL}${actor!!.profile_path}")
                     .placeholder(R.drawable.no_image_small)
                     .into(binding.sivActorSpotlight)
 
                 binding.tvActorName.text = "${actor.name}"
-                binding.tvActorAge.text = "Popularity: ${actor.popularity}"
-                binding.tvActorKnownFor.text = "Starred in:"
+                binding.tvActorAge.text = getString(R.string.actor_popularity) + actor.popularity
+                binding.tvActorKnownFor.text = getString(R.string.actor_known_for)
                 actorObject = actor
                 actorId = actor.id
                 actorKnownForMovies = actor.known_for
@@ -200,29 +200,8 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View?) {
         showDialogBox()
         val button = view as Button
-        val genreText = button.text.toString()
-
-        when (genreText) {
-            "Action" -> {
-                genreId = Constants.ACTION.toString()
-            }
-            "Adventure" -> {
-                genreId = Constants.ADVENTURE.toString()
-            }
-            "Animation" -> {
-                genreId = Constants.ANIMATION.toString()
-            }
-            "Comedy" -> {
-                genreId = Constants.COMEDY.toString()
-            }
-            "Crime" -> {
-                genreId = Constants.CRIME.toString()
-            }
-            "Drama" -> {
-                genreId = Constants.DRAMA.toString()
-            }
-        }
-        viewModel.getPopularMoviesByCategory(genreId)
+        val genreId = MovieActivity.getGenreId(button.text.toString())
+        viewModel.getPopularMoviesByCategory(genreId.toString())
         hideDialogBox()
     }
 

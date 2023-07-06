@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviebase.Constants
 import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
 import com.example.moviebase.model.MovieList
@@ -24,10 +23,12 @@ class MovieViewModel (private val movieDatabase: MovieDatabase): ViewModel() {
     private var similarMoviesDetailsLiveData = MutableLiveData<List<Movie>>()
 
     fun getSimilarMovies(id: Int) {
-        RetrofitInstance.api.getSimilarMovies(id, Constants.api_key).enqueue(object: Callback<MovieList> {
+        RetrofitInstance.api.getSimilarMovies(id).enqueue(object: Callback<MovieList> {
             override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                 if (response.body() != null) {
                     similarMoviesDetailsLiveData.value = response.body()!!.results
+                } else {
+                    Log.d("MovieViewModel","Response body is null")
                 }
             }
 

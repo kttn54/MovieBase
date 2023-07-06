@@ -2,12 +2,14 @@ package com.example.moviebase.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moviebase.Constants
+import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
 import com.example.moviebase.databinding.GenerateMovieItemBinding
 import com.example.moviebase.model.Movie
+import com.example.moviebase.utils.MovieDiffCallback
 import java.lang.Integer.min
 
 /**
@@ -16,22 +18,17 @@ import java.lang.Integer.min
 
 class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHolder>() {
 
-    private var movieList = ArrayList<Movie>()
-    lateinit var onItemClick: ((Movie) -> Unit)
+    private var movieList: MutableList<Movie> = mutableListOf()
+    var onItemClick: ((Movie) -> Unit)? = null
 
-    fun setMovies(movieList: ArrayList<Movie>) {
-        val previousSize = this.movieList.size
+    fun setMovies(movieList: List<Movie>) {
+        val diffCallback = MovieDiffCallback(this.movieList, movieList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         this.movieList.clear()
         this.movieList.addAll(movieList)
-        val newSize = this.movieList.size
 
-        notifyItemRangeChanged(0, min(previousSize, newSize))
-
-        if (previousSize < newSize) {
-            notifyItemRangeInserted(previousSize, newSize - previousSize)
-        } else if (previousSize > newSize) {
-            notifyItemRangeRemoved(newSize, previousSize - newSize)
-        }
+        diffResult.dispatchUpdatesTo(this)
     }
 
     inner class MakeAMovieViewHolder(val binding: GenerateMovieItemBinding): RecyclerView.ViewHolder(binding.root)
@@ -44,7 +41,7 @@ class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHo
         val movie = movieList[position]
 
         // Bind the movie's poster image to the row item if available
-        if (movie.poster_path.isNullOrEmpty()) {
+        if (movie.poster_path.isNullOrBlank()) {
             Glide.with(holder.itemView)
                 .load(R.drawable.no_image_small)
                 .into(holder.binding.ivMakeAMovie)
@@ -57,7 +54,7 @@ class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHo
         holder.binding.tvGenerateMovieItem.text = movieList[position].title
 
         holder.itemView.setOnClickListener {
-            onItemClick.invoke(movieList[position])
+            onItemClick?.invoke(movieList[position])
         }
     }
 

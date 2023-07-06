@@ -1,41 +1,33 @@
 package com.example.moviebase.activities
 
 import android.content.Intent
+import android.media.tv.TvContract.Programs.Genres.NEWS
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.moviebase.Constants
-import com.example.moviebase.Constants.ACTION
-import com.example.moviebase.Constants.ACTION_AND_ADVENTURE
-import com.example.moviebase.Constants.ADVENTURE
-import com.example.moviebase.Constants.ANIMATION
-import com.example.moviebase.Constants.COMEDY
-import com.example.moviebase.Constants.CRIME
-import com.example.moviebase.Constants.DOCUMENTARY
-import com.example.moviebase.Constants.DRAMA
-import com.example.moviebase.Constants.FAMILY
-import com.example.moviebase.Constants.FANTASY
-import com.example.moviebase.Constants.HISTORY
-import com.example.moviebase.Constants.HORROR
-import com.example.moviebase.Constants.KIDS
-import com.example.moviebase.Constants.MUSIC
-import com.example.moviebase.Constants.MYSTERY
-import com.example.moviebase.Constants.NEWS
-import com.example.moviebase.Constants.REALITY
-import com.example.moviebase.Constants.ROMANCE
-import com.example.moviebase.Constants.SCIENCE_FICTION
-import com.example.moviebase.Constants.SCI_FI_AND_FANTASY
-import com.example.moviebase.Constants.SOAP
-import com.example.moviebase.Constants.TALK
-import com.example.moviebase.Constants.THRILLER
-import com.example.moviebase.Constants.TV_MOVIE
-import com.example.moviebase.Constants.WAR
-import com.example.moviebase.Constants.WAR_AND_POLITICS
-import com.example.moviebase.Constants.WESTERN
+import com.example.moviebase.utils.Constants
+import com.example.moviebase.utils.Constants.ACTION
+import com.example.moviebase.utils.Constants.ADVENTURE
+import com.example.moviebase.utils.Constants.ANIMATION
+import com.example.moviebase.utils.Constants.COMEDY
+import com.example.moviebase.utils.Constants.CRIME
+import com.example.moviebase.utils.Constants.DOCUMENTARY
+import com.example.moviebase.utils.Constants.DRAMA
+import com.example.moviebase.utils.Constants.FAMILY
+import com.example.moviebase.utils.Constants.FANTASY
+import com.example.moviebase.utils.Constants.HISTORY
+import com.example.moviebase.utils.Constants.HORROR
+import com.example.moviebase.utils.Constants.MUSIC
+import com.example.moviebase.utils.Constants.MYSTERY
+import com.example.moviebase.utils.Constants.ROMANCE
+import com.example.moviebase.utils.Constants.SCIENCE_FICTION
+import com.example.moviebase.utils.Constants.THRILLER
+import com.example.moviebase.utils.Constants.TV_MOVIE
+import com.example.moviebase.utils.Constants.WAR
+import com.example.moviebase.utils.Constants.WESTERN
 import com.example.moviebase.R
 import com.example.moviebase.adapters.HorizontalMovieAdapter
 import com.example.moviebase.databinding.ActivityMovieBinding
@@ -92,8 +84,8 @@ class MovieActivity : AppCompatActivity() {
     private fun setMovieInformation() {
         binding.tvDetailedMovieTitle.text = movie.title
         binding.tvDetailedMovieOverview.text = movie.overview
-        binding.tvDetailedMovieRating.text = "Rating: ${movie.vote_average}"
-        binding.tvDetailedMovieReleaseDate.text = "Release Date: ${movie.release_date}"
+        binding.tvDetailedMovieRating.text = getString(R.string.movie_rating) + movie.vote_average
+        binding.tvDetailedMovieReleaseDate.text = getString(R.string.movie_release_date) + movie.release_date
 
         // If there is no image, display the "no image found" picture. Otherwise, display the image.
         if (movie.poster_path == "N/A") {
@@ -106,7 +98,7 @@ class MovieActivity : AppCompatActivity() {
                 .into(binding.ivDetailedMovieImage)
         }
 
-        for (genreId in movie.genre_ids!!) {
+        for (genreId in movie.genre_ids ?: emptyList()) {
             val genreName = getGenreName(genreId)
             binding.tvDetailedGenres.append("\n \u2022 $genreName")
         }
@@ -124,8 +116,12 @@ class MovieActivity : AppCompatActivity() {
      */
     private fun observerSimilarMovies() {
         movieMvvm.observerSimilarMoviesLiveData().observe(this) { movieList ->
-            similarMoviesAdapter.setMovies(movieList = movieList as ArrayList<Movie>)
+            setSimilarMovies(movieList)
         }
+    }
+
+    private fun setSimilarMovies(movies: List<Movie>) {
+        similarMoviesAdapter.setMovies(movies as ArrayList<Movie>)
     }
 
     /**
@@ -144,52 +140,71 @@ class MovieActivity : AppCompatActivity() {
      */
     private fun onFavouriteButtonClicked() {
         binding.ivSave.setOnClickListener {
-            movie.let {
-                movieMvvm.insertMovie(it!!)
-                Toast.makeText(this, "Movie Saved", Toast.LENGTH_SHORT).show()
+            movie?.let {
+                movieMvvm.insertMovie(it)
+                Toast.makeText(this, "${movie.title} Saved", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun onHomeButtonClicked() {
         binding.ivMovieHome.setOnClickListener {
-            startActivity(Intent(this@MovieActivity, MainActivity::class.java))
+            finish()
         }
     }
 
     /**
      * A function that returns the appropriate genre given the corresponding integer.
      */
-    private fun getGenreName(genreId: Int): String {
-        return when (genreId) {
-            ACTION -> "Action"
-            ADVENTURE -> "Adventure"
-            ANIMATION -> "Animation"
-            COMEDY -> "Comedy"
-            CRIME -> "Crime"
-            DOCUMENTARY -> "Documentary"
-            DRAMA -> "Drama"
-            FAMILY -> "Family"
-            FANTASY -> "Fantasy"
-            HISTORY -> "History"
-            HORROR -> "Horror"
-            MUSIC -> "Music"
-            MYSTERY -> "Mystery"
-            ROMANCE -> "Romance"
-            SCIENCE_FICTION -> "Science Fiction"
-            TV_MOVIE -> "TV Movie"
-            THRILLER -> "Thriller"
-            WAR -> "War"
-            WESTERN -> "Western"
-            ACTION_AND_ADVENTURE -> "Action and Adventure"
-            KIDS -> "Kids"
-            NEWS -> "News"
-            REALITY -> "Reality"
-            SCI_FI_AND_FANTASY -> "Sci-Fi and Fantasy"
-            SOAP -> "Soap"
-            TALK -> "Talk"
-            WAR_AND_POLITICS -> "War and Politics"
-            else -> "Unknown Genre"
+    companion object {
+        fun getGenreId(genreName: String): Int {
+            return when (genreName) {
+                "Action" -> ACTION
+                "Adventure" -> ADVENTURE
+                "Animation" -> ANIMATION
+                "Comedy" -> COMEDY
+                "Crime" -> CRIME
+                "Documentary" -> DOCUMENTARY
+                "Drama" -> DRAMA
+                "Family" -> FAMILY
+                "Fantasy" -> FANTASY
+                "History" -> HISTORY
+                "Horror" -> HORROR
+                "Music" -> MUSIC
+                "Mystery" -> MYSTERY
+                "Romance" -> ROMANCE
+                "Science Fiction" -> SCIENCE_FICTION
+                "TV Movie" -> TV_MOVIE
+                "Thriller" -> THRILLER
+                "War" -> WAR
+                "Western" -> WESTERN
+                else -> -1 // or any default value
+            }
+        }
+
+        fun getGenreName(genreId: Int): String {
+            return when (genreId) {
+                ACTION -> "Action"
+                ADVENTURE -> "Adventure"
+                ANIMATION -> "Animation"
+                COMEDY -> "Comedy"
+                CRIME -> "Crime"
+                DOCUMENTARY -> "Documentary"
+                DRAMA -> "Drama"
+                FAMILY -> "Family"
+                FANTASY -> "Fantasy"
+                HISTORY -> "History"
+                HORROR -> "Horror"
+                MUSIC -> "Music"
+                MYSTERY -> "Mystery"
+                ROMANCE -> "Romance"
+                SCIENCE_FICTION -> "Science Fiction"
+                TV_MOVIE -> "TV Movie"
+                THRILLER -> "Thriller"
+                WAR -> "War"
+                WESTERN -> "Western"
+                else -> "Unknown Genre"
+            }
         }
     }
 }

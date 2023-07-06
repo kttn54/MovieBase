@@ -1,18 +1,15 @@
-package com.example.moviebase
+package com.example.moviebase.utils
 
-// TODO: include actor part in the main page
+import com.example.moviebase.BuildConfig
 
 object Constants {
 
-    const val api_key: String = "775154bc0da8953106516b8e02ffd088"
+    val api_key: String = BuildConfig.API_KEY
 
     const val BASE_IMG_URL: String = "https://image.tmdb.org/t/p/w500/"
-    const val BASE_IMG_ACTOR_URL: String = "https://image.tmdb.org/t/p/w500/"
-
     const val BASE_URL: String = "https://api.themoviedb.org/3/"
 
     const val MOVIE_OBJECT = "com.example.moviebase.movieObject"
-    const val ACTOR_OBJECT = "com.example.moviebase.actorObject"
     const val ACTOR_KNOWN_FOR = "com.example.moviebase.actorKnownFor"
     const val ACTOR_ID = "com.example.moviebase.actorId"
 
@@ -36,16 +33,6 @@ object Constants {
     const val WAR: Int = 10752
     const val WESTERN: Int = 37
 
-    const val ACTION_AND_ADVENTURE = 10759
-    const val KIDS = 10762
-    const val NEWS = 10763
-    const val REALITY = 10764
-    const val SCI_FI_AND_FANTASY = 10765
-    const val SOAP = 10766
-    const val TALK = 10767
-    const val WAR_AND_POLITICS = 10768
-
-
     const val MOST_POPULAR = "popularity.desc"
     const val TOP_RATED = "vote_average.desc"
     const val RECENTLY_RELEASED = "primary_release_date.desc"
@@ -53,5 +40,3 @@ object Constants {
     const val LEAST_RATED = "vote_average.asc"
     const val RELEASED_AGES_AGO = "primary_release_date.asc"
 }
-
-// ?api_key=775154bc0da8953106516b8e02ffd088

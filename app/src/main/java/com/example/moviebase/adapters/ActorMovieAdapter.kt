@@ -4,11 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moviebase.Constants
+import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
 import com.example.moviebase.databinding.HorizontalMovieItemBinding
 import com.example.moviebase.model.Movie
-import java.lang.Integer.min
 
 /**
  * This class is the adapter for the Featured Movies RecyclerView in the Actor Activity.
@@ -16,8 +15,8 @@ import java.lang.Integer.min
 
 class ActorMovieAdapter: RecyclerView.Adapter<ActorMovieAdapter.ActorViewHolder>() {
 
-    lateinit var onItemClick: ((Movie) -> Unit)
-    private var movieList = ArrayList<Movie>()
+    var onItemClick: ((Movie) -> Unit)? = null
+    private var movieList: List<Movie> = emptyList()
 
     /**
      * This attaches the list of movies to the adapter.
@@ -36,7 +35,7 @@ class ActorMovieAdapter: RecyclerView.Adapter<ActorMovieAdapter.ActorViewHolder>
         val movie = movieList[position]
 
         // Bind the movie's poster image to the row item if available
-        if (movie.poster_path.isNullOrEmpty()) {
+        if (movie.poster_path.isNullOrBlank()) {
             Glide.with(holder.itemView)
                 .load(R.drawable.no_image_small)
                 .into(holder.binding.ivPopularMovie)
@@ -47,7 +46,7 @@ class ActorMovieAdapter: RecyclerView.Adapter<ActorMovieAdapter.ActorViewHolder>
         }
 
         holder.itemView.setOnClickListener {
-            onItemClick.invoke(movie)
+            onItemClick?.invoke(movie)
         }
     }
 

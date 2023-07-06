@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moviebase.Constants
+import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
 import com.example.moviebase.databinding.GenerateMovieItemBinding
 import com.example.moviebase.model.Movie
@@ -17,7 +17,7 @@ import com.example.moviebase.model.Movie
 
 class SavedMoviesAdapter: RecyclerView.Adapter<SavedMoviesAdapter.SavedMoviesViewHolder>() {
 
-    lateinit var onItemClick: ((Movie) -> Unit)
+    var onItemClick: ((Movie) -> Unit)? = null
 
     /**
      * DiffUtil calculates differences between two lists and updates the RecyclerView accordingly
@@ -60,7 +60,7 @@ class SavedMoviesAdapter: RecyclerView.Adapter<SavedMoviesAdapter.SavedMoviesVie
         }
 
         holder.itemView.setOnClickListener {
-            onItemClick.invoke(movie)
+            onItemClick?.invoke(movie)
         }
     }
 
