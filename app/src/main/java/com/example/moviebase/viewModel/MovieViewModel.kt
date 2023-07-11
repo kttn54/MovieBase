@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebase.model.Movie
-import com.example.moviebase.repositories.DetailedMovieRepository
+import com.example.moviebase.repositories.DefaultMovieRepository
+import com.example.moviebase.repositories.MovieRepository
+import com.example.moviebase.utils.Event
+import com.example.moviebase.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -13,15 +16,12 @@ import kotlinx.coroutines.launch
  * This class retrieves similar movies for a particular movie in the Movie activity.
  */
 
-class MovieViewModel (private val repository: DetailedMovieRepository): ViewModel() {
+class MovieViewModel (private val repository: MovieRepository): ViewModel() {
 
-    private var _similarMoviesDetailsLiveData = repository.similarMoviesDetailsLiveData
-    val similarMoviesDetailsLiveData: LiveData<List<Movie>>
-        get() = _similarMoviesDetailsLiveData
+    val similarMoviesDetailsLiveData: LiveData<List<Movie>> = repository.observeSimilarMovies()
 
-    init {
-        _similarMoviesDetailsLiveData = repository.similarMoviesDetailsLiveData
-    }
+    private val _movieItemStatus = MutableLiveData<Event<Resource<Movie>>>()
+    val movieItemStatus: LiveData<Event<Resource<Movie>>> = _movieItemStatus
 
     fun getSimilarMovies(id: Int) {
         viewModelScope.launch {
@@ -29,11 +29,7 @@ class MovieViewModel (private val repository: DetailedMovieRepository): ViewMode
         }
     }
 
-    fun insertMovie(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
+    fun upsertMovie(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
         repository.upsertMovie(movie)
-    }
-
-    fun deleteMovie(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteMovie(movie)
     }
 }

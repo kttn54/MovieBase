@@ -14,7 +14,7 @@ import retrofit2.Response
  * This class gets actor information from the API.
  */
 
-class DetailedActorViewModel: ViewModel() {
+class ActorViewModel: ViewModel() {
 
     private val actorInformationLiveData = MutableLiveData<DetailedActor>()
 

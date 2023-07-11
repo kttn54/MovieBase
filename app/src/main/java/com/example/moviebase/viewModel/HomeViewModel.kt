@@ -1,7 +1,6 @@
 package com.example.moviebase.viewModel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebase.model.Movie
@@ -17,24 +16,19 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val repository: HomeRepository): ViewModel() {
 
     private var _trendingMovieLiveData = repository.trendingMovieLiveData
-    val trendingMovieLiveData: LiveData<Movie>
-        get() = _trendingMovieLiveData
+    val trendingMovieLiveData: LiveData<Movie> = _trendingMovieLiveData
 
     private var _trendingActorLiveData = repository.trendingActorLiveData
-    val trendingActorLiveData: LiveData<TrendingActorDetails>
-        get() = _trendingActorLiveData
+    val trendingActorLiveData: LiveData<TrendingActorDetails> = _trendingActorLiveData
 
     private var _popularMovieLiveData = repository.popularMovieLiveData
-    val popularMovieLiveData: LiveData<List<Movie>>
-        get() = _popularMovieLiveData
+    val popularMovieLiveData: LiveData<List<Movie>> = _popularMovieLiveData
 
     private var _searchedMoviesLiveData = repository.searchedMoviesLiveData
-    val searchedMoviesLiveData: LiveData<List<Movie>>
-        get() = _searchedMoviesLiveData
+    val searchedMoviesLiveData: LiveData<List<Movie>> = _searchedMoviesLiveData
 
     private var _savedMovieLiveData = repository.savedMovieLiveData
-    val savedMovieLiveData: LiveData<List<Movie>>
-        get() = _savedMovieLiveData
+    val savedMovieLiveData: LiveData<List<Movie>> = _savedMovieLiveData
 
     fun getTrendingMovie() {
         viewModelScope.launch {

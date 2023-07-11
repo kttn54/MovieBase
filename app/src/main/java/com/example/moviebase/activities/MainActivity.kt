@@ -32,8 +32,7 @@ class MainActivity : AppCompatActivity() {
     val viewModel: HomeViewModel by lazy {
         val dao = MovieDatabase.getInstance(this).movieDao()
         val api = RetrofitInstance.api
-        val movieDatabase = MovieDatabase.getInstance(this)
-        val homeRepository = HomeRepository(dao, api, movieDatabase)
+        val homeRepository = HomeRepository(dao, api)
         val homeViewModelProviderFactory = HomeViewModelFactory(homeRepository)
         ViewModelProvider(this, homeViewModelProviderFactory)[HomeViewModel::class.java]
     }

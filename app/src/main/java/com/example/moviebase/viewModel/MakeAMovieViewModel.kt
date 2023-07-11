@@ -1,17 +1,11 @@
 package com.example.moviebase.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebase.model.*
 import com.example.moviebase.repositories.MakeAMovieRepository
-import com.example.moviebase.retrofit.RetrofitInstance
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 /**
  * This class gets movie and actor information from the API to return data for the MakeAMovie fragment.
@@ -20,19 +14,14 @@ import retrofit2.Response
 
 class MakeAMovieViewModel(private val repository: MakeAMovieRepository): ViewModel() {
 
-    private val include_adult = false
-
     private val _makeAMovieLiveData = repository.makeAMovieLiveData
-    val makeAMovieLiveData: LiveData<List<Movie>>
-        get() = _makeAMovieLiveData
+    val makeAMovieLiveData: LiveData<List<Movie>> = _makeAMovieLiveData
 
     private val _getActorOneLiveData = repository.getActorOneLiveData
-    val getActorOneLiveData: LiveData<SearchedActorDetails>
-        get() = _getActorOneLiveData
+    val getActorOneLiveData: LiveData<SearchedActorDetails> = _getActorOneLiveData
 
     private val _getActorTwoLiveData = repository.getActorTwoLiveData
-    val getActorTwoLiveData: LiveData<SearchedActorDetails>
-        get() = _getActorTwoLiveData
+    val getActorTwoLiveData: LiveData<SearchedActorDetails> = _getActorTwoLiveData
 
     fun makeAMovieWithGenre(genreId: String, sortBy: String) {
         viewModelScope.launch {

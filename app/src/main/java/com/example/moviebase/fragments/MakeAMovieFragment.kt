@@ -18,19 +18,14 @@ import com.example.moviebase.utils.Constants.RECENTLY_RELEASED
 import com.example.moviebase.utils.Constants.RELEASED_AGES_AGO
 import com.example.moviebase.utils.Constants.TOP_RATED
 import com.example.moviebase.R
-import com.example.moviebase.activities.MainActivity
 import com.example.moviebase.activities.MovieActivity
 import com.example.moviebase.adapters.MakeAMovieAdapter
 import com.example.moviebase.databinding.FragmentMakeAMovieBinding
-import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
-import com.example.moviebase.repositories.DetailedMovieRepository
 import com.example.moviebase.repositories.MakeAMovieRepository
 import com.example.moviebase.retrofit.RetrofitInstance
-import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.MakeAMovieViewModel
 import com.example.moviebase.viewModel.MakeAMovieViewModelFactory
-import com.example.moviebase.viewModel.MovieViewModelFactory
 import kotlinx.coroutines.*
 import java.lang.Math.abs
 
@@ -58,10 +53,8 @@ class MakeAMovieFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         // This creates and instantiates the MovieViewModel class
-        val dao = MovieDatabase.getInstance(requireContext()).movieDao()
         val api = RetrofitInstance.api
-        val movieDatabase = MovieDatabase.getInstance(requireContext())
-        val mamRepository = MakeAMovieRepository(dao, api, movieDatabase)
+        val mamRepository = MakeAMovieRepository(api)
         val viewModelFactory = MakeAMovieViewModelFactory(mamRepository)
         MaMMvvm = ViewModelProvider(this, viewModelFactory)[MakeAMovieViewModel::class.java]
 

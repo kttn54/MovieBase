@@ -2,7 +2,6 @@ package com.example.moviebase.repositories
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.moviebase.db.MovieDao
 import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
@@ -11,23 +10,21 @@ import com.example.moviebase.model.TrendingActorDetails
 import com.example.moviebase.model.TrendingActorResults
 import com.example.moviebase.retrofit.MovieAPI
 import com.example.moviebase.retrofit.RetrofitInstance
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.random.Random
 
-class HomeRepository(private val dao: MovieDao, private val api: MovieAPI, private val db: MovieDatabase) {
+class HomeRepository(private val dao: MovieDao, private val api: MovieAPI) {
 
     var trendingMovieLiveData = MutableLiveData<Movie>()
     var trendingActorLiveData = MutableLiveData<TrendingActorDetails>()
     var popularMovieLiveData = MutableLiveData<List<Movie>>()
     var searchedMoviesLiveData = MutableLiveData<List<Movie>>()
-    var savedMovieLiveData = db.movieDao().getAllSavedMovies()
+    var savedMovieLiveData = dao.getAllSavedMovies()
 
     fun getTrendingMovie() {
-        RetrofitInstance.api.getTrendingMovie().enqueue(object: Callback<MovieList> {
+        api.getTrendingMovie().enqueue(object: Callback<MovieList> {
             override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                 if (response.body() != null) {
                     val listSize = response.body()!!.results.size
@@ -46,7 +43,7 @@ class HomeRepository(private val dao: MovieDao, private val api: MovieAPI, priva
     }
 
     fun searchMovie(query: String) {
-        RetrofitInstance.api.searchMovie(query).enqueue(object: Callback<MovieList> {
+        api.searchMovie(query).enqueue(object: Callback<MovieList> {
             override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                 if (response.body() != null) {
                     searchedMoviesLiveData.value = response.body()!!.results
@@ -63,7 +60,7 @@ class HomeRepository(private val dao: MovieDao, private val api: MovieAPI, priva
     }
 
     fun getPopularMoviesByCategory(genre: String) {
-        RetrofitInstance.api.getPopularMovieByGenre(false, "en", 1, "popularity.desc", genre)
+        api.getPopularMovieByGenre(false, "en", 1, "popularity.desc", genre)
             .enqueue(object: Callback<MovieList> {
                 override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                     if (response.body() != null) {
@@ -80,7 +77,7 @@ class HomeRepository(private val dao: MovieDao, private val api: MovieAPI, priva
     }
 
     fun getTrendingActor() {
-        RetrofitInstance.api.getTrendingActor().enqueue(object: Callback<TrendingActorResults> {
+        api.getTrendingActor().enqueue(object: Callback<TrendingActorResults> {
             override fun onResponse(call: Call<TrendingActorResults>, response: Response<TrendingActorResults>) {
                 if (response.body() != null) {
                     val listSize = response.body()!!.results.size
@@ -99,10 +96,10 @@ class HomeRepository(private val dao: MovieDao, private val api: MovieAPI, priva
     }
 
     suspend fun insertMovie(movie: Movie) {
-        db.movieDao().upsertMovie(movie)
+        dao.upsertMovie(movie)
     }
 
     suspend fun deleteMovie(movie: Movie) {
-        db.movieDao().deleteMovie(movie)
+        dao.deleteMovie(movie)
     }
 }

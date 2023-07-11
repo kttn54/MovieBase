@@ -32,7 +32,7 @@ import com.example.moviebase.adapters.HorizontalMovieAdapter
 import com.example.moviebase.databinding.ActivityMovieBinding
 import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
-import com.example.moviebase.repositories.DetailedMovieRepository
+import com.example.moviebase.repositories.DefaultMovieRepository
 import com.example.moviebase.retrofit.RetrofitInstance
 import com.example.moviebase.viewModel.MovieViewModel
 import com.example.moviebase.viewModel.MovieViewModelFactory
@@ -56,8 +56,7 @@ class MovieActivity : AppCompatActivity() {
         // This creates and instantiates the MovieViewModel class
         val dao = MovieDatabase.getInstance(this).movieDao()
         val api = RetrofitInstance.api
-        val movieDatabase = MovieDatabase.getInstance(this)
-        val movieRepository = DetailedMovieRepository(dao, api, movieDatabase)
+        val movieRepository = DefaultMovieRepository(dao, api)
         val viewModelFactory = MovieViewModelFactory(movieRepository)
         movieMvvm = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
 
@@ -145,7 +144,7 @@ class MovieActivity : AppCompatActivity() {
     private fun onFavouriteButtonClicked() {
         binding.ivSave.setOnClickListener {
             movie.let {
-                movieMvvm.insertMovie(it)
+                movieMvvm.upsertMovie(it)
                 Toast.makeText(this, "${movie.title} Saved", Toast.LENGTH_SHORT).show()
             }
         }

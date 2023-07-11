@@ -11,7 +11,7 @@ import com.example.moviebase.R
 import com.example.moviebase.adapters.ActorMovieAdapter
 import com.example.moviebase.databinding.ActivityActorBinding
 import com.example.moviebase.model.Movie
-import com.example.moviebase.viewModel.DetailedActorViewModel
+import com.example.moviebase.viewModel.ActorViewModel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -22,7 +22,7 @@ import kotlin.collections.ArrayList
 class ActorActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityActorBinding
-    private lateinit var actorMvvm: DetailedActorViewModel
+    private lateinit var actorMvvm: ActorViewModel
     private lateinit var actorMovieAdapter: ActorMovieAdapter
     private lateinit var actorKnownForMovies: List<Movie>
     private var actorId = 0
@@ -32,7 +32,7 @@ class ActorActivity : AppCompatActivity() {
         binding = ActivityActorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        actorMvvm = ViewModelProvider(this)[DetailedActorViewModel::class.java]
+        actorMvvm = ViewModelProvider(this)[ActorViewModel::class.java]
         actorMovieAdapter = ActorMovieAdapter()
 
         getActorInformation()
