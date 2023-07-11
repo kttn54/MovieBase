@@ -11,7 +11,6 @@ MovieBase is an Android application that utilises modern Android application dev
 - Detailed movie information: Find detailed information on your favorite movies including overviews, ratings, and more.
 - Custom movie recommendations: Generate a movie suggestion based on your selected preferences, such as genre, actor, and sort order.
 - Search functionality: Search for movies by name.
-- Responsive layout: Enjoy a seamless user experience across all device types.
 
 ## Tech Stack
 
