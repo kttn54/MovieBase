@@ -1,136 +1,70 @@
 package com.example.moviebase.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
-import com.example.moviebase.model.MovieList
 import com.example.moviebase.model.TrendingActorDetails
-import com.example.moviebase.model.TrendingActorResults
-import com.example.moviebase.retrofit.RetrofitInstance
+import com.example.moviebase.repositories.HomeRepository
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.random.Random
 
 /**
  * This class retrieves Trending Movies, Popular Movies and Trending actor information from the API.
  * It also contains functions to save and delete movies from the local database.
  */
 
-class HomeViewModel(private val movieDatabase: MovieDatabase): ViewModel() {
+class HomeViewModel(private val repository: HomeRepository): ViewModel() {
 
-    private var trendingMovieLiveData = MutableLiveData<Movie>()
-    private var trendingActorLiveData = MutableLiveData<TrendingActorDetails>()
-    private var popularMovieLiveData = MutableLiveData<List<Movie>>()
-    private var searchedMoviesLiveData = MutableLiveData<List<Movie>>()
-    private var savedMovieLiveData = movieDatabase.movieDao().getAllSavedMovies()
+    private var _trendingMovieLiveData = repository.trendingMovieLiveData
+    val trendingMovieLiveData: LiveData<Movie>
+        get() = _trendingMovieLiveData
+
+    private var _trendingActorLiveData = repository.trendingActorLiveData
+    val trendingActorLiveData: LiveData<TrendingActorDetails>
+        get() = _trendingActorLiveData
+
+    private var _popularMovieLiveData = repository.popularMovieLiveData
+    val popularMovieLiveData: LiveData<List<Movie>>
+        get() = _popularMovieLiveData
+
+    private var _searchedMoviesLiveData = repository.searchedMoviesLiveData
+    val searchedMoviesLiveData: LiveData<List<Movie>>
+        get() = _searchedMoviesLiveData
+
+    private var _savedMovieLiveData = repository.savedMovieLiveData
+    val savedMovieLiveData: LiveData<List<Movie>>
+        get() = _savedMovieLiveData
 
     fun getTrendingMovie() {
-        RetrofitInstance.api.getTrendingMovie().enqueue(object: Callback<MovieList> {
-            override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
-                if (response.body() != null) {
-                    val listSize = response.body()!!.results.size
-                    val randomIndex = Random.nextInt(0, listSize)
-                    val randomTrendingMovie = response.body()!!.results[randomIndex]
-                    trendingMovieLiveData.value = randomTrendingMovie
-                } else {
-                    Log.d("HomeViewModel","Response body is null")
-                }
-            }
-
-            override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                Log.e("HomeViewModel: Trending Movie Error", t.message.toString())
-            }
-        })
+        viewModelScope.launch {
+            repository.getTrendingMovie()
+        }
     }
 
     fun searchMovie(query: String) {
-        RetrofitInstance.api.searchMovie(query).enqueue(object: Callback<MovieList> {
-            override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
-                if (response.body() != null) {
-                    searchedMoviesLiveData.value = response.body()!!.results
-                } else {
-                    Log.d("HomeViewModel","Response body is null")
-                }
-            }
-
-            override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                Log.d("HomeViewModel: Searched Movies", t.message.toString())
-            }
-
-        })
+        viewModelScope.launch {
+            repository.searchMovie(query)
+        }
     }
 
     fun getPopularMoviesByCategory(genre: String) {
-        RetrofitInstance.api.getPopularMovieByGenre(false, "en", 1, "popularity.desc", genre)
-            .enqueue(object: Callback<MovieList> {
-                override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
-                    if (response.body() != null) {
-                        popularMovieLiveData.value = response.body()!!.results
-                    } else {
-                        Log.d("HomeViewModel","Response body is null")
-                    }
-                }
-
-                override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                    Log.e("HomeViewModel: Popular Movie Error", t.message.toString())
-                }
-            })
+        viewModelScope.launch {
+            repository.getPopularMoviesByCategory(genre)
+        }
     }
 
     fun getTrendingActor() {
-        RetrofitInstance.api.getTrendingActor().enqueue(object: Callback<TrendingActorResults> {
-            override fun onResponse(call: Call<TrendingActorResults>, response: Response<TrendingActorResults>) {
-                if (response.body() != null) {
-                    val listSize = response.body()!!.results.size
-                    val randomIndex = Random.nextInt(0, listSize)
-                    val randomTrendingActor = response.body()!!.results[randomIndex]
-                    trendingActorLiveData.value = randomTrendingActor
-                } else {
-                    Log.d("HomeViewModel","Response body is null")
-                }
-            }
-
-            override fun onFailure(call: Call<TrendingActorResults>, t: Throwable) {
-                Log.e("HomeViewModel: Trending Actor Error", t.message.toString())
-            }
-        })
-    }
-
-    fun insertMovie(movie: Movie) {
         viewModelScope.launch {
-            movieDatabase.movieDao().upsertMovie(movie)
+            repository.getTrendingActor()
         }
     }
 
-    fun deleteMovie(movie: Movie) {
-        viewModelScope.launch {
-            movieDatabase.movieDao().deleteMovie(movie)
-        }
+    fun insertMovie(movie: Movie) = viewModelScope.launch {
+        repository.insertMovie(movie)
     }
 
-    fun observerTrendingMovieLiveData(): LiveData<Movie> {
-        return trendingMovieLiveData
-    }
-
-    fun observerPopularMovieLiveData(): LiveData<List<Movie>> {
-        return popularMovieLiveData
-    }
-
-    fun observerSavedMovieLiveData(): LiveData<List<Movie>> {
-        return savedMovieLiveData
-    }
-
-    fun observerTrendingActorLiveData(): LiveData<TrendingActorDetails> {
-        return trendingActorLiveData
-    }
-
-    fun observerSearchedMoviesLiveData(): LiveData<List<Movie>> {
-        return searchedMoviesLiveData
+    fun deleteMovie(movie: Movie) = viewModelScope.launch {
+        repository.deleteMovie(movie)
     }
 }

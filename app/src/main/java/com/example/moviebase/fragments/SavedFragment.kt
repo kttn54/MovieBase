@@ -64,9 +64,9 @@ class SavedFragment : Fragment() {
      * then load the movies into the RecyclerView. If no data is found, do not load anything.
      */
     private fun observeSavedMovies() {
-        viewModel.observerSavedMovieLiveData().observe(viewLifecycleOwner, Observer { movies ->
+        viewModel.savedMovieLiveData.observe(viewLifecycleOwner) { movies ->
             savedAdapter.differ.submitList(movies)
-        })
+        }
     }
 
     private fun onSavedMovieClicked() {

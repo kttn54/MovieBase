@@ -1,50 +1,39 @@
 package com.example.moviebase.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
-import com.example.moviebase.model.MovieList
-import com.example.moviebase.retrofit.RetrofitInstance
+import com.example.moviebase.repositories.DetailedMovieRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 /**
  * This class retrieves similar movies for a particular movie in the Movie activity.
  */
 
-class MovieViewModel (private val movieDatabase: MovieDatabase): ViewModel() {
+class MovieViewModel (private val repository: DetailedMovieRepository): ViewModel() {
 
-    private var similarMoviesDetailsLiveData = MutableLiveData<List<Movie>>()
+    private var _similarMoviesDetailsLiveData = repository.similarMoviesDetailsLiveData
+    val similarMoviesDetailsLiveData: LiveData<List<Movie>>
+        get() = _similarMoviesDetailsLiveData
 
-    fun getSimilarMovies(id: Int) {
-        RetrofitInstance.api.getSimilarMovies(id).enqueue(object: Callback<MovieList> {
-            override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
-                if (response.body() != null) {
-                    similarMoviesDetailsLiveData.value = response.body()!!.results
-                } else {
-                    Log.d("MovieViewModel","Response body is null")
-                }
-            }
-
-            override fun onFailure(call: Call<MovieList>, t: Throwable) {
-                Log.d("Movie ViewModel: Movie Error", t.message.toString())
-            }
-        })
+    init {
+        _similarMoviesDetailsLiveData = repository.similarMoviesDetailsLiveData
     }
 
-    fun insertMovie(movie: Movie) {
+    fun getSimilarMovies(id: Int) {
         viewModelScope.launch {
-            movieDatabase.movieDao().upsertMovie(movie)
+            repository.getSimilarMovies(id)
         }
     }
 
-    fun observerSimilarMoviesLiveData(): LiveData<List<Movie>> {
-        return similarMoviesDetailsLiveData
+    fun insertMovie(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
+        repository.upsertMovie(movie)
+    }
+
+    fun deleteMovie(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteMovie(movie)
     }
 }

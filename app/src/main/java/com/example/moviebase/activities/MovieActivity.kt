@@ -1,7 +1,6 @@
 package com.example.moviebase.activities
 
 import android.content.Intent
-import android.media.tv.TvContract.Programs.Genres.NEWS
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -33,6 +32,8 @@ import com.example.moviebase.adapters.HorizontalMovieAdapter
 import com.example.moviebase.databinding.ActivityMovieBinding
 import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
+import com.example.moviebase.repositories.DetailedMovieRepository
+import com.example.moviebase.retrofit.RetrofitInstance
 import com.example.moviebase.viewModel.MovieViewModel
 import com.example.moviebase.viewModel.MovieViewModelFactory
 
@@ -53,8 +54,11 @@ class MovieActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // This creates and instantiates the MovieViewModel class
+        val dao = MovieDatabase.getInstance(this).movieDao()
+        val api = RetrofitInstance.api
         val movieDatabase = MovieDatabase.getInstance(this)
-        val viewModelFactory = MovieViewModelFactory(movieDatabase)
+        val movieRepository = DetailedMovieRepository(dao, api, movieDatabase)
+        val viewModelFactory = MovieViewModelFactory(movieRepository)
         movieMvvm = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
 
         similarMoviesAdapter = HorizontalMovieAdapter()
@@ -115,7 +119,7 @@ class MovieActivity : AppCompatActivity() {
      * A function that updates the RecyclerView's adapter based on movie data received from the API call.
      */
     private fun observerSimilarMovies() {
-        movieMvvm.observerSimilarMoviesLiveData().observe(this) { movieList ->
+        movieMvvm.similarMoviesDetailsLiveData.observe(this) { movieList ->
             setSimilarMovies(movieList)
         }
     }
@@ -140,7 +144,7 @@ class MovieActivity : AppCompatActivity() {
      */
     private fun onFavouriteButtonClicked() {
         binding.ivSave.setOnClickListener {
-            movie?.let {
+            movie.let {
                 movieMvvm.insertMovie(it)
                 Toast.makeText(this, "${movie.title} Saved", Toast.LENGTH_SHORT).show()
             }

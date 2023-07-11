@@ -59,7 +59,7 @@ class SearchFragment : Fragment() {
      * then load the movies into the RecyclerView. If no data is found, do not load anything.
      */
     private fun observeSearchedMoviesLiveData() {
-        viewModel.observerSearchedMoviesLiveData().observe(viewLifecycleOwner) { movieList ->
+        viewModel.searchedMoviesLiveData.observe(viewLifecycleOwner) { movieList ->
             if (movieList.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "No available data with the filters. Please try again.", Toast.LENGTH_LONG).show()
                 binding.rvSearchedMovies.visibility = View.INVISIBLE

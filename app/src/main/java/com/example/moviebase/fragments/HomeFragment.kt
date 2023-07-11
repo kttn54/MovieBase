@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -107,18 +106,16 @@ class HomeFragment : Fragment(), View.OnClickListener {
      */
     private fun observerTrendingMovie() {
         showDialogBox()
-        viewModel.observerTrendingMovieLiveData().observe(viewLifecycleOwner, object: Observer<Movie> {
-            override fun onChanged(movie: Movie?) {
-                Glide.with(this@HomeFragment)
-                    .load("${Constants.BASE_IMG_URL}${movie!!.backdrop_path}")
-                    .placeholder(R.drawable.no_image_small)
-                    .into(binding.ivTrending)
+        viewModel.trendingMovieLiveData.observe(viewLifecycleOwner) { movie ->
+            Glide.with(this@HomeFragment)
+                .load("${Constants.BASE_IMG_URL}${movie!!.backdrop_path}")
+                .placeholder(R.drawable.no_image_small)
+                .into(binding.ivTrending)
 
-                binding.tvTrendingTitle.text = movie.title
+            binding.tvTrendingTitle.text = movie.title
 
-                trendingMovie = movie
-            }
-        })
+            trendingMovie = movie
+        }
         hideDialogBox()
     }
 
@@ -138,7 +135,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
      */
     private fun observerPopularMovie() {
         showDialogBox()
-        viewModel.observerPopularMovieLiveData().observe(viewLifecycleOwner)
+        viewModel.popularMovieLiveData.observe(viewLifecycleOwner)
         { movieList ->
             popularMoviesAdapter.setMovies(movieList = movieList as ArrayList<Movie>)
         }
@@ -160,26 +157,24 @@ class HomeFragment : Fragment(), View.OnClickListener {
      * When there is data received in the observer function of the HomeViewModel, then load the image into the actor UI component.
      */
     private fun observerTrendingActor() {
-        viewModel.observerTrendingActorLiveData().observe(viewLifecycleOwner, object: Observer<TrendingActorDetails> {
-            override fun onChanged(actor: TrendingActorDetails?) {
-                Glide.with(this@HomeFragment)
-                    .load("${Constants.BASE_IMG_URL}${actor!!.profile_path}")
-                    .placeholder(R.drawable.no_image_small)
-                    .into(binding.sivActorSpotlight)
+        viewModel.trendingActorLiveData.observe(viewLifecycleOwner) { actor ->
+            Glide.with(this@HomeFragment)
+                .load("${Constants.BASE_IMG_URL}${actor!!.profile_path}")
+                .placeholder(R.drawable.no_image_small)
+                .into(binding.sivActorSpotlight)
 
-                binding.tvActorName.text = "${actor.name}"
-                binding.tvActorAge.text = getString(R.string.actor_popularity) + actor.popularity
-                binding.tvActorKnownFor.text = getString(R.string.actor_known_for)
-                actorObject = actor
-                actorId = actor.id
-                actorKnownForMovies = actor.known_for
+            binding.tvActorName.text = "${actor.name}"
+            binding.tvActorAge.text = getString(R.string.actor_popularity) + actor.popularity
+            binding.tvActorKnownFor.text = getString(R.string.actor_known_for)
+            actorObject = actor
+            actorId = actor.id
+            actorKnownForMovies = actor.known_for
 
-                for (movie in actor.known_for) {
-                    val movieName = movie.title
-                    binding.tvActorKnownFor.append("\n \u2022 $movieName")
-                }
+            for (movie in actor.known_for) {
+                val movieName = movie.title
+                binding.tvActorKnownFor.append("\n \u2022 $movieName")
             }
-        })
+        }
     }
 
     /**

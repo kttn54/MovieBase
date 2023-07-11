@@ -5,6 +5,7 @@ import com.example.moviebase.model.SearchedActorResult
 import com.example.moviebase.model.MovieList
 import com.example.moviebase.model.TrendingActorResults
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -75,7 +76,7 @@ interface MovieAPI {
     ): Call<MovieList>
 
     @GET("movie/{movie_id}/recommendations")
-    fun getSimilarMovies(
+    suspend fun getSimilarMovies(
         @Path("movie_id") movie_id: Int,
-    ): Call<MovieList>
+    ): Response<MovieList>
 }

@@ -22,9 +22,15 @@ import com.example.moviebase.activities.MainActivity
 import com.example.moviebase.activities.MovieActivity
 import com.example.moviebase.adapters.MakeAMovieAdapter
 import com.example.moviebase.databinding.FragmentMakeAMovieBinding
+import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
+import com.example.moviebase.repositories.DetailedMovieRepository
+import com.example.moviebase.repositories.MakeAMovieRepository
+import com.example.moviebase.retrofit.RetrofitInstance
 import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.MakeAMovieViewModel
+import com.example.moviebase.viewModel.MakeAMovieViewModelFactory
+import com.example.moviebase.viewModel.MovieViewModelFactory
 import kotlinx.coroutines.*
 import java.lang.Math.abs
 
@@ -35,7 +41,6 @@ import java.lang.Math.abs
 class MakeAMovieFragment : Fragment() {
     private lateinit var binding: FragmentMakeAMovieBinding
     private lateinit var MaMMvvm: MakeAMovieViewModel
-    private lateinit var viewModel: HomeViewModel
     private var genreOne = ""
     private var genreOneId = ""
     private var genreTwo = ""
@@ -52,8 +57,13 @@ class MakeAMovieFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MaMMvvm = ViewModelProvider(this)[MakeAMovieViewModel::class.java]
-        viewModel = (activity as MainActivity).viewModel
+        // This creates and instantiates the MovieViewModel class
+        val dao = MovieDatabase.getInstance(requireContext()).movieDao()
+        val api = RetrofitInstance.api
+        val movieDatabase = MovieDatabase.getInstance(requireContext())
+        val mamRepository = MakeAMovieRepository(dao, api, movieDatabase)
+        val viewModelFactory = MakeAMovieViewModelFactory(mamRepository)
+        MaMMvvm = ViewModelProvider(this, viewModelFactory)[MakeAMovieViewModel::class.java]
 
         MaMAdapter = MakeAMovieAdapter()
     }
@@ -205,7 +215,7 @@ class MakeAMovieFragment : Fragment() {
      * If no data is found, then do not load anything.
      */
     private fun observeMakeAMovie() {
-        MaMMvvm.observerMakeAMovieLiveData().observe(viewLifecycleOwner) { movieList ->
+        MaMMvvm.makeAMovieLiveData.observe(viewLifecycleOwner) { movieList ->
             if (movieList.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "No available data with the filters. Please try again.", Toast.LENGTH_LONG).show()
                 binding.progressBar.visibility = View.INVISIBLE
@@ -236,13 +246,13 @@ class MakeAMovieFragment : Fragment() {
     }
 
     private fun observeActorOneId() {
-        MaMMvvm.observerGetActorOneLiveData().observe(viewLifecycleOwner) { actor ->
+        MaMMvvm.getActorOneLiveData.observe(viewLifecycleOwner) { actor ->
             actorOneId = actor!!.id.toString()
         }
     }
 
     private fun observeActorTwoId() {
-        MaMMvvm.observerGetActorTwoLiveData().observe(viewLifecycleOwner) { actor ->
+        MaMMvvm.getActorTwoLiveData.observe(viewLifecycleOwner) { actor ->
             actorTwoId = actor!!.id.toString()
         }
     }
