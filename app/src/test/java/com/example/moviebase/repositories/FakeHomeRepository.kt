@@ -10,9 +10,5 @@ class FakeHomeRepository {
 
     private var shouldReturnNetworkError = false
 
-    fun setShouldReturnNetworkError(value: Boolean) {
-        shouldReturnNetworkError = value
-    }
-
 
 }

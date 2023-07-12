@@ -29,8 +29,4 @@ class DefaultMovieRepository(private val dao: MovieDao, private val api: MovieAP
             null
         }
     }
-
-    override fun observeSimilarMovies(): LiveData<List<Movie>> {
-        return similarMoviesDetailsLiveData
-    }
 }

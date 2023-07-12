@@ -13,30 +13,26 @@ class FakeMovieRepository: MovieRepository {
     private val similarMovieItems = mutableListOf<Movie>()
     private val observableSimilarMovieItems = MutableLiveData<List<Movie>>(similarMovieItems)
 
-    private var shouldReturnNetworkError = false
+    var lastUpsertedMovie: Movie? = null
+        private set
 
-    fun setShouldReturnNetworkError(value: Boolean) {
-        shouldReturnNetworkError = value
-    }
+    private var shouldReturnNetworkError = false
 
     private fun refreshLiveData() {
         observableSimilarMovieItems.postValue(similarMovieItems)
     }
 
-    override fun upsertMovie(movie: Movie) {
+    override suspend fun upsertMovie(movie: Movie) {
         similarMovieItems.add(movie)
+        lastUpsertedMovie = movie
         refreshLiveData()
     }
 
-    override fun getSimilarMovies(id: Int): List<Movie>? {
+    override suspend fun getSimilarMovies(id: Int): List<Movie>? {
         return if (shouldReturnNetworkError) {
             null
         } else {
-            listOf()
+            similarMovieItems
         }
-    }
-
-    override fun observeSimilarMovies(): LiveData<List<Movie>> {
-        return observableSimilarMovieItems
     }
 }

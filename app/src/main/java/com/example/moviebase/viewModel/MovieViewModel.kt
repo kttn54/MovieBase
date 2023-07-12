@@ -18,18 +18,31 @@ import kotlinx.coroutines.launch
 
 class MovieViewModel (private val repository: MovieRepository): ViewModel() {
 
-    val similarMoviesDetailsLiveData: LiveData<List<Movie>> = repository.observeSimilarMovies()
+    private val _similarMoviesDetailsLiveData = MutableLiveData<List<Movie>>()
+    val similarMoviesDetailsLiveData: LiveData<List<Movie>> = _similarMoviesDetailsLiveData
 
     private val _movieItemStatus = MutableLiveData<Event<Resource<Movie>>>()
     val movieItemStatus: LiveData<Event<Resource<Movie>>> = _movieItemStatus
 
     fun getSimilarMovies(id: Int) {
+        if (id < 2) {
+            _similarMoviesDetailsLiveData.postValue(listOf())
+            return
+        }
         viewModelScope.launch {
             repository.getSimilarMovies(id)
+            _similarMoviesDetailsLiveData.postValue(repository.getSimilarMovies(id)!!)
         }
     }
 
-    fun upsertMovie(movie: Movie) = viewModelScope.launch(Dispatchers.IO) {
-        repository.upsertMovie(movie)
+    fun upsertMovie(movie: Movie) {
+        if (movie.title == "" || movie.id == 0) {
+            _movieItemStatus.postValue(Event(Resource.error("The fields must not be empty", null)))
+            return
+        }
+        viewModelScope.launch {
+            repository.upsertMovie(movie)
+            _movieItemStatus.postValue(Event(Resource.success(movie)))
+        }
     }
 }

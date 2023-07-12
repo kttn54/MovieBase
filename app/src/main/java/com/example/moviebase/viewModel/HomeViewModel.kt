@@ -1,11 +1,14 @@
 package com.example.moviebase.viewModel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebase.model.Movie
 import com.example.moviebase.model.TrendingActorDetails
 import com.example.moviebase.repositories.HomeRepository
+import com.example.moviebase.utils.Event
+import com.example.moviebase.utils.Resource
 import kotlinx.coroutines.launch
 
 /**
@@ -29,6 +32,9 @@ class HomeViewModel(private val repository: HomeRepository): ViewModel() {
 
     private var _savedMovieLiveData = repository.savedMovieLiveData
     val savedMovieLiveData: LiveData<List<Movie>> = _savedMovieLiveData
+
+    private val _movieItemStatus = MutableLiveData<Event<Resource<Movie>>>()
+    val movieItemStatus: LiveData<Event<Resource<Movie>>> = _movieItemStatus
 
     fun getTrendingMovie() {
         viewModelScope.launch {

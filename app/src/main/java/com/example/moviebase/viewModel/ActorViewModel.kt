@@ -5,7 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviebase.model.DetailedActor
+import com.example.moviebase.model.Movie
 import com.example.moviebase.retrofit.RetrofitInstance
+import com.example.moviebase.utils.Event
+import com.example.moviebase.utils.Resource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,6 +20,9 @@ import retrofit2.Response
 class ActorViewModel: ViewModel() {
 
     private val actorInformationLiveData = MutableLiveData<DetailedActor>()
+
+    private val _actorItemStatus = MutableLiveData<Event<Resource<Movie>>>()
+    val actorItemStatus: LiveData<Event<Resource<Movie>>> = _actorItemStatus
 
     fun getDetailedActorInformation(id: Int) {
         RetrofitInstance.api.getActorInformation(id).enqueue(object: Callback<DetailedActor> {
