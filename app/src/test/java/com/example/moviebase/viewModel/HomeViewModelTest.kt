@@ -1,11 +1,13 @@
 package com.example.moviebase.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.moviebase.repositories.FakeMovieRepository
+import com.example.moviebase.repositories.FakeHomeRepository
 import com.example.moviebase.ui.MainCoroutineRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 
+@ExperimentalCoroutinesApi
 class HomeViewModelTest {
 
     @get:Rule
@@ -15,12 +17,12 @@ class HomeViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var viewModel: MovieViewModel
-    private lateinit var fakeMovieRepository: FakeMovieRepository
+    private lateinit var fakeHomeRepository: FakeHomeRepository
 
     @Before
     fun setup() {
-        fakeMovieRepository = FakeMovieRepository()
-        viewModel = MovieViewModel(fakeMovieRepository)
+        fakeHomeRepository = FakeHomeRepository()
+        //viewModel = HomeViewModel(fakeHomeRepository)
     }
 
 

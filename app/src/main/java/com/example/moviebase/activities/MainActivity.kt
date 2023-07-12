@@ -3,14 +3,12 @@ package com.example.moviebase.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.moviebase.R
 import com.example.moviebase.databinding.ActivityMainBinding
 import com.example.moviebase.db.MovieDatabase
-import com.example.moviebase.repositories.HomeRepository
+import com.example.moviebase.repositories.DefaultHomeRepository
 import com.example.moviebase.retrofit.RetrofitInstance
 import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.HomeViewModelFactory
@@ -32,8 +30,8 @@ class MainActivity : AppCompatActivity() {
     val viewModel: HomeViewModel by lazy {
         val dao = MovieDatabase.getInstance(this).movieDao()
         val api = RetrofitInstance.api
-        val homeRepository = HomeRepository(dao, api)
-        val homeViewModelProviderFactory = HomeViewModelFactory(homeRepository)
+        val defaultHomeRepository = DefaultHomeRepository(dao, api)
+        val homeViewModelProviderFactory = HomeViewModelFactory(defaultHomeRepository)
         ViewModelProvider(this, homeViewModelProviderFactory)[HomeViewModel::class.java]
     }
 

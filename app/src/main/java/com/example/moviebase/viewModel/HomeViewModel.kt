@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebase.model.Movie
 import com.example.moviebase.model.TrendingActorDetails
-import com.example.moviebase.repositories.HomeRepository
+import com.example.moviebase.repositories.DefaultHomeRepository
 import com.example.moviebase.utils.Event
 import com.example.moviebase.utils.Resource
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
  * It also contains functions to save and delete movies from the local database.
  */
 
-class HomeViewModel(private val repository: HomeRepository): ViewModel() {
+class HomeViewModel(private val repository: DefaultHomeRepository): ViewModel() {
 
     private var _trendingMovieLiveData = repository.trendingMovieLiveData
     val trendingMovieLiveData: LiveData<Movie> = _trendingMovieLiveData
