@@ -5,12 +5,10 @@ import com.example.moviebase.getOrAwaitValueTest
 import com.example.moviebase.model.Movie
 import com.example.moviebase.repositories.FakeMovieRepository
 import com.example.moviebase.ui.MainCoroutineRule
-import com.example.moviebase.utils.Resource
 import com.example.moviebase.utils.Status
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,6 +16,8 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class MovieViewModelTest {
 
+    // This executes all tasks in the thread that's running the test, allowing for the updated value to be seen immediately
+    // Allows for synchronous execution which makes testing LiveData and ViewModel easier
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
