@@ -1,5 +1,6 @@
 package com.example.moviebase.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -119,10 +120,20 @@ class HomeViewModel(private val repository: HomeRepository): ViewModel() {
     }
 
     fun insertMovie(movie: Movie) = viewModelScope.launch {
-        repository.insertMovie(movie)
+        try {
+            repository.insertMovie(movie)
+            _movieItemStatus.value = Event(Resource.success(movie))
+        } catch (e: Exception) {
+            _movieItemStatus.value = Event(Resource.error(e.message ?: "Unknown error", null))
+        }
     }
 
     fun deleteMovie(movie: Movie) = viewModelScope.launch {
-        repository.deleteMovie(movie)
+        try {
+            repository.deleteMovie(movie)
+            _movieItemStatus.value = Event(Resource.success(movie))
+        } catch (e: Exception) {
+            _movieItemStatus.value = Event(Resource.error(e.message ?: "Unknown error", null))
+        }
     }
 }

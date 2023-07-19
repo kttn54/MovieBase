@@ -10,8 +10,8 @@ import com.example.moviebase.model.Movie
 
 class FakeMovieRepository: MovieRepository {
 
-    private val similarMovieItems = mutableListOf<Movie>()
-    private val observableSimilarMovieItems = MutableLiveData<List<Movie>>(similarMovieItems)
+    private val _similarMovieItems = mutableListOf<Movie>()
+    val similarMovieItems = MutableLiveData<List<Movie>>(_similarMovieItems)
 
     var lastUpsertedMovie: Movie? = null
         private set
@@ -19,11 +19,10 @@ class FakeMovieRepository: MovieRepository {
     private var shouldReturnNetworkError = false
 
     private fun refreshLiveData() {
-        observableSimilarMovieItems.postValue(similarMovieItems)
+        similarMovieItems.postValue(_similarMovieItems)
     }
 
     override suspend fun upsertMovie(movie: Movie) {
-        similarMovieItems.add(movie)
         lastUpsertedMovie = movie
         refreshLiveData()
     }
@@ -32,7 +31,11 @@ class FakeMovieRepository: MovieRepository {
         return if (shouldReturnNetworkError) {
             null
         } else {
-            similarMovieItems
+            _similarMovieItems
         }
+    }
+
+    fun addSimilarMovies(movies: List<Movie>) {
+        _similarMovieItems.addAll(movies)
     }
 }
