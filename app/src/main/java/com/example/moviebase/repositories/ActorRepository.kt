@@ -1,4 +1,8 @@
 package com.example.moviebase.repositories
 
-class ActorRepository {
+import com.example.moviebase.model.DetailedActor
+import retrofit2.Call
+
+interface ActorRepository {
+    fun getDetailedActorInformation(id: Int): Call<DetailedActor>
 }

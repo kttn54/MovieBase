@@ -5,7 +5,7 @@ data class DetailedActor(
     val also_known_as: List<Any>,
     val biography: String,
     val birthday: String,
-    val deathday: Any,
+    val deathday: Any?,
     val gender: Int,
     val homepage: Any,
     val id: Int,

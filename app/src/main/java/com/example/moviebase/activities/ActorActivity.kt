@@ -11,7 +11,11 @@ import com.example.moviebase.R
 import com.example.moviebase.adapters.ActorMovieAdapter
 import com.example.moviebase.databinding.ActivityActorBinding
 import com.example.moviebase.model.Movie
+import com.example.moviebase.repositories.DefaultActorRepository
+import com.example.moviebase.retrofit.RetrofitInstance
 import com.example.moviebase.viewModel.ActorViewModel
+import com.example.moviebase.viewModel.ActorViewModelFactory
+import com.example.moviebase.viewModel.MovieViewModelFactory
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -32,7 +36,11 @@ class ActorActivity : AppCompatActivity() {
         binding = ActivityActorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        actorMvvm = ViewModelProvider(this)[ActorViewModel::class.java]
+        val api = RetrofitInstance.api
+        val actorRepository = DefaultActorRepository(api)
+        val viewModelFactory = ActorViewModelFactory(actorRepository)
+        actorMvvm = ViewModelProvider(this, viewModelFactory)[ActorViewModel::class.java]
+
         actorMovieAdapter = ActorMovieAdapter()
 
         getActorInformation()
@@ -63,10 +71,8 @@ class ActorActivity : AppCompatActivity() {
             actorMovieAdapter.setActorMovies(actorKnownForMovies as ArrayList<Movie>)
         }
 
-        actorMvvm.observerActorInformationLiveData().removeObservers(this)
-
         // Set all other UI components
-        actorMvvm.observerActorInformationLiveData().observe(this) { actor ->
+        actorMvvm.actorInformationLiveData.observe(this) { actor ->
             binding.tvDetailedActorName.text = actor.name
             if (actor.profile_path == "N/A") {
                 Glide.with(this@ActorActivity)
