@@ -44,7 +44,7 @@ interface MovieAPI {
     ): Call<SearchedActorResult>
 
     @GET("discover/movie")
-    fun makeMovieWithGenre(
+    fun makeAMovieWithGenre(
         @Query("include_adult") include_adult: Boolean,
         @Query("page") page: Int,
         @Query("with_genres") with_genres: String,
@@ -52,7 +52,7 @@ interface MovieAPI {
     ): Call<MovieList>
 
     @GET("discover/movie")
-    fun makeMovieWithActor(
+    fun makeAMovieWithActor(
         @Query("include_adult") include_adult: Boolean,
         @Query("page") page: Int,
         @Query("with_cast") with_cast: String,
@@ -60,14 +60,14 @@ interface MovieAPI {
     ): Call<MovieList>
 
     @GET ("discover/movie")
-    fun makeMovieBySorted(
+    fun makeAMovieBySorted(
         @Query("include_adult") include_adult: Boolean,
         @Query("page") page: Int,
         @Query("sort_by") sort_by: String
     ): Call<MovieList>
 
     @GET("discover/movie")
-    fun makeMovieWithGenreAndActor(
+    fun makeAMovieWithGenreAndActor(
         @Query("include_adult") include_adult: Boolean,
         @Query("page") page: Int,
         @Query("with_genres") with_genres: String,

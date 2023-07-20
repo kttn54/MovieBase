@@ -12,12 +12,14 @@ import com.example.moviebase.repositories.DefaultHomeRepository
 import com.example.moviebase.retrofit.RetrofitInstance
 import com.example.moviebase.viewModel.HomeViewModel
 import com.example.moviebase.viewModel.HomeViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * This class instantiates a variable of type HomeViewModel and binds the bottom navigation
  * with the host fragment
  */
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

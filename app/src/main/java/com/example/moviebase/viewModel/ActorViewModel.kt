@@ -26,17 +26,22 @@ class ActorViewModel(private val repository: ActorRepository): ViewModel() {
     private val _actorItemStatus = MutableLiveData<Event<Resource<Movie>>>()
     val actorItemStatus: LiveData<Event<Resource<Movie>>> = _actorItemStatus
 
+    private var _errorLiveData = MutableLiveData<String>()
+    val errorLiveData: LiveData<String> = _errorLiveData
+
     fun getDetailedActorInformation(id: Int) {
         repository.getDetailedActorInformation(id).enqueue(object: Callback<DetailedActor> {
             override fun onResponse(call: Call<DetailedActor>, response: Response<DetailedActor>) {
                 if (response.body() != null) {
                     _actorInformationLiveData.value = response.body()
                } else {
+                    _errorLiveData.value = "Response body is null"
                     Log.d("HomeViewModel","Response body is null")
                 }
             }
 
             override fun onFailure(call: Call<DetailedActor>, t: Throwable) {
+                _errorLiveData.value = t.message.toString()
                 Log.e("DetailedActorViewModel Error: Actor", t.message.toString())
             }
         })

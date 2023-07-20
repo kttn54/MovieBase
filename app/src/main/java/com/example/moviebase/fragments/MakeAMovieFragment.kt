@@ -2,6 +2,7 @@ package com.example.moviebase.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.moviebase.MovieBaseApplication
 import com.example.moviebase.utils.Constants
 import com.example.moviebase.utils.Constants.LEAST_POPULAR
 import com.example.moviebase.utils.Constants.LEAST_RATED
@@ -22,18 +24,25 @@ import com.example.moviebase.activities.MovieActivity
 import com.example.moviebase.adapters.MakeAMovieAdapter
 import com.example.moviebase.databinding.FragmentMakeAMovieBinding
 import com.example.moviebase.model.Movie
-import com.example.moviebase.repositories.MakeAMovieRepository
+import com.example.moviebase.repositories.DefaultMakeAMovieRepository
 import com.example.moviebase.retrofit.RetrofitInstance
+import com.example.moviebase.utils.logger.AndroidLogger
+import com.example.moviebase.utils.logger.Logger
 import com.example.moviebase.viewModel.MakeAMovieViewModel
 import com.example.moviebase.viewModel.MakeAMovieViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.lang.Math.abs
+import javax.inject.Inject
 
 /**
  * This fragment creates a list of movies depending on the filters the user has chosen.
  */
 
+@AndroidEntryPoint
 class MakeAMovieFragment : Fragment() {
+    @Inject lateinit var logger: Logger
+
     private lateinit var binding: FragmentMakeAMovieBinding
     private lateinit var MaMMvvm: MakeAMovieViewModel
     private var genreOne = ""
@@ -54,8 +63,9 @@ class MakeAMovieFragment : Fragment() {
 
         // This creates and instantiates the MovieViewModel class
         val api = RetrofitInstance.api
-        val mamRepository = MakeAMovieRepository(api)
-        val viewModelFactory = MakeAMovieViewModelFactory(mamRepository)
+        logger = AndroidLogger()
+        val mamRepository = DefaultMakeAMovieRepository(api)
+        val viewModelFactory = MakeAMovieViewModelFactory(mamRepository, logger)
         MaMMvvm = ViewModelProvider(this, viewModelFactory)[MakeAMovieViewModel::class.java]
 
         MaMAdapter = MakeAMovieAdapter()

@@ -14,12 +14,16 @@ class FakeHomeRepository: HomeRepository {
 
     private val _trendingMovieItems = mutableListOf<Movie>()
     val trendingMovieItems = MutableLiveData<List<Movie>>(_trendingMovieItems)
+
     private val _popularMovieItems = mutableListOf<Movie>()
     val popularMovieItems = MutableLiveData<List<Movie>>(_popularMovieItems)
+
     private var _searchMovieItems = mutableListOf<Movie>()
     val searchMovieItems = MutableLiveData<List<Movie>>(_searchMovieItems)
+
     private val _savedMovieItems = mutableListOf<Movie>()
     val savedMovieItems = MutableLiveData<List<Movie>>(_savedMovieItems)
+
     private var _trendingActorItems = mutableListOf<TrendingActorDetails>()
     val trendingActorItems = MutableLiveData<List<TrendingActorDetails>>(_trendingActorItems)
 
