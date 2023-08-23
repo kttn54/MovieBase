@@ -30,7 +30,7 @@ MovieBase is an Android application that utilises modern Android application dev
 
 If you need any help, you can connect with me.
 
-Visit -> [My Github](https://github.com/stporg/)
+Visit -> [My Github](https://github.com/kttn54/)
 
 ## Acknowledgments
 
