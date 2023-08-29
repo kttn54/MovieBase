@@ -1,4 +1,4 @@
-package com.example.moviebase.repositories
+package com.example.moviebase.home
 
 import com.example.moviebase.model.Movie
 import com.example.moviebase.model.MovieList

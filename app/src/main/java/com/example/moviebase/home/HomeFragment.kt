@@ -1,4 +1,4 @@
-package com.example.moviebase.fragments
+package com.example.moviebase.home
 
 import android.app.Dialog
 import android.content.Intent
@@ -13,13 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
-import com.example.moviebase.activities.ActorActivity
+import com.example.moviebase.actor.ActorActivity
 import com.example.moviebase.activities.MainActivity
-import com.example.moviebase.adapters.HorizontalMovieAdapter
 import com.example.moviebase.databinding.FragmentHomeBinding
 import com.example.moviebase.model.Movie
-import com.example.moviebase.viewModel.HomeViewModel
-import com.example.moviebase.activities.MovieActivity
+import com.example.moviebase.movie.MovieActivity
 import com.example.moviebase.model.TrendingActorDetails
 
 /**
@@ -28,7 +26,7 @@ import com.example.moviebase.model.TrendingActorDetails
  * Users can also search for a movie in this fragment.
  */
 
-class HomeFragment : Fragment(), View.OnClickListener {
+class HomeFragment: Fragment(), View.OnClickListener {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel

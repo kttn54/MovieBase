@@ -1,8 +1,7 @@
-package com.example.moviebase.viewModel
+package com.example.moviebase.makeamovie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.moviebase.repositories.DefaultMakeAMovieRepository
 import com.example.moviebase.utils.logger.Logger
 
 /**

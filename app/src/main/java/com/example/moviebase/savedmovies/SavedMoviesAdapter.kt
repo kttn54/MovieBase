@@ -1,4 +1,4 @@
-package com.example.moviebase.adapters
+package com.example.moviebase.savedmovies
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

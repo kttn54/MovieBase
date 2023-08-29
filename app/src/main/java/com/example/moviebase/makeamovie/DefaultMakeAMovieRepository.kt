@@ -1,4 +1,4 @@
-package com.example.moviebase.repositories
+package com.example.moviebase.makeamovie
 
 import com.example.moviebase.retrofit.MovieAPI
 import javax.inject.Inject

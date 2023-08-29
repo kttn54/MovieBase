@@ -1,4 +1,4 @@
-package com.example.moviebase.fragments
+package com.example.moviebase.savedmovies
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,17 +11,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviebase.utils.Constants
 import com.example.moviebase.activities.MainActivity
-import com.example.moviebase.activities.MovieActivity
-import com.example.moviebase.adapters.SavedMoviesAdapter
+import com.example.moviebase.movie.MovieActivity
 import com.example.moviebase.databinding.FragmentSavedBinding
-import com.example.moviebase.viewModel.HomeViewModel
+import com.example.moviebase.home.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 
 /**
  * This fragment displays the list of saved movies.
  */
 
-class SavedFragment : Fragment() {
+class SavedMoviesFragment : Fragment() {
 
     private lateinit var binding: FragmentSavedBinding
     private lateinit var savedAdapter: SavedMoviesAdapter

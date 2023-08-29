@@ -1,6 +1,5 @@
-package com.example.moviebase.viewModel
+package com.example.moviebase.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +8,7 @@ import com.example.moviebase.model.Movie
 import com.example.moviebase.model.MovieList
 import com.example.moviebase.model.TrendingActorDetails
 import com.example.moviebase.model.TrendingActorResults
-import com.example.moviebase.repositories.DefaultHomeRepository
-import com.example.moviebase.repositories.HomeRepository
+import com.example.moviebase.home.HomeRepository
 import com.example.moviebase.utils.Event
 import com.example.moviebase.utils.Resource
 import kotlinx.coroutines.Dispatchers

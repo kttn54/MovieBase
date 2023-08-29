@@ -2,12 +2,12 @@ package com.example.moviebase.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.moviebase.getOrAwaitValueTest
+import com.example.moviebase.makeamovie.MakeAMovieViewModel
 import com.example.moviebase.model.Movie
 import com.example.moviebase.model.SearchedActorDetails
 import com.example.moviebase.model.SearchedActorKnownFor
 import com.example.moviebase.repositories.FakeMakeAMovieRepository
 import com.example.moviebase.ui.MainCoroutineRule
-import com.example.moviebase.utils.logger.Logger
 import com.example.moviebase.utils.logger.TestLogger
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +16,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class MakeAMovieViewModelTest {

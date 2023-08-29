@@ -1,4 +1,4 @@
-package com.example.moviebase.viewModel
+package com.example.moviebase.movie
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

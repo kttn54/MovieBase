@@ -2,6 +2,7 @@ package com.example.moviebase.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.moviebase.getOrAwaitValueTest
+import com.example.moviebase.home.HomeViewModel
 import com.example.moviebase.model.Movie
 import com.example.moviebase.model.TrendingActorDetails
 import com.example.moviebase.repositories.FakeHomeRepository

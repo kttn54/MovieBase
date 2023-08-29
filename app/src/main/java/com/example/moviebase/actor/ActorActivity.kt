@@ -1,21 +1,21 @@
-package com.example.moviebase.activities
+package com.example.moviebase.actor
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
-import com.example.moviebase.adapters.ActorMovieAdapter
+import com.example.moviebase.movie.MovieActivity
 import com.example.moviebase.databinding.ActivityActorBinding
 import com.example.moviebase.model.Movie
 import com.example.moviebase.repositories.DefaultActorRepository
 import com.example.moviebase.retrofit.RetrofitInstance
-import com.example.moviebase.viewModel.ActorViewModel
-import com.example.moviebase.viewModel.ActorViewModelFactory
-import com.example.moviebase.viewModel.MovieViewModelFactory
+import com.example.moviebase.utils.Resource
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -72,35 +72,48 @@ class ActorActivity : AppCompatActivity() {
         }
 
         // Set all other UI components
-        actorMvvm.actorInformationLiveData.observe(this) { actor ->
-            binding.tvDetailedActorName.text = actor.name
-            if (actor.profile_path == "N/A") {
-                Glide.with(this@ActorActivity)
-                    .load(R.drawable.no_image_small)
-                    .into(binding.ivDetailedActorImage)
-            } else {
-                Glide.with(this@ActorActivity)
-                    .load("${Constants.BASE_IMG_URL}${actor.profile_path}")
-                    .into(binding.ivDetailedActorImage)
-            }
-            binding.tvDetailedActorBiography.text = actor.biography
+        lifecycleScope.launchWhenStarted {
+            actorMvvm.actorInformation.collect { actor ->
+                when (actor) {
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Success -> {
+                        val detailedActor = actor.data
+                        binding.tvDetailedActorName.text = detailedActor!!.name
+                        if (detailedActor.profile_path == "N/A") {
+                            Glide.with(this@ActorActivity)
+                                .load(R.drawable.no_image_small)
+                                .into(binding.ivDetailedActorImage)
+                        } else {
+                            Glide.with(this@ActorActivity)
+                                .load("${Constants.BASE_IMG_URL}${detailedActor!!.profile_path}")
+                                .into(binding.ivDetailedActorImage)
+                        }
+                        binding.tvDetailedActorBiography.text = detailedActor!!.biography
 
-            binding.tvDetailedActorBirthday.text = getString(R.string.actor_birthday) + actor.birthday.reversed()
-            binding.tvDetailedActorBirthPlace.text = getString(R.string.actor_place_of_birth) + actor.place_of_birth
+                        binding.tvDetailedActorBirthday.text = getString(R.string.actor_birthday) + detailedActor.birthday.reversed()
+                        binding.tvDetailedActorBirthPlace.text = getString(R.string.actor_place_of_birth) + detailedActor.place_of_birth
 
-            // This calculates the actor's age if they are still alive, or age when deceased.
-            val calendar = Calendar.getInstance()
-            val currentYear = calendar.get(Calendar.YEAR)
+                        // This calculates the actor's age if they are still alive, or age when deceased.
+                        val calendar = Calendar.getInstance()
+                        val currentYear = calendar.get(Calendar.YEAR)
 
-            val actorBirthYear = actor.birthday.split("-")[0].toInt()
-            var actorAge = currentYear - actorBirthYear
-            
-            if (actor.deathday == null) {
-                binding.tvDetailedActorAge.text = getString(R.string.actor_age) + actorAge
-            } else {
-                val actorDeathYear = actor.deathday.toString().split("-")[0].toInt()
-                actorAge = actorDeathYear - actorBirthYear
-                binding.tvDetailedActorAge.text = getString(R.string.actor_age) + actorAge + getString(R.string.actor_deceased)
+                        val actorBirthYear = detailedActor.birthday.split("-")[0].toInt()
+                        var actorAge = currentYear - actorBirthYear
+
+                        if (detailedActor.deathday == null) {
+                            binding.tvDetailedActorAge.text = getString(R.string.actor_age) + actorAge
+                        } else {
+                            val actorDeathYear = detailedActor.deathday.toString().split("-")[0].toInt()
+                            actorAge = actorDeathYear - actorBirthYear
+                            binding.tvDetailedActorAge.text = getString(R.string.actor_age) + actorAge + getString(R.string.actor_deceased)
+                        }
+                    }
+                    is Resource.Error -> {
+                        handleError(actor.message ?: "Unknown Error")
+                    }
+                    else -> Unit
+                }
             }
         }
     }
@@ -127,5 +140,9 @@ class ActorActivity : AppCompatActivity() {
         binding.ivMovieHome.setOnClickListener {
             finish()
         }
+    }
+
+    private fun handleError(message: String) {
+        Toast.makeText(this, "Error: $message", Toast.LENGTH_LONG).show()
     }
 }

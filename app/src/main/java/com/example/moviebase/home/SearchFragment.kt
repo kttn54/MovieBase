@@ -1,4 +1,4 @@
-package com.example.moviebase.fragments
+package com.example.moviebase.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,11 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviebase.utils.Constants
 import com.example.moviebase.activities.MainActivity
-import com.example.moviebase.activities.MovieActivity
-import com.example.moviebase.adapters.MakeAMovieAdapter
+import com.example.moviebase.movie.MovieActivity
+import com.example.moviebase.makeamovie.MakeAMovieAdapter
 import com.example.moviebase.databinding.FragmentSearchBinding
 import com.example.moviebase.model.Movie
-import com.example.moviebase.viewModel.HomeViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

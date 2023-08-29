@@ -1,4 +1,4 @@
-package com.example.moviebase.adapters
+package com.example.moviebase.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,20 +7,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.moviebase.utils.Constants
 import com.example.moviebase.R
-import com.example.moviebase.databinding.GenerateMovieItemBinding
+import com.example.moviebase.databinding.HorizontalMovieItemBinding
 import com.example.moviebase.model.Movie
 import com.example.moviebase.utils.MovieDiffCallback
-import java.lang.Integer.min
 
 /**
- * This is the adapter for the RecyclerView in the MakeAMovie fragment.
+ * This is the adapter for the multiple RecyclerViews where the movies are shown
+ * horizontally without any movie title
  */
 
-class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHolder>() {
+class HorizontalMovieAdapter: RecyclerView.Adapter<HorizontalMovieAdapter.HorizontalMovieViewHolder>() {
 
-    private var movieList: MutableList<Movie> = mutableListOf()
     var onItemClick: ((Movie) -> Unit)? = null
+    private var movieList: MutableList<Movie> = mutableListOf()
 
+    /**
+     * This attaches the list of movies to the adapter. When there is a new list, then update according
+     * to whether items are removed or inserted.
+     */
     fun setMovies(movieList: List<Movie>) {
         val diffCallback = MovieDiffCallback(this.movieList, movieList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -31,30 +35,28 @@ class MakeAMovieAdapter: RecyclerView.Adapter<MakeAMovieAdapter.MakeAMovieViewHo
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class MakeAMovieViewHolder(val binding: GenerateMovieItemBinding): RecyclerView.ViewHolder(binding.root)
+    inner class HorizontalMovieViewHolder(val binding: HorizontalMovieItemBinding): RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MakeAMovieViewHolder {
-        return MakeAMovieViewHolder(GenerateMovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalMovieViewHolder {
+        return HorizontalMovieViewHolder(HorizontalMovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: MakeAMovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HorizontalMovieViewHolder, position: Int) {
         val movie = movieList[position]
 
         // Bind the movie's poster image to the row item if available
         if (movie.poster_path.isNullOrBlank()) {
             Glide.with(holder.itemView)
                 .load(R.drawable.no_image_small)
-                .into(holder.binding.ivMakeAMovie)
+                .into(holder.binding.ivPopularMovie)
         } else {
             Glide.with(holder.itemView)
                 .load("${Constants.BASE_IMG_URL}${movie.poster_path}")
-                .into(holder.binding.ivMakeAMovie)
+                .into(holder.binding.ivPopularMovie)
         }
 
-        holder.binding.tvGenerateMovieItem.text = movieList[position].title
-
         holder.itemView.setOnClickListener {
-            onItemClick?.invoke(movieList[position])
+            onItemClick?.invoke(movie)
         }
     }
 

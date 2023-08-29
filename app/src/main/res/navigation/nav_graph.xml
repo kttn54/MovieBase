@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.moviebase.fragments.HomeFragment"
+        android:name="com.example.moviebase.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -16,17 +16,17 @@
     </fragment>
     <fragment
         android:id="@+id/savedFragment"
-        android:name="com.example.moviebase.fragments.SavedFragment"
+        android:name="com.example.moviebase.savedmovies.SavedMoviesFragment"
         android:label="fragment_saved"
         tools:layout="@layout/fragment_saved" />
     <fragment
         android:id="@+id/generateFragment"
-        android:name="com.example.moviebase.fragments.MakeAMovieFragment"
+        android:name="com.example.moviebase.makeamovie.MakeAMovieFragment"
         android:label="fragment_generate"
         tools:layout="@layout/fragment_make_a_movie" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.moviebase.fragments.SearchFragment"
+        android:name="com.example.moviebase.home.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
 </navigation>

@@ -1,8 +1,7 @@
-package com.example.moviebase.fragments
+package com.example.moviebase.makeamovie
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.moviebase.MovieBaseApplication
 import com.example.moviebase.utils.Constants
 import com.example.moviebase.utils.Constants.LEAST_POPULAR
 import com.example.moviebase.utils.Constants.LEAST_RATED
@@ -20,16 +18,12 @@ import com.example.moviebase.utils.Constants.RECENTLY_RELEASED
 import com.example.moviebase.utils.Constants.RELEASED_AGES_AGO
 import com.example.moviebase.utils.Constants.TOP_RATED
 import com.example.moviebase.R
-import com.example.moviebase.activities.MovieActivity
-import com.example.moviebase.adapters.MakeAMovieAdapter
+import com.example.moviebase.movie.MovieActivity
 import com.example.moviebase.databinding.FragmentMakeAMovieBinding
 import com.example.moviebase.model.Movie
-import com.example.moviebase.repositories.DefaultMakeAMovieRepository
 import com.example.moviebase.retrofit.RetrofitInstance
 import com.example.moviebase.utils.logger.AndroidLogger
 import com.example.moviebase.utils.logger.Logger
-import com.example.moviebase.viewModel.MakeAMovieViewModel
-import com.example.moviebase.viewModel.MakeAMovieViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.lang.Math.abs

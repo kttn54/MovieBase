@@ -1,4 +1,4 @@
-package com.example.moviebase.activities
+package com.example.moviebase.movie
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -28,14 +28,12 @@ import com.example.moviebase.utils.Constants.TV_MOVIE
 import com.example.moviebase.utils.Constants.WAR
 import com.example.moviebase.utils.Constants.WESTERN
 import com.example.moviebase.R
-import com.example.moviebase.adapters.HorizontalMovieAdapter
+import com.example.moviebase.home.HorizontalMovieAdapter
 import com.example.moviebase.databinding.ActivityMovieBinding
 import com.example.moviebase.db.MovieDatabase
 import com.example.moviebase.model.Movie
 import com.example.moviebase.repositories.DefaultMovieRepository
 import com.example.moviebase.retrofit.RetrofitInstance
-import com.example.moviebase.viewModel.MovieViewModel
-import com.example.moviebase.viewModel.MovieViewModelFactory
 
 /**
  * This class shows detailed information about the movie that was clicked in the previous activity/fragment.

@@ -18,10 +18,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.ActorActivity"
+            android:name=".actor.ActorActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MovieActivity"
+            android:name=".movie.MovieActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
